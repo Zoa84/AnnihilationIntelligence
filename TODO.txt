@@ -1,0 +1,3 @@
+Begin Creating activities and linking parts together
+Seperate game activity from the surface view
+Make all parts of the game landscape, and traverse between all parts of the app, then focus on game
