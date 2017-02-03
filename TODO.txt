@@ -1,3 +1,7 @@
 Begin Creating activities and linking parts together
 Seperate game activity from the surface view
+
+
+
 Make all parts of the game landscape, and traverse between all parts of the app, then focus on game
+-Under the Android Manifest, the screen orientation for each activity can be set, and by default this is "landspace", where the bottom of the screen is on the right. By setting this to "reverseLandscape", the bottom of the screen is on the left. Have code in the settings to choose which type of landscape, Best would be radio buttons (one or the other) along with pictures to show the user which one is which.

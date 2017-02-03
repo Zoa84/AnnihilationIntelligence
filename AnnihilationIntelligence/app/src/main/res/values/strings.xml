@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Annihilation Intelligence</string>
-    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_splash">@string/app_name</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="start">Start Game</string>
+    <string name="options">Options</string>
+    <string name="exit">Exit</string>
 </resources>

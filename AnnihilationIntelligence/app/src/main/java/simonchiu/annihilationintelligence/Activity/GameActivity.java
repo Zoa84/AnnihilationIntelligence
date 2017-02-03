@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.threed.jpct.Camera;
 import com.threed.jpct.FrameBuffer;
@@ -85,6 +86,16 @@ public class GameActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         Logger.log("onCreate");
+
+        //Set the game activity to use fullscreen, removing the action bars, etc
+        int mUIFlag = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        getWindow().getDecorView().setSystemUiVisibility(mUIFlag);
 
         if (master != null) {
             copy(master);
