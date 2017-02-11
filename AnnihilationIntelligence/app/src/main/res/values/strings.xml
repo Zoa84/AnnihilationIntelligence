@@ -3,7 +3,21 @@
     <string name="title_activity_splash">@string/app_name</string>
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_activity_game">GameActivity</string>
-    <string name="start">Start Game</string>
-    <string name="options">Options</string>
-    <string name="exit">Exit</string>
+    <string name="title_activity_options">@string/sOptions</string>
+
+    <!--Menu Strings-->
+    <string name="sStart">Start Game</string>
+    <string name="sOptions">Options</string>
+    <string name="sExit">Exit</string>
+
+    <!--Options Strings-->
+    <string name="sMusic">Music Volume</string>
+    <string name="sSound">Sound Volume</string>
+    <string name="sInvX">Invert X axis</string>
+    <string name="sInvY">Invert Y axis</string>
+    <string name="sOrien">Orientation</string>
+    <string name="sRestore">Restore Settings</string>
+    <string name="sCancel">Cancel</string>
+    <string name="sSave">Save</string>
+
 </resources>

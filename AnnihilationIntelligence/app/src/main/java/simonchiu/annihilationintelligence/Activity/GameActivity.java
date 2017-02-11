@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.graphics.Rect;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.threed.jpct.Camera;
 import com.threed.jpct.FrameBuffer;
@@ -50,7 +52,7 @@ public class GameActivity extends Activity {
     private MyRenderer renderer = null;
     private FrameBuffer fb = null;
     private World world = null;
-    private RGBColor back = new RGBColor(50, 50, 100);
+    private RGBColor bg = new RGBColor(50, 50, 100);
 
     private float touchTurn = 0;
     private float touchTurnUp = 0;
@@ -82,6 +84,9 @@ public class GameActivity extends Activity {
     private int fps = 0;
 
     private Light sun = null;
+
+    private Toast toast;
+    boolean back = false;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -131,6 +136,29 @@ public class GameActivity extends Activity {
     protected void onResume() {
         super.onResume();
         mGLView.onResume();
+    }
+
+    //Return to menu todo change to show a pause menu, DOES NOT end the game in any way
+    @Override
+    public void onBackPressed(){
+        if (!back) {
+            toast = Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT);
+            toast.show();
+            back = true;
+            new CountDownTimer(2000, 1000){
+                public void onTick(long millisUntilFinished) {
+
+                }
+                public void onFinish() {
+                    back = false;
+                    toast.cancel();
+                }
+            }.start();
+        }
+        else{
+            toast.cancel();
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -308,7 +336,7 @@ public class GameActivity extends Activity {
 
                 for (int i = 0; i < textures.length; i++) {
                     try {
-                        is = getResources().getAssets().open(textures[i] + ".obj");
+                        is = getResources().getAssets().open("objects" + textures[i] + ".obj");
                         tObjects = Loader.loadOBJ(is, null, 1);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -424,7 +452,7 @@ public class GameActivity extends Activity {
             }*/
 
             //Draw and display 3D objects
-            fb.clear(back);
+            fb.clear(bg);
             world.renderScene(fb);
             world.draw(fb);
             fb.display();

@@ -17,7 +17,7 @@
         android:adjustViewBounds="true"/>
 
     <Button
-        android:text="@string/start"
+        android:text="@string/sStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -29,7 +29,7 @@
         android:onClick="start"/>
 
     <Button
-        android:text="@string/options"
+        android:text="@string/sOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/options"
@@ -41,7 +41,7 @@
         android:onClick="options"/>
 
     <Button
-        android:text="@string/exit"
+        android:text="@string/sExit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/exit"

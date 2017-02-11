@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context="simonchiu.annihilationintelligence.Activity.OptionsActivity"
+    android:weightSum="1.0" >
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp" >
+
+                <TextView
+                    android:text="@string/sMusic"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:textAlignment="center" />
+
+                <SeekBar
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/sMusic"
+                    android:max="99"
+                    android:layout_weight="0.6"/>
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cMusic"
+                    android:layout_weight="0.1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp" >
+
+                <TextView
+                    android:text="@string/sSound"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:textAlignment="center" />
+
+                <SeekBar
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/sSound"
+                    android:max="99"
+                    android:layout_weight="0.6"/>
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cSound"
+                    android:layout_weight="0.1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp" >
+
+                <TextView
+                    android:text="@string/sInvX"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:textAlignment="center" />
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cInvX"
+                    android:layout_weight="0.1"/>
+
+                <TextView
+                    android:text="@string/sInvY"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:textAlignment="center" />
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cInvY"
+                    android:layout_weight="0.1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp" >
+
+                <TableRow
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" >
+
+                    <TextView
+                        android:text="@string/sOrien"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textAlignment="center" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8" >
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:id="@+id/rgOrien">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@drawable/img_left_ori"
+                            android:layout_weight="0.3"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/rLeft"
+                            android:layout_weight="0.1" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@drawable/img_right_ori"
+                            android:layout_weight="0.3"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/rRight"
+                            android:layout_weight="0.1" />
+
+                    </RadioGroup>
+
+                </TableRow>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp" >
+
+                <Button
+                    android:text="@string/sRestore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="restore"
+                    android:layout_weight="0.3"/>
+
+                <Button
+                    android:text="@string/sCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="cancel"
+                    android:layout_weight="0.4"/>
+
+                <Button
+                    android:text="@string/sSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="save"
+                    android:layout_weight="0.3"/>
+            </TableRow>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

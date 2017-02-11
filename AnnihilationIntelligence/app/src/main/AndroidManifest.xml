@@ -27,13 +27,19 @@
             android:name=".Activity.MenuActivity"
             android:label="@string/title_activity_menu"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".Activity.GameActivity"
             android:label="@string/title_activity_game"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".Activity.OptionsActivity"
+            android:label="@string/title_activity_options"
+            android:screenOrientation="landscape" />
+            <!--android:theme="@style/AppTheme.NoActionBar" />-->
 
     </application>
 

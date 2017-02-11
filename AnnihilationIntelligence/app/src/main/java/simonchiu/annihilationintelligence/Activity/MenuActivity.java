@@ -16,8 +16,8 @@ Android buttons, a toast message will appear to ask the player to press again to
 
 public class MenuActivity extends AppCompatActivity {
 
-    boolean back = false;
-    Toast toast;
+    boolean back = false;   //If the back button has been pressed
+    Toast toast;            //Variable to hold a toast message
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +31,8 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void options (View view){ // Button press options
-        //Intent intent = new Intent(MenuActivity.this,OptionsActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(MenuActivity.this,OptionsActivity.class);
+        startActivity(intent);
     }
 
     public void exit (View view){ // Button press exit game
