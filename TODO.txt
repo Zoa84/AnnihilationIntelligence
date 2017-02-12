@@ -17,4 +17,6 @@ Create the framework, including loading music and sound and loading data from a 
 
 Create or otherwise source a floor with objects in it, and import to game activity.
 
+Change or source new music and sound. Currently using "example" music from previous work
+
 
