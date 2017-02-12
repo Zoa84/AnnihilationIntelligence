@@ -336,7 +336,7 @@ public class GameActivity extends Activity {
 
                 for (int i = 0; i < textures.length; i++) {
                     try {
-                        is = getResources().getAssets().open("objects" + textures[i] + ".obj");
+                        is = getResources().getAssets().open("objects/" + textures[i] + ".obj");
                         tObjects = Loader.loadOBJ(is, null, 1);
                     } catch (IOException e) {
                         e.printStackTrace();

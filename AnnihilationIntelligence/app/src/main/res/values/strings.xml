@@ -10,7 +10,7 @@
     <string name="sOptions">Options</string>
     <string name="sExit">Exit</string>
 
-    <!--Options Strings-->
+    <!--Defines Strings-->
     <string name="sMusic">Music Volume</string>
     <string name="sSound">Sound Volume</string>
     <string name="sInvX">Invert X axis</string>
