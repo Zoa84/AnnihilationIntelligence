@@ -2,6 +2,8 @@ package simonchiu.annihilationintelligence.Activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -13,6 +15,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import simonchiu.annihilationintelligence.Class.Media;
 import simonchiu.annihilationintelligence.R;
 
 import static simonchiu.annihilationintelligence.Class.Defines.INVERTX;
@@ -36,6 +39,9 @@ public class MenuActivity extends AppCompatActivity {
     boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
 
+    AssetFileDescriptor descriptor;
+    MediaPlayer mediaPlayer = new MediaPlayer();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +52,9 @@ public class MenuActivity extends AppCompatActivity {
         this.iVolume = getIntent().getIntArrayExtra("volumeData");
 
         setOrientation();
+
+        //Play music (passing the element to play)
+        if (!Media.getInstance().playMusic(3)) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();;
     }
 
     public void start (View view){ // Button press start game
@@ -59,6 +68,7 @@ public class MenuActivity extends AppCompatActivity {
         Intent intent = new Intent(MenuActivity.this,OptionsActivity.class);
         intent.putExtra("optionData", bOptionData);
         intent.putExtra("volumeData", iVolume);
+        Media.getInstance().playSound(1);
         startActivityForResult(intent, OPTIONS);
     }
 
@@ -70,6 +80,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         if (!back) {
+            toast.cancel();
             toast = Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT);
             toast.show();
             back = true;
@@ -85,6 +96,7 @@ public class MenuActivity extends AppCompatActivity {
         }
         else{
             toast.cancel();
+            Media.getInstance().stopMusic();
             finish();
         }
     }
@@ -131,7 +143,7 @@ public class MenuActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        toast = Toast.makeText(this, "Data Saved" + iVolume[MUSIC], Toast.LENGTH_SHORT);
+        toast = Toast.makeText(this, "Data Saved", Toast.LENGTH_SHORT);
         toast.show();
     }
 

@@ -2,6 +2,11 @@ package simonchiu.annihilationintelligence.Activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +18,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import simonchiu.annihilationintelligence.Class.Media;
 import simonchiu.annihilationintelligence.R;
 
 import static simonchiu.annihilationintelligence.Class.Defines.INVERTX;
@@ -29,6 +35,12 @@ public class SplashActivity extends AppCompatActivity {
 
     boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
+    String[] sMusicName = {"menu", "battle", "score", "settings"};      //File names for music files
+    String[] sSoundName = {"death", "fire", "hit", "select", "time"};   //File names for sound files
+
+    AssetFileDescriptor descriptor;
+
+    Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +58,7 @@ public class SplashActivity extends AppCompatActivity {
                     Intent intent = new Intent(SplashActivity.this, MenuActivity.class);
                     intent.putExtra("optionData", bOptionData);
                     intent.putExtra("volumeData", iVolume);
+                    toast.cancel();
                     startActivity(intent);
                 }
             }
@@ -64,7 +77,8 @@ public class SplashActivity extends AppCompatActivity {
             //If the file does not exist, create one with default settings
             //Will be used during first time use of the app, or if the text file is somehow removed
             if (!file.exists()) {
-                Toast.makeText(this, "Creating Text File", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(this, "Creating Text File", Toast.LENGTH_SHORT);
+                toast.show();
                 FileWriter writer = new FileWriter(file);
                 writer.append("true\ntrue\nfalse\nfalse\ntrue\n99\n99");
                 writer.flush();
@@ -106,13 +120,49 @@ public class SplashActivity extends AppCompatActivity {
         if (bOptionData[ORIENTATION]) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
 
-        Toast.makeText(this, "Data Loaded", Toast.LENGTH_SHORT).show();
+        //Load music
+        for (int i = 0; i < sMusicName.length; i++) {
+            loadMusic("music/example/" + sMusicName[i] + ".ogg", i);
+        }
+
+        //Load sound
+        for (int i = 0; i < sSoundName.length; i++) {
+            loadSound("sound/example/" + sSoundName[i] + ".ogg", i);
+        }
+
+        toast = Toast.makeText(this, "Data Loaded", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         finish();
+    }
+
+    private void loadMusic(String file, int element) {
+        //Music is loaded to a singleton class called Media, which holds music and sound
+        //Music files are loaded to an array, which can then be accessed by other activities
+        AssetManager assetManager = getAssets();
+        try{
+            descriptor = assetManager.openFd(file);
+            Media.getInstance().setupMusic(descriptor, element);
+        }
+        catch (IOException e){
+            Toast.makeText(this, "Couldn't load music file, " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void loadSound(String file, int element) {
+        //Sound is loaded and sent to the Media Singleton class
+        AssetManager assetManager = getAssets();
+        try{
+            descriptor = assetManager.openFd(file);
+            Media.getInstance().setupSound(descriptor, element);
+        }
+        catch (IOException e){
+            Toast.makeText(this, "Couldn't load sound file, " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

@@ -139,17 +139,16 @@ public class OptionsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //Return to menu activity, without saving any changes
-        super.onBackPressed();
-
-    }
-
-    public void cancel (View view){ // Button press cancel
-        //Return to menu activity, without saving any changes
         Intent data = new Intent();
         data.putExtra("optionData", getIntent().getBooleanArrayExtra("optionData"));
         data.putExtra("volumeData", getIntent().getIntArrayExtra("volumeData"));
         setResult(OPTIONS, data);
         finish();
+    }
+
+    public void cancel (View view){ // Button press cancel
+        //Return to menu activity, without saving any changes
+        onBackPressed();
     }
 
     public void restore (View view){ // Button press restore settings

@@ -1,4 +1,3 @@
-Begin Creating activities and linking parts together
 Seperate game activity from the surface view
 
 
@@ -11,8 +10,6 @@ Make all parts of the game landscape, and traverse between all parts of the app,
 
 TODO Next Time
 
-Be able to save and load from a text file, and be able to push data to the Game Activity (Not necessarily use yet, but create basics so future options can be added)
-
 Create the framework, including loading music and sound and loading data from a text file before working on main game
 
 Create or otherwise source a floor with objects in it, and import to game activity.
@@ -20,3 +17,8 @@ Create or otherwise source a floor with objects in it, and import to game activi
 Change or source new music and sound. Currently using "example" music from previous work
 
 
+!!Change the structure of Options to have a options Singleton Class??
+Doing this will make stuff like volume easily accessible by the other activities, and
+removes the need for intents (at least for options)
+Can either do this and clean up the code more, or keep the intents, so the
+write up can include the use of intents. Will end up re-writing the write up anyways
