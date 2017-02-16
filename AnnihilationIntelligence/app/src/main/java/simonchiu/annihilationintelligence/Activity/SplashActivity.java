@@ -21,11 +21,7 @@ import java.io.IOException;
 import simonchiu.annihilationintelligence.Class.Media;
 import simonchiu.annihilationintelligence.R;
 
-import static simonchiu.annihilationintelligence.Class.Defines.INVERTX;
-import static simonchiu.annihilationintelligence.Class.Defines.INVERTY;
-import static simonchiu.annihilationintelligence.Class.Defines.MUSIC;
-import static simonchiu.annihilationintelligence.Class.Defines.ORIENTATION;
-import static simonchiu.annihilationintelligence.Class.Defines.SOUND;
+import static simonchiu.annihilationintelligence.Class.Defines.*;
 
 /*The Splash Screen Activity, and the starting point of the app. From here it creates a loading screen
 for the player, then moves on to the Menu Activity.

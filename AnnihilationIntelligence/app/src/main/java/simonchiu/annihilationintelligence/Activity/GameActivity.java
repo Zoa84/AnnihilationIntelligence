@@ -35,6 +35,8 @@ import javax.microedition.khronos.opengles.GL10;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+import static simonchiu.annihilationintelligence.Class.Defines.*;
+
 /**
  * A simple demo. This shows more how to use jPCT-AE than it shows how to write
  * a proper application for Android. It includes basic activity management to

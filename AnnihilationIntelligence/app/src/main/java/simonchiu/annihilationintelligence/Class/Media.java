@@ -21,8 +21,6 @@ public class Media {
     private int[] iSounds = new int[5];                                     //Array of sound files
     private SoundPool soundpool = new SoundPool(5, AudioManager.STREAM_MUSIC,0);    //Loads and plays the sound files
 
-    private int[] iVolume = {99, 99};
-
     //Sets the loaded music file to the array of music
     public void setupMusic(AssetFileDescriptor desc, int element) {
         descriptor[element] = desc;
@@ -34,15 +32,25 @@ public class Media {
     }
 
     //Play the selected music file. Returns true if successful
-    public boolean playMusic(int element) {
-        try{
-            mediaPlayer.setDataSource(descriptor[element].getFileDescriptor(), descriptor[element].getStartOffset(), descriptor[element].getLength());
-            mediaPlayer.prepare();
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-            return true;
+    public boolean playMusic(int element, int volume, boolean play) {
+        if (play)
+        {
+            try{
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.setDataSource(descriptor[element].getFileDescriptor(), descriptor[element].getStartOffset(), descriptor[element].getLength());
+                mediaPlayer.prepare();
+                mediaPlayer.setLooping(true);
+                changeMusicVolume(volume);
+                mediaPlayer.start();
+                return true;
+            }
+            catch (IOException e){
+                return false;
+            }
         }
-        catch (IOException e){
+        else
+        {
+            stopMusic();
             return false;
         }
     }
@@ -53,8 +61,15 @@ public class Media {
     }
 
     //Play the selected sound effect
-    public void playSound(int element) {
-        soundpool.play(iSounds[element], (float) iVolume[1], (float) iVolume[1], 0, 0, 1);
+    public void playSound(int element, int volume, boolean play) {
+        if (play) soundpool.play(iSounds[element], (float) volume/100, (float) volume/100, 0, 0, 1);
+    }
+
+    //Change the volume of the music
+    public void changeMusicVolume(int volume)
+    {
+        float fVolume = (float) (Math.log(100 - volume)/Math.log(100));
+        mediaPlayer.setVolume(1 - fVolume, 1 - fVolume);
     }
 
     //Creates a instance of this class, which is passed to any activity which calls this

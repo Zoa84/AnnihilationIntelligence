@@ -9,15 +9,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
+import simonchiu.annihilationintelligence.Class.Media;
 import simonchiu.annihilationintelligence.R;
 
-import static simonchiu.annihilationintelligence.Class.Defines.INVERTX;
-import static simonchiu.annihilationintelligence.Class.Defines.INVERTY;
-import static simonchiu.annihilationintelligence.Class.Defines.MUSIC;
-import static simonchiu.annihilationintelligence.Class.Defines.OPTIONS;
-import static simonchiu.annihilationintelligence.Class.Defines.ORIENTATION;
-import static simonchiu.annihilationintelligence.Class.Defines.SOUND;
+import static simonchiu.annihilationintelligence.Class.Defines.*;
 
 public class OptionsActivity extends AppCompatActivity {
 
@@ -39,15 +36,31 @@ public class OptionsActivity extends AppCompatActivity {
         if (bOptionData[ORIENTATION]) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
 
-
+        //Play music (passing the element to play)
+        if (!Media.getInstance().playMusic(MUSIC_SETTINGS, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();
 
         //Settings for the Music
         cCheckBox[MUSIC] = (CheckBox) findViewById(R.id.cMusic);
         cCheckBox[MUSIC].setChecked(bOptionData[MUSIC]);
-
         //Settings for the Sound
         cCheckBox[SOUND] = (CheckBox) findViewById(R.id.cSound);
         cCheckBox[SOUND].setChecked(bOptionData[SOUND]);
+        //Listeners to check for changes to the check boxes for music and sound
+        cCheckBox[MUSIC].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                bOptionData[MUSIC] = cCheckBox[MUSIC].isChecked();
+                Media.getInstance().playMusic(MUSIC_SETTINGS, iVolume[MUSIC], bOptionData[MUSIC]);
+                Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
+            }
+        });
+        cCheckBox[SOUND].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                bOptionData[SOUND] = cCheckBox[SOUND].isChecked();
+                Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
+            }
+        });
 
         //Settings for Inverting camera controls
         cCheckBox[INVERTX] = (CheckBox) findViewById(R.id.cInvX);
@@ -55,16 +68,18 @@ public class OptionsActivity extends AppCompatActivity {
         //Set the check buttons to current settings
         cCheckBox[INVERTX].setChecked(bOptionData[INVERTX]);
         cCheckBox[INVERTY].setChecked(bOptionData[INVERTY]);
-        //Listeners to check for changes to the check boxes
+        //Listeners to check for changes to the check boxes for inverting axis
         cCheckBox[INVERTX].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
                 bOptionData[INVERTX] = cCheckBox[INVERTX].isChecked();
             }
         });
         cCheckBox[INVERTY].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
                 bOptionData[INVERTY] = cCheckBox[INVERTY].isChecked();
             }
         });
@@ -84,7 +99,7 @@ public class OptionsActivity extends AppCompatActivity {
         rgOrien.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                //soundpool.play(sounds[3],(float) soundVolume/100,(float) soundVolume/100,0,0,1);
+                Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
                 bOptionData[ORIENTATION] = rgOrien.findViewById(rgOrien.getCheckedRadioButtonId()) == findViewById(R.id.rLeft);
                 if (bOptionData[ORIENTATION]) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
@@ -103,35 +118,34 @@ public class OptionsActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 iVolume[MUSIC] = progress;
-                //musicLog = (float) (Math.log(100 - musicVolume)/Math.log(100));
-                //mediaPlayer.setVolume(1-musicLog,1-musicLog);
+                Media.getInstance().changeMusicVolume(iVolume[MUSIC]);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //TODO Sound effect
+                Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //TODO Sound effect
+                Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
             }
         });
         sVolume[SOUND].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 iVolume[SOUND] = progress;
-                //TODO Sound effect
+                //MUSIC changes
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //TODO Sound effect
+                Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //TODO Sound effect
+                Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
             }
         });
     }
@@ -139,10 +153,12 @@ public class OptionsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //Return to menu activity, without saving any changes
+        Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
         Intent data = new Intent();
         data.putExtra("optionData", getIntent().getBooleanArrayExtra("optionData"));
         data.putExtra("volumeData", getIntent().getIntArrayExtra("volumeData"));
         setResult(OPTIONS, data);
+        Media.getInstance().stopMusic();
         finish();
     }
 
@@ -167,10 +183,12 @@ public class OptionsActivity extends AppCompatActivity {
 
     public void save (View view){ // Button press save
         //Return to menu activity, saving the settings
+        Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
         Intent data = new Intent();
         data.putExtra("optionData", bOptionData);
         data.putExtra("volumeData", iVolume);
         setResult(OPTIONS, data);
+        Media.getInstance().stopMusic();
         finish();
     }
 

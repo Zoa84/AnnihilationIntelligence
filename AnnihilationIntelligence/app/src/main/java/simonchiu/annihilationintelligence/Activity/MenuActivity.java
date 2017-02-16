@@ -18,13 +18,7 @@ import java.io.IOException;
 import simonchiu.annihilationintelligence.Class.Media;
 import simonchiu.annihilationintelligence.R;
 
-import static simonchiu.annihilationintelligence.Class.Defines.INVERTX;
-import static simonchiu.annihilationintelligence.Class.Defines.INVERTY;
-import static simonchiu.annihilationintelligence.Class.Defines.MUSIC;
-import static simonchiu.annihilationintelligence.Class.Defines.ORIENTATION;
-import static simonchiu.annihilationintelligence.Class.Defines.SOUND;
-import static simonchiu.annihilationintelligence.Class.Defines.OPTIONS;
-import static simonchiu.annihilationintelligence.Class.Defines.GAME;
+import static simonchiu.annihilationintelligence.Class.Defines.*;
 
 /*The Menu Activity. This is the central hub of the app, and is accessed after the Splash Screen
 From here the player can choose to start the game, change options or exit. If exiting using the
@@ -39,9 +33,6 @@ public class MenuActivity extends AppCompatActivity {
     boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
 
-    AssetFileDescriptor descriptor;
-    MediaPlayer mediaPlayer = new MediaPlayer();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,13 +45,15 @@ public class MenuActivity extends AppCompatActivity {
         setOrientation();
 
         //Play music (passing the element to play)
-        if (!Media.getInstance().playMusic(3)) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();;
+        if (!Media.getInstance().playMusic(MUSIC_MENU, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();
     }
 
     public void start (View view){ // Button press start game
         Intent intent = new Intent(MenuActivity.this,GameActivity.class);
         intent.putExtra("optionData", bOptionData);
         intent.putExtra("volumeData", iVolume);
+        Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
+        Media.getInstance().stopMusic();
         startActivityForResult(intent, GAME);
     }
 
@@ -68,17 +61,21 @@ public class MenuActivity extends AppCompatActivity {
         Intent intent = new Intent(MenuActivity.this,OptionsActivity.class);
         intent.putExtra("optionData", bOptionData);
         intent.putExtra("volumeData", iVolume);
-        Media.getInstance().playSound(1);
+        Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
+        Media.getInstance().stopMusic();
         startActivityForResult(intent, OPTIONS);
     }
 
     public void exit (View view){ // Button press exit game
+        Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
+        Media.getInstance().stopMusic();
         finish();
     }
 
     //End the game if trying to leave from menu
     @Override
     public void onBackPressed(){
+        Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
         if (!back) {
             toast.cancel();
             toast = Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT);
@@ -115,6 +112,9 @@ public class MenuActivity extends AppCompatActivity {
         else if (resultCode == GAME) {
 
         }
+
+        if (!Media.getInstance().playMusic(MUSIC_MENU, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();
+
     }
 
     //Set the orientation, checking what the orientation has been set to
