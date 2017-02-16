@@ -10,15 +10,22 @@ Make all parts of the game landscape, and traverse between all parts of the app,
 
 TODO Next Time
 
-Create the framework, including loading music and sound and loading data from a text file before working on main game
+Joystick
+http://stackoverflow.com/questions/5643152/multiple-finger-input-for-android-development
+Create two joysticks (class?) for the left and right side of screen. Draw a 2d joystick background to show the area of the joystick, as well as a joystick itself, which will move and stay "connected" to the base
+
+Buttons
+Create button class to activate events
 
 Create or otherwise source a floor with objects in it, and import to game activity.
 
 Change or source new music and sound. Currently using "example" music from previous work
 
 
-!!Change the structure of Options to have a options Singleton Class??
-Doing this will make stuff like volume easily accessible by the other activities, and
-removes the need for intents (at least for options)
-Can either do this and clean up the code more, or keep the intents, so the
-write up can include the use of intents. Will end up re-writing the write up anyways
+
+!!Keep options as is, passing the volume and sound. Not only does this allow us to change the volume of certain music/ sound (e.g. decreasing music for certain sound/ voice) but it is also generally better to not rely on singletons (could research for report?)
+
+!!Do Fortnightly reports and sign off
+
+Continue writing up about anything at any time (even on phone/ laptop)
+
