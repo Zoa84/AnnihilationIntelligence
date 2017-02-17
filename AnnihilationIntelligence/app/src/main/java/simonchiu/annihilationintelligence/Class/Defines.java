@@ -30,4 +30,7 @@ public final class Defines {
     public static final int SOUND_HIT = 2;
     public static final int SOUND_SELECT = 3;
     public static final int SOUND_TIME = 4;
+
+    //Defines for maths
+    public static final float DEG_TO_RAD = 3.141f / 180f;
 }

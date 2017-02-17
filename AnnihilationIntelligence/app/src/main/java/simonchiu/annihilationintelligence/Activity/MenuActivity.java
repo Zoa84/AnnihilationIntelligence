@@ -27,11 +27,11 @@ Android buttons, a toast message will appear to ask the player to press again to
 
 public class MenuActivity extends AppCompatActivity {
 
-    boolean back = false;   //If the back button has been pressed
-    Toast toast;            //Variable to hold a toast message
+    private boolean back = false;   //If the back button has been pressed
+    private Toast toast;            //Variable to hold a toast message
 
-    boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
-    int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
+    private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
+    private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
