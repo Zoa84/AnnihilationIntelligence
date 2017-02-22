@@ -2,8 +2,11 @@ TODO Next Time
 
 Joystick
 http://stackoverflow.com/questions/5643152/multiple-finger-input-for-android-development
-Create two joysticks (class?) for the left and right side of screen. Draw a 2d joystick background to show the area of the joystick, as well as a joystick itself, which will move and stay "connected" to the base
-Draw the base from the corners of the screen, about 300 in (x and y)
+Get data from joystick classes for amount to move/rotate character.
+Draw relative to screen size
+Clean up motion event code and Joystick class
+
+
 
 Buttons
 Create button class to activate events

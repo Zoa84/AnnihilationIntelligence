@@ -28,6 +28,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import simonchiu.annihilationintelligence.Activity.GameActivity;
+import simonchiu.annihilationintelligence.Class.Joystick;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -80,6 +81,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     //Array of strings of UI texture names, and array of textures themselves
     private String[] uint = {"inv", "inte", "interact"};
     private Texture[] uintT = new Texture[uint.length];
+
+    //Joystick TESTING
+    private Joystick[] jMove = new Joystick[2];
 
     public void setOptions(boolean invX, boolean invY) {
         if (invX) invCam[0] = -1;
@@ -186,6 +190,11 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             sun.setPosition(sv);
             MemoryHelper.compact();
 
+            //ADD JOYSTICK
+            //CHANGE to relative to screen size
+            jMove[0] = new Joystick(300, 700, 128, context);
+            jMove[1] = new Joystick(1600, 700, 128, context);
+
             if (master == null) {
                 Logger.log("Saving master Activity!");
                 master = ((GameActivity) context);
@@ -280,6 +289,11 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             }
         }
 
+        //Update for when not in use (always runs)
+        for (int i = 0; i < jMove.length; i++) {
+            jMove[i].Reset();
+        }
+
         if (me.getAction() == MotionEvent.ACTION_UP) {
             xpos = -1;
             ypos = -1;
@@ -287,6 +301,17 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             touchTurnUp = 0;
             touchMove = 0;
             touchMoveUp = 0;
+        }
+        else {
+            int pointerCount = me.getPointerCount();
+            for (int i = 0; i < pointerCount; i++) {
+                float x = me.getX(i);
+                float y = me.getY(i);
+
+                //Joystick chance TEST
+                jMove[0].Update((int) x, (int) y);
+                jMove[1].Update((int) x, (int) y);
+            }
         }
     }
 
@@ -370,6 +395,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         {
             //Looking at pickable object
             fb.blit(uintT[2], 0, 0, buttons[2].left, buttons[2].top, buttons[2].right, buttons[2].bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        }
+
+        for (int i = 0; i < jMove.length; i++) {
+            jMove[i].Draw(fb);
         }
 
         fb.setRenderTarget(uintT[0]);
