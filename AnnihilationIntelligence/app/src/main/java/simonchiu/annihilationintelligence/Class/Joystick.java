@@ -5,15 +5,14 @@ import android.graphics.Rect;
 
 import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.Texture;
-import com.threed.jpct.TextureManager;
 import com.threed.jpct.util.BitmapHelper;
 
 /**
  * Created by Simon on 21/02/2017.
  */
 
-//Pass the x and y pos from the constructor, as well as size, and will setup the data,
-//as well as draw to screen
+//Joystick class - Creates joysticks for the HUD, and allows usage of the Joysticks to simulate
+//real joysticks
 
 public class Joystick {
     private int iXPos;                              //X position of joystick (origin is middle)
@@ -23,10 +22,9 @@ public class Joystick {
     private int iState;                             //State for pointer to joystick
     private float fScale;                           //Scale for joystick to movement
     private Rect rBackground, rButton;              //Saves data to a format to use in the draw function
-    private boolean bPressed;
     private Texture[] tTextures = new Texture[2];   //Array of the joystick textures, the background and the button itself
 
-
+    //Gets the x and y pos from the constructor, as well as size, and will setup the data, as well as load the textures
     public Joystick(int xPos, int yPos, int size, Context context) {
         iXPos = xPos;
         iYPos = yPos;
@@ -35,6 +33,8 @@ public class Joystick {
         iState = 0;
         fScale = -3000f;
 
+        //Set position of joystick background and button, using constructor parameters
+        //Drawn as a rectangle, so need the four corners, not the middle with extents
         rBackground = new Rect(iXPos - iSize, iYPos - iSize, iSize*2, iSize*2);
         rButton = new Rect(iXPos - (iSize/2), iYPos - (iSize/2), iSize, iSize);
 
@@ -48,8 +48,6 @@ public class Joystick {
         resID = context.getResources().getIdentifier("img_joystick_button", "drawable", context.getPackageName());
         texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iSize, iSize));
         tTextures[1] = texture;
-
-
     }
 
     //Have an update function run in the update, can either be used if finger is in boundary, or set with parameters of
@@ -59,7 +57,6 @@ public class Joystick {
         if (fLength < iLimit*iLimit) {
             rButton.left = (int) xPos - (iSize / 2);
             rButton.top = (int) yPos - (iSize / 2);
-            bPressed = true;
         }
     }
 
@@ -69,30 +66,33 @@ public class Joystick {
         //Draw Joystick background
         fb.blit(tTextures[0], 0, 0, rBackground.left, rBackground.top, rBackground.right, rBackground.bottom, FrameBuffer.TRANSPARENT_BLITTING);
 
-        //TODO calculations to move button (if necessary)
         //Draw Joystick button
         fb.blit(tTextures[1], 0, 0, rButton.left, rButton.top, rButton.right, rButton.bottom, FrameBuffer.TRANSPARENT_BLITTING);
     }
 
+    //Reset the joystick buttons position and state
     public void Reset() {
         rButton.left = iXPos - (iSize/2);
         rButton.top = iYPos - (iSize/2);
         iState = 0;
-        bPressed = false;
     }
 
+    //Return the horizontal difference of the joystick
     public float GetHor() {
         return ((rButton.left + (iSize / 2)) - iXPos) / fScale;
     }
 
+    //Return the vertical difference of the joystick
     public float GetVer() {
-        return ((rButton.top + (iSize / 2)) - iYPos)/fScale;
+        return ((rButton.top + (iSize / 2)) - iYPos) / fScale;
     }
 
+    //Set the state, which type of finger has been used
     public void SetState(int state) {
         iState = state;
     }
 
+    //Return the current state
     public int GetState() {
         return iState;
     }

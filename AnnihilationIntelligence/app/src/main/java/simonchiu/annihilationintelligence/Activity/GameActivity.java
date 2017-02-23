@@ -90,7 +90,7 @@ public class GameActivity extends Activity {
 
         renderer = new GameSurfaceView(this, screenSize);
 
-        renderer.setOptions(bOptionData[INVERTX], bOptionData[INVERTY]);
+        renderer.setOptions(bOptionData, iVolume);
 
         mGLView.setRenderer(renderer);
         setContentView(mGLView);

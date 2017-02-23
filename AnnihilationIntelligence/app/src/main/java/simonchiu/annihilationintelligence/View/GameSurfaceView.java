@@ -54,13 +54,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     private int fps = 0;
     private Light sun = null;
     private static GameActivity master = null;
-    Context context;
+    private Context context;
 
     private float xrot = 0.f;
     private float yrot = 0.f;
-
-    //Invert x and y axis of camera
-    private int[] invCam = {1, 1};
 
     private SimpleVector testery = new SimpleVector(0.f, 0.f, 0.f);
 
@@ -74,18 +71,18 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     private String[] uint = {"inv", "inte", "interact"};
     private Texture[] uintT = new Texture[uint.length];
 
-    //Joystick TESTING
+    //Array of Joysticks
     private Joystick[] jMove = new Joystick[2];
 
-    private int iState1 = 0;
-    private int iState2 = 0;
-
     //Screen Size;
-    Point pPoint;
+    private Point pPoint;
 
-    public void setOptions(boolean invX, boolean invY) {
-        if (invX) invCam[0] = -1;
-        if (invY) invCam[1] = -1;
+    private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
+    private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
+
+    public void setOptions(boolean[] optionData, int[] volume) {
+        bOptionData = optionData;
+        iVolume = volume;
     }
 
     //Constructor
@@ -189,11 +186,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             sun.setPosition(sv);
             MemoryHelper.compact();
 
-
-
-
-            //ADD JOYSTICK
-            //CHANGE to relative to screen size
+            //Initialise Joystick array
+            //Set as 300 pixels away from both corners, with a radius of 128
             jMove[0] = new Joystick(300, pPoint.y - 300, 128, context);
             jMove[1] = new Joystick(pPoint.x - 300, pPoint.y - 300, 128, context);
 
@@ -330,7 +324,6 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         jMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
                     }
                 }
-
             }
         }
     }
@@ -355,9 +348,15 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         float touchTurn = jMove[1].GetHor();
         float touchTurnUp = jMove[1].GetVer();
 
-        //Get amount to rotate in x
-        if (touchTurn != 0) {
-            xrot += invCam[1] * touchTurnUp;
+        //Set rotation data. Rotating in X is Pitch, Y is Yaw
+        //However, in games, inverting x axis affects the yaw of the camera, and inverting the y axis affects the pitch
+        //Therefore, the rotation in pitch (or x) uses the invert y from option data, and the rotation in yaw (or y)
+        //uses the invert x from option data
+
+        //Get amount to rotate in pitch
+        if (touchTurnUp != 0) {
+            if (bOptionData[INVERTY]) xrot -= touchTurnUp;
+            else xrot += touchTurnUp;
             if (xrot > 90 * DEG_TO_RAD)
             {
                 xrot = 90 * DEG_TO_RAD;
@@ -368,9 +367,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             }
         }
 
-        //Get amount to rotate in y
-        if (touchTurnUp != 0) {
-            yrot += invCam[0] * touchTurn;
+        //Get amount to rotate in yaw
+        if (touchTurn != 0) {
+            if (bOptionData[INVERTX]) yrot -= touchTurn;
+            else yrot += touchTurn;
         }
 
         //Move Camera
@@ -412,7 +412,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
         //Draw and display UI
         //get textures starting x and y, x and y start position on screen, and size to draw
-        //BLACK is transparent
+        //BLACK is transparent, or use .png with transparency
         for (int i = 0; i < 2; i++) {
             fb.blit(uintT[i], 0, 0, buttons[i].left, buttons[i].top, buttons[i].right, buttons[i].bottom, FrameBuffer.TRANSPARENT_BLITTING);
         }
@@ -423,16 +423,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             fb.blit(uintT[2], 0, 0, buttons[2].left, buttons[2].top, buttons[2].right, buttons[2].bottom, FrameBuffer.TRANSPARENT_BLITTING);
         }
 
+        //Draw Joysticks
         for (int i = 0; i < jMove.length; i++) {
             jMove[i].Draw(fb);
         }
-
-        //TEST RESET
-        touchTurn = 0;
-        touchTurnUp = 0;
-        touchMove = 0;
-        touchMoveUp = 0;
-
 
         fb.setRenderTarget(uintT[0]);
         world.renderScene(fb);
