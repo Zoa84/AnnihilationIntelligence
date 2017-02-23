@@ -1,9 +1,11 @@
 package simonchiu.annihilationintelligence.View;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.opengl.GLSurfaceView;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
@@ -54,16 +56,6 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     private static GameActivity master = null;
     Context context;
 
-    //Variables for game
-    private float touchTurn = 0;
-    private float touchTurnUp = 0;
-
-    private float touchMove = 0;
-    private float touchMoveUp = 0;
-
-    private float xpos = -1;
-    private float ypos = -1;
-
     private float xrot = 0.f;
     private float yrot = 0.f;
 
@@ -85,15 +77,22 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     //Joystick TESTING
     private Joystick[] jMove = new Joystick[2];
 
+    private int iState1 = 0;
+    private int iState2 = 0;
+
+    //Screen Size;
+    Point pPoint;
+
     public void setOptions(boolean invX, boolean invY) {
         if (invX) invCam[0] = -1;
         if (invY) invCam[1] = -1;
     }
 
     //Constructor
-    public GameSurfaceView(Context context) {
+    public GameSurfaceView(Context context, Point point) {
         //Get the context, which allows us to load assets
         this.context = context;
+        pPoint = point;
 
         //
         if (master == null) {
@@ -190,10 +189,13 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             sun.setPosition(sv);
             MemoryHelper.compact();
 
+
+
+
             //ADD JOYSTICK
             //CHANGE to relative to screen size
-            jMove[0] = new Joystick(300, 700, 128, context);
-            jMove[1] = new Joystick(1600, 700, 128, context);
+            jMove[0] = new Joystick(300, pPoint.y - 300, 128, context);
+            jMove[1] = new Joystick(pPoint.x - 300, pPoint.y - 300, 128, context);
 
             if (master == null) {
                 Logger.log("Saving master Activity!");
@@ -204,61 +206,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
     public void touchEvent(MotionEvent me) {
         Camera cam = world.getCamera();
-        if (me.getY() > 512) {
-            if (me.getX() > 960.f) {
-                //stop moving while turning
-                //REMOVE FOR BOTH LATER
-                touchMove = 0;
-                touchMoveUp = 0;
-                if (me.getAction() == MotionEvent.ACTION_DOWN) {
-                    xpos = me.getX();
-                    ypos = me.getY();
-                }
 
-                if (me.getAction() == MotionEvent.ACTION_MOVE) {
-                    float xd = me.getX() - xpos;
-                    float yd = me.getY() - ypos;
+        //OLD BUTTON PRESSES TODO REPLACE
+        if (me.getY() > pPoint.y/2) {
 
-                    if (xpos != -1) {
-                        touchTurn = xd / -3000f;
-                        touchTurnUp = yd / -3000f;
-                    } else {
-                        touchTurn = 0;
-                        touchTurnUp = 0;
-                    }
-                }
-            } else {
-                if (me.getAction() == MotionEvent.ACTION_MOVE) {
-                    touchTurn = 0;
-                    touchTurnUp = 0;
-                }
-            }
-
-            //Movement
-            if (me.getX() < 960.f) {
-                //stop turning while moving
-                //REMOVE FOR BOTH LATER
-                touchTurn = 0;
-                touchTurnUp = 0;
-                if (me.getAction() == MotionEvent.ACTION_DOWN) {
-                    xpos = me.getX();
-                    ypos = me.getY();
-                }
-
-                if (me.getAction() == MotionEvent.ACTION_MOVE) {
-                    float xd = me.getX() - xpos;
-                    float yd = me.getY() - ypos;
-                    if (xpos != -1) {
-                        touchMove = xd / 3000f;
-                        touchMoveUp = yd / -3000f;
-                    }
-                }
-            } else {
-                if (me.getAction() == MotionEvent.ACTION_MOVE) {
-                    touchMove = 0;
-                    touchMoveUp = 0;
-                }
-            }
         }
         else //if touching top half of screen
         {
@@ -275,7 +226,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                     }
                 }
                 //Within X if Interact button
-                else if (me.getX() > 1664 && me.getX() < 1920)
+                else if (me.getX() > 1664 && me.getX() < pPoint.x)
                 {
                     if (me.getAction() == MotionEvent.ACTION_UP) {
                         SimpleVector tester = cam.getPosition();
@@ -289,28 +240,97 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             }
         }
 
-        //Update for when not in use (always runs)
-        for (int i = 0; i < jMove.length; i++) {
-            jMove[i].Reset();
+        //The current pointer we are checking the onTouchEvent for (0 = first finger)
+        int pointerIndex = me.getActionIndex();
+
+        //Action is down for first finger
+        if (me.getActionMasked() == MotionEvent.ACTION_DOWN)
+        {
+            if (me.getX(pointerIndex) < pPoint.x/2)
+            {
+                jMove[0].SetState(pointerIndex+1);
+            }
+            else
+            {
+                jMove[1].SetState(pointerIndex+1);
+            }
+        }
+        //Action is down for any finger other than first
+        if (me.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN)
+        {
+            if (me.getX(pointerIndex) < pPoint.x/2)
+            {
+                jMove[0].SetState(pointerIndex+1);
+            }
+            else
+            {
+                jMove[1].SetState(pointerIndex+1);
+            }
         }
 
-        if (me.getAction() == MotionEvent.ACTION_UP) {
-            xpos = -1;
-            ypos = -1;
-            touchTurn = 0;
-            touchTurnUp = 0;
-            touchMove = 0;
-            touchMoveUp = 0;
+        //Action is up for last finger, so reset all
+        if (me.getActionMasked() == MotionEvent.ACTION_UP)
+        {
+            jMove[0].Reset();
+            jMove[1].Reset();
         }
-        else {
+        //Action is up for a finger other than last finger
+        if (me.getActionMasked() == MotionEvent.ACTION_POINTER_UP)
+        {
+            if (me.getX(pointerIndex) < pPoint.x/2 && jMove[0].GetState() == pointerIndex + 1)
+            {
+                jMove[0].Reset();
+            }
+            else if (jMove[1].GetState() == pointerIndex + 1)
+            {
+                jMove[1].Reset();
+            }
+        }
+
+        //Update joysticks with touch data
+        if (jMove[0].GetState() != 0)
+        {
+            jMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+        }
+        if (jMove[1].GetState() != 0)
+        {
+            jMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+        }
+
+        //If the action is moving, then check through all pointers and set them accordingly
+        //This fixes the problems of multiple finger presses to the screen
+        if (me.getAction() == MotionEvent.ACTION_MOVE)
+        {
             int pointerCount = me.getPointerCount();
-            for (int i = 0; i < pointerCount; i++) {
-                float x = me.getX(i);
-                float y = me.getY(i);
 
-                //Joystick chance TEST
-                jMove[0].Update((int) x, (int) y);
-                jMove[1].Update((int) x, (int) y);
+            for (int i = 0; i < pointerCount; i++)
+            {
+                pointerIndex = i;
+                int pointerId = me.getPointerId(pointerIndex);
+
+                if (pointerId == 0)
+                {
+                    if (jMove[0].GetState() == 1)
+                    {
+                        jMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                    }
+                    else if (jMove[1].GetState() == 1)
+                    {
+                        jMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                    }
+                }
+                if (pointerId == 1)
+                {
+                    if (jMove[0].GetState() == 2)
+                    {
+                        jMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                    }
+                    else if (jMove[1].GetState() == 2)
+                    {
+                        jMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                    }
+                }
+
             }
         }
     }
@@ -324,15 +344,19 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             fb.dispose();
         }
         fb = new FrameBuffer(gl, w, h);
-
-
     }
 
     public void onDrawFrame(GL10 gl) {
         Camera cam = world.getCamera();
 
+        //Set the movement and rotation data
+        float touchMove = -jMove[0].GetHor();
+        float touchMoveUp = jMove[0].GetVer();
+        float touchTurn = jMove[1].GetHor();
+        float touchTurnUp = jMove[1].GetVer();
+
         //Get amount to rotate in x
-        if (touchTurnUp != 0) {
+        if (touchTurn != 0) {
             xrot += invCam[1] * touchTurnUp;
             if (xrot > 90 * DEG_TO_RAD)
             {
@@ -345,13 +369,15 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
 
         //Get amount to rotate in y
-        if (touchTurn != 0) {
+        if (touchTurnUp != 0) {
             yrot += invCam[0] * touchTurn;
         }
 
         //Move Camera
-        SimpleVector moveVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
-        cam.moveCamera(moveVector, 10f);
+        if (touchMove != 0 || touchMoveUp != 0) {
+            SimpleVector moveVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
+            cam.moveCamera(moveVector, 10f);
+        }
 
         //Rotate Camera
         SimpleVector cameraVector = cam.getPosition();
@@ -400,6 +426,13 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         for (int i = 0; i < jMove.length; i++) {
             jMove[i].Draw(fb);
         }
+
+        //TEST RESET
+        touchTurn = 0;
+        touchTurnUp = 0;
+        touchMove = 0;
+        touchMoveUp = 0;
+
 
         fb.setRenderTarget(uintT[0]);
         world.renderScene(fb);

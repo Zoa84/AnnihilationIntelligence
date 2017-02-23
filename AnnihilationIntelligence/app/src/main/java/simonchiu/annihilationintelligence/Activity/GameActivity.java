@@ -2,9 +2,11 @@ package simonchiu.annihilationintelligence.Activity;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -82,7 +84,11 @@ public class GameActivity extends Activity {
             }
         });
 
-        renderer = new GameSurfaceView(this);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        Point screenSize = new Point(metrics.widthPixels, metrics.heightPixels);
+
+        renderer = new GameSurfaceView(this, screenSize);
 
         renderer.setOptions(bOptionData[INVERTX], bOptionData[INVERTY]);
 

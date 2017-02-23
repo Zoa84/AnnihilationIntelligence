@@ -16,13 +16,15 @@ import com.threed.jpct.util.BitmapHelper;
 //as well as draw to screen
 
 public class Joystick {
-    int iXPos;                              //X position of joystick (origin is middle)
-    int iYPos;                              //Y position of joystick
-    int iSize;                              //x/y extents
-    int iLimit;
-    Rect rBackground, rButton;              //Saves data to a format to use in the draw function
-    boolean bPressed;
-    Texture[] tTextures = new Texture[2];   //Array of the joystick textures, the background and the button itself
+    private int iXPos;                              //X position of joystick (origin is middle)
+    private int iYPos;                              //Y position of joystick
+    private int iSize;                              //x/y extents
+    private int iLimit;                             //Limits for joystick recognition
+    private int iState;                             //State for pointer to joystick
+    private float fScale;                           //Scale for joystick to movement
+    private Rect rBackground, rButton;              //Saves data to a format to use in the draw function
+    private boolean bPressed;
+    private Texture[] tTextures = new Texture[2];   //Array of the joystick textures, the background and the button itself
 
 
     public Joystick(int xPos, int yPos, int size, Context context) {
@@ -30,6 +32,8 @@ public class Joystick {
         iYPos = yPos;
         iSize = size;
         iLimit = iSize + (iSize/2);
+        iState = 0;
+        fScale = -3000f;
 
         rBackground = new Rect(iXPos - iSize, iYPos - iSize, iSize*2, iSize*2);
         rButton = new Rect(iXPos - (iSize/2), iYPos - (iSize/2), iSize, iSize);
@@ -50,11 +54,12 @@ public class Joystick {
 
     //Have an update function run in the update, can either be used if finger is in boundary, or set with parameters of
     //the fingers x and y and use an if statement to decide if within bounds
-    public void Update(int xPos, int yPos) {
+    public void Update(float xPos, float yPos) {
         float fLength = ((iXPos - xPos) * (iXPos - xPos)) + ((iYPos - yPos) * (iYPos - yPos));
         if (fLength < iLimit*iLimit) {
-            rButton.left = xPos - (iSize / 2);
-            rButton.top = yPos - (iSize / 2);
+            rButton.left = (int) xPos - (iSize / 2);
+            rButton.top = (int) yPos - (iSize / 2);
+            bPressed = true;
         }
     }
 
@@ -72,5 +77,23 @@ public class Joystick {
     public void Reset() {
         rButton.left = iXPos - (iSize/2);
         rButton.top = iYPos - (iSize/2);
+        iState = 0;
+        bPressed = false;
+    }
+
+    public float GetHor() {
+        return ((rButton.left + (iSize / 2)) - iXPos) / fScale;
+    }
+
+    public float GetVer() {
+        return ((rButton.top + (iSize / 2)) - iYPos)/fScale;
+    }
+
+    public void SetState(int state) {
+        iState = state;
+    }
+
+    public int GetState() {
+        return iState;
     }
 }
