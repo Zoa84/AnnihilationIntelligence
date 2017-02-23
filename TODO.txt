@@ -1,12 +1,5 @@
 TODO Next Time
 
-Joystick
-http://stackoverflow.com/questions/5643152/multiple-finger-input-for-android-development
-Get data from joystick classes for amount to move/rotate character.
-Draw relative to screen size
-Clean up motion event code and Joystick class
-
-
 
 Buttons
 Create button class to activate events
@@ -15,6 +8,7 @@ Create or otherwise source a floor with objects in it, and import to game activi
 
 Change or source new music and sound. Currently using "example" music from previous work
 
+Replace old button functionality with Button class
 
 
 Options
