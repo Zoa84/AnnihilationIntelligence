@@ -1,14 +1,12 @@
 TODO Next Time
 
 
-Buttons
-Create button class to activate events
+Create a pause menu, create as a Menu class, which can be drawn when the game is paused, and will draw a Pause title, a Resume, Return to Menu, Options?
 
 Create or otherwise source a floor with objects in it, and import to game activity.
 
 Change or source new music and sound. Currently using "example" music from previous work
 
-Replace old button functionality with Button class
 
 
 Options
