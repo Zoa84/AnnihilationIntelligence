@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import com.threed.jpct.Camera;
 import com.threed.jpct.FrameBuffer;
@@ -80,6 +81,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
     //Screen Size;
     private Point pPoint;
+
+    //if game is paused
+    private boolean bPaused = false;
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
@@ -216,125 +220,101 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         aButtons[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
         aButtons[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
 
-        //Action is down for first finger
-        if (me.getActionMasked() == MotionEvent.ACTION_DOWN)
-        {
-            if (me.getX(pointerIndex) < pPoint.x/2)
-            {
-                aMove[0].SetState(pointerIndex+1);
+        //if Options button is pressed
+        if (me.getActionMasked() == MotionEvent.ACTION_DOWN || me.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+            if (aButtons[1].GetPressed()) {
+                Logger.log("Options");
+                if (bPaused) {
+                    bPaused = false;
+                } else {
+                    bPaused = true;
+                }
             }
-            else
-            {
-                aMove[1].SetState(pointerIndex+1);
-            }
+        }
 
-            //if Interact button is pressed
-            if (aButtons[0].GetPressed())
-            {
-                SimpleVector tester = cam.getPosition();
-                if (object[0].rayIntersectsAABB(tester, testery) < 30.f)
-                {
-                    //Logger.log("HIT!");
-                    object[0].setVisibility(false);
+        //if game is not paused, can update inputs
+        if (!bPaused) {
+            //Action is down for first finger
+            if (me.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                if (me.getX(pointerIndex) < pPoint.x / 2) {
+                    aMove[0].SetState(pointerIndex + 1);
+                } else {
+                    aMove[1].SetState(pointerIndex + 1);
+                }
+
+                //if Interact button is pressed
+                if (aButtons[0].GetPressed()) {
+                    SimpleVector tester = cam.getPosition();
+                    tester.z += 1;
+                    if (object[0].rayIntersectsAABB(tester, testery) < 30.f) {
+                        //Logger.log("HIT!");
+                        object[0].setVisibility(false);
+                    }
+                }
+            }
+            //Action is down for any finger other than first
+            if (me.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+                if (me.getX(pointerIndex) < pPoint.x / 2) {
+                    aMove[0].SetState(pointerIndex + 1);
+                } else {
+                    aMove[1].SetState(pointerIndex + 1);
+                }
+
+                //if Interact button is pressed
+                if (aButtons[0].GetPressed()) {
+                    SimpleVector tester = cam.getPosition();
+                    tester.z += 1;
+                    if (object[0].rayIntersectsAABB(tester, testery) < 30.f) {
+                        //Logger.log("HIT!");
+                        object[0].setVisibility(false);
+                    }
                 }
             }
 
-            //if Options button is pressed
-            if (aButtons[1].GetPressed())
-            {
-
-            }
-        }
-        //Action is down for any finger other than first
-        if (me.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN)
-        {
-            if (me.getX(pointerIndex) < pPoint.x/2)
-            {
-                aMove[0].SetState(pointerIndex+1);
-            }
-            else
-            {
-                aMove[1].SetState(pointerIndex+1);
-            }
-
-            //if Interact button is pressed
-            if (aButtons[0].GetPressed())
-            {
-                SimpleVector tester = cam.getPosition();
-                if (object[0].rayIntersectsAABB(tester, testery) < 30.f)
-                {
-                    //Logger.log("HIT!");
-                    object[0].setVisibility(false);
-                }
-            }
-
-            //if Options button is pressed
-            if (aButtons[1].GetPressed())
-            {
-
-            }
-        }
-
-        //Action is up for last finger, so reset all
-        if (me.getActionMasked() == MotionEvent.ACTION_UP)
-        {
-            aMove[0].Reset();
-            aMove[1].Reset();
-        }
-        //Action is up for a finger other than last finger
-        if (me.getActionMasked() == MotionEvent.ACTION_POINTER_UP)
-        {
-            if (me.getX(pointerIndex) < pPoint.x/2 && aMove[0].GetState() == pointerIndex + 1)
-            {
+            //Action is up for last finger, so reset all
+            if (me.getActionMasked() == MotionEvent.ACTION_UP) {
                 aMove[0].Reset();
-            }
-            else if (aMove[1].GetState() == pointerIndex + 1)
-            {
                 aMove[1].Reset();
             }
-        }
-
-        //Update joysticks with touch data
-        if (aMove[0].GetState() != 0)
-        {
-            aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
-        }
-        if (aMove[1].GetState() != 0)
-        {
-            aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
-        }
-
-        //If the action is moving, then check through all pointers and set them accordingly
-        //This fixes the problems of multiple finger presses to the screen
-        if (me.getAction() == MotionEvent.ACTION_MOVE)
-        {
-            int pointerCount = me.getPointerCount();
-
-            for (int i = 0; i < pointerCount; i++)
-            {
-                pointerIndex = i;
-                int pointerId = me.getPointerId(pointerIndex);
-
-                if (pointerId == 0)
-                {
-                    if (aMove[0].GetState() == 1)
-                    {
-                        aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
-                    }
-                    else if (aMove[1].GetState() == 1)
-                    {
-                        aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
-                    }
+            //Action is up for a finger other than last finger
+            if (me.getActionMasked() == MotionEvent.ACTION_POINTER_UP) {
+                if (me.getX(pointerIndex) < pPoint.x / 2 && aMove[0].GetState() == pointerIndex + 1) {
+                    aMove[0].Reset();
+                } else if (aMove[1].GetState() == pointerIndex + 1) {
+                    aMove[1].Reset();
                 }
-                if (pointerId == 1)
-                {
-                    if (aMove[0].GetState() == 2)
-                    {
-                        aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+            }
+
+            //Update joysticks with touch data
+            if (aMove[0].GetState() != 0) {
+                aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+            }
+            if (aMove[1].GetState() != 0) {
+                aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+            }
+
+            //If the action is moving, then check through all pointers and set them accordingly
+            //This fixes the problems of multiple finger presses to the screen
+            if (me.getAction() == MotionEvent.ACTION_MOVE) {
+                int pointerCount = me.getPointerCount();
+
+                for (int i = 0; i < pointerCount; i++) {
+                    pointerIndex = i;
+                    int pointerId = me.getPointerId(pointerIndex);
+
+                    if (pointerId == 0) {
+                        if (aMove[0].GetState() == 1) {
+                            aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                        } else if (aMove[1].GetState() == 1) {
+                            aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                        }
                     }
-                    else if (aMove[1].GetState() == 2)
-                    {
-                        aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                    if (pointerId == 1) {
+                        if (aMove[0].GetState() == 2) {
+                            aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                        } else if (aMove[1].GetState() == 2) {
+                            aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                        }
                     }
                 }
             }
@@ -386,22 +366,25 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             else yrot += touchTurn;
         }
 
-        //Move Camera
-        if (touchMove != 0 || touchMoveUp != 0) {
-            SimpleVector moveVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
-            cam.moveCamera(moveVector, 10f);
-        }
+        //if game is not paused, can draw objects properly
+        if (!bPaused) {
+            //Move Camera
+            if (touchMove != 0 || touchMoveUp != 0) {
+                SimpleVector moveVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
+                cam.moveCamera(moveVector, 10f);
+            }
 
-        //Rotate Camera
-        SimpleVector cameraVector = cam.getPosition();
-        cameraVector.z += 1f;
-        cam.lookAt(cameraVector);
-        cam.rotateY(yrot);
-        cam.rotateX(xrot);
+            //Rotate Camera
+            SimpleVector cameraVector = cam.getPosition();
+            cameraVector.z += 1f;
+            cam.lookAt(cameraVector);
+            cam.rotateY(yrot);
+            cam.rotateX(xrot);
 
-        //instead of outright vector, find in yrot,
-        //then do a pythagoras check for angle?
-        SimpleVector cameraView = new SimpleVector(-sin(yrot), -xrot, cos(yrot));
+            //instead of outright vector, find in yrot,
+            //then do a pythagoras check for angle?
+            SimpleVector cameraView = new SimpleVector(-sin(yrot), -xrot, cos(yrot));
+            testery = cameraView;
             /*
             cameraVector.z -= 1f;
             if (object[0].rayIntersectsAABB(cameraVector, cameraView) < 30.f)
@@ -414,41 +397,49 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 object[0].setTexture(textures[0]);
             }*/
 
-        //Draw and display 3D objects
-        fb.clear(bg);
-        world.renderScene(fb);
-        world.draw(fb);
-        fb.display();
+            //Draw and display 3D objects
+            fb.clear(bg);
+            world.renderScene(fb);
+            world.draw(fb);
+            fb.display();
 
-        //Array of x y positions and sizes
-        Rect buttons[] = {new Rect(0, 256, 256, 256), new Rect(1664, 256, 256, 256), new Rect(960, 512, 256, 256)};
+            //Array of x y positions and sizes
+            Rect buttons[] = {new Rect(0, 256, 256, 256), new Rect(1664, 256, 256, 256), new Rect(960, 512, 256, 256)};
 
-        //Draw and display UI
-        //get textures starting x and y, x and y start position on screen, and size to draw
-        //BLACK is transparent, or use .png with transparency
-        for (int i = 0; i < 2; i++) {
-            fb.blit(uintT[i], 0, 0, buttons[i].left, buttons[i].top, buttons[i].right, buttons[i].bottom, FrameBuffer.TRANSPARENT_BLITTING);
+            //Draw and display UI
+            //get textures starting x and y, x and y start position on screen, and size to draw
+            //BLACK is transparent, or use .png with transparency
+            for (int i = 0; i < 2; i++) {
+                fb.blit(uintT[i], 0, 0, buttons[i].left, buttons[i].top, buttons[i].right, buttons[i].bottom, FrameBuffer.TRANSPARENT_BLITTING);
+            }
+            //Draw interact text if can interact
+            if (object[0].rayIntersectsAABB(cameraVector, cameraView) < 30.f && object[0].getVisibility())
+            {
+                //Looking at pickable object
+                fb.blit(uintT[2], 0, 0, buttons[2].left, buttons[2].top, buttons[2].right, buttons[2].bottom, FrameBuffer.TRANSPARENT_BLITTING);
+            }
+
+            //Draw Joysticks
+            for (int i = 0; i < aMove.length; i++) {
+                aMove[i].Draw(fb);
+            }
+
+            //Draw Buttons
+            for (int i = 0; i < aButtons.length; i++) {
+                aButtons[i].Draw(fb);
+            }
+
+            fb.setRenderTarget(uintT[0]);
+            world.renderScene(fb);
+            fb.removeRenderTarget();
         }
-        //Draw interact text if can interact
-        if (object[0].rayIntersectsAABB(cameraVector, cameraView) < 30.f && object[0].getVisibility())
-        {
-            //Looking at pickable object
-            fb.blit(uintT[2], 0, 0, buttons[2].left, buttons[2].top, buttons[2].right, buttons[2].bottom, FrameBuffer.TRANSPARENT_BLITTING);
-        }
 
-        //Draw Joysticks
-        for (int i = 0; i < aMove.length; i++) {
-            aMove[i].Draw(fb);
-        }
-
-        //Draw Buttons
+        //Reset
         for (int i = 0; i < aButtons.length; i++) {
-            aButtons[i].Draw(fb);
+            aButtons[i].Reset();
         }
 
-        fb.setRenderTarget(uintT[0]);
-        world.renderScene(fb);
-        fb.removeRenderTarget();
+
 
         if (System.currentTimeMillis() - time >= 1000) {
             //Logger.log(fps + "fps");

@@ -48,10 +48,14 @@ public class Button {
 
     public void Draw(FrameBuffer fb) {
         fb.blit(texture, 0, 0, rButton.left, rButton.top, rButton.right, rButton.bottom, FrameBuffer.TRANSPARENT_BLITTING);
-        bPressed = false;
     }
 
     public boolean GetPressed() {
         return bPressed;
     }
+
+    public void Reset() {
+        bPressed = false;
+    }
+
 }
