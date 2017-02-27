@@ -22,7 +22,7 @@ public class Joystick {
     private int iState;                             //State for pointer to joystick
     private float fScale;                           //Scale for joystick to movement
     private Rect rBackground, rButton;              //Saves data to a format to use in the draw function
-    private Texture[] tTextures = new Texture[2];   //Array of the joystick textures, the background and the button itself
+    private Texture[] aTextures = new Texture[2];   //Array of the joystick textures, the background and the button itself
 
     //Gets the x and y pos from the constructor, as well as size, and will setup the data, as well as load the textures
     public Joystick(int xPos, int yPos, int size, Context context) {
@@ -43,11 +43,11 @@ public class Joystick {
         //Load Joystick background
         resID = context.getResources().getIdentifier("img_joystick_bg", "drawable", context.getPackageName());
         texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iSize*2, iSize*2));
-        tTextures[0] = texture;
+        aTextures[0] = texture;
         //Load Joystick button
         resID = context.getResources().getIdentifier("img_joystick_button", "drawable", context.getPackageName());
         texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iSize, iSize));
-        tTextures[1] = texture;
+        aTextures[1] = texture;
     }
 
     //Have an update function run in the update, can either be used if finger is in boundary, or set with parameters of
@@ -64,10 +64,10 @@ public class Joystick {
     //then draws it
     public void Draw(FrameBuffer fb) {
         //Draw Joystick background
-        fb.blit(tTextures[0], 0, 0, rBackground.left, rBackground.top, rBackground.right, rBackground.bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        fb.blit(aTextures[0], 0, 0, rBackground.left, rBackground.top, rBackground.right, rBackground.bottom, FrameBuffer.TRANSPARENT_BLITTING);
 
         //Draw Joystick button
-        fb.blit(tTextures[1], 0, 0, rButton.left, rButton.top, rButton.right, rButton.bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        fb.blit(aTextures[1], 0, 0, rButton.left, rButton.top, rButton.right, rButton.bottom, FrameBuffer.TRANSPARENT_BLITTING);
     }
 
     //Reset the joystick buttons position and state
