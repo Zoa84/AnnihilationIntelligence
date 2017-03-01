@@ -33,6 +33,8 @@ public class MenuActivity extends AppCompatActivity {
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
 
+    private boolean bCompleted = false;             //Whether the game was completed
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +112,7 @@ public class MenuActivity extends AppCompatActivity {
         }
         //If returning from the Game Activity
         else if (resultCode == GAME) {
-
+            bCompleted = data.getBooleanExtra("completed", false);
         }
 
         if (!Media.getInstance().playMusic(MUSIC_MENU, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();

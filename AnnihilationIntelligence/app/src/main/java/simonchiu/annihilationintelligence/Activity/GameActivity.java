@@ -31,7 +31,7 @@ public class GameActivity extends Activity {
     //TODO necessary?
     private static GameActivity master = null;
 
-    private GLSurfaceView mGLView;
+    private GLSurfaceView mGLView = null;
     private GameSurfaceView renderer = null;
 
     private Toast toast;
@@ -162,4 +162,9 @@ public class GameActivity extends Activity {
         return super.onTouchEvent(me);
     }
 
+
+    @Override
+    public void finish() {
+        super.finish();
+    }
 }

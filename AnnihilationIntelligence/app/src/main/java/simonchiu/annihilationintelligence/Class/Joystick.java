@@ -31,7 +31,7 @@ public class Joystick {
         iSize = size;
         iLimit = iSize + (iSize/2);
         iState = 0;
-        fScale = -3000f;
+        fScale = -5000f;
 
         //Set position of joystick background and button, using constructor parameters
         //Drawn as a rectangle, so need the four corners, not the middle with extents

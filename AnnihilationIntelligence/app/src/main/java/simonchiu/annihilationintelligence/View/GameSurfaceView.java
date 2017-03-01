@@ -1,12 +1,15 @@
 package simonchiu.annihilationintelligence.View;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.opengl.GLSurfaceView;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.threed.jpct.Camera;
@@ -32,6 +35,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import simonchiu.annihilationintelligence.Activity.GameActivity;
 import simonchiu.annihilationintelligence.Class.Button;
+import simonchiu.annihilationintelligence.Class.Floors.FloorThird;
 import simonchiu.annihilationintelligence.Class.Joystick;
 import simonchiu.annihilationintelligence.Class.PauseMenu;
 import simonchiu.annihilationintelligence.Include.AGLFont;
@@ -41,6 +45,7 @@ import simonchiu.annihilationintelligence.R;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+import static java.security.AccessController.getContext;
 import static simonchiu.annihilationintelligence.Class.Defines.*;
 import static simonchiu.annihilationintelligence.Class.TransformFix.*;
 
@@ -88,11 +93,16 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     //Screen Size;
     private Point pPoint;
 
+    int iFloor = 3;
+    FloorThird Floor;
+
     //if game is paused
     private boolean bPaused = false;
 
-    AGLFont font;
-    Paint paint;
+    private AGLFont[] AGLFont = new AGLFont[2];
+    private Paint Paint = new Paint();
+    private Button[] aPauseButtons = new Button[3];
+    private boolean bDestroy = false;
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
@@ -105,18 +115,20 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     //Constructor
     public GameSurfaceView(Context context, Point point) {
         //TODO clean up text
-        paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setTypeface(Typeface.create((String)null, Typeface.BOLD));
-        paint.setTextSize(30);
-        font = new AGLFont(paint);
+        Paint = new Paint();
+        Paint.setAntiAlias(true);
+        Paint.setTypeface(Typeface.create((String)null, Typeface.BOLD));
+        Paint.setTextSize(100);
+        AGLFont[0] = new AGLFont(Paint);
+
+        Paint.setTextSize(50);
+        AGLFont[1] = new AGLFont(Paint);
         ////
 
         //Get the context, which allows us to load assets
         this.context = context;
         pPoint = point;
 
-        //
         if (master == null) {
 
             world = new World();
@@ -125,7 +137,15 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             sun = new Light(world);
             sun.setIntensity(250, 250, 250);
 
-            Texture texture;
+
+            Floor = new FloorThird(context);
+
+
+
+
+
+
+            /*Texture texture;
 
             //For loop loading textures
             int resID;
@@ -170,12 +190,13 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 object[i].rotateMesh();
                 object[i].clearRotation();
             }
-
+            */
             Camera cam = world.getCamera();
             cam.moveCamera(Camera.CAMERA_MOVEOUT, 100);
 
             SimpleVector sv = new SimpleVector();
-            sv.set(object[0].getTransformedCenter());
+            //sv.set(object[0].getTransformedCenter());
+            sv.set(Floor.test());
 
             //Use Maya scene to draw whole scene
             //Create a load object from scene function, reversing all necessary values
@@ -185,6 +206,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 Need opposite X Rotates
                 Need opposite Y Rotates
                 */
+
+            /*
             object[1].translate(fixTrans(25, 0, 0));
             object[2].translate(fixTrans(0f, -8.5f, 0f));
             object[3].scale(50);
@@ -204,7 +227,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
             object[0].translate(fixTrans(-12f, -3.4f, 0f));
             object[0].translateMesh();
-            object[0].clearTranslation();
+            object[0].clearTranslation();*/
 
             sv.y -= 100;
             sv.z -= 100;
@@ -221,7 +244,11 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             aButtons[0] = new Button(0, pPoint.x - 250, pPoint.y - 556, 128, context);
             aButtons[1] = new Button(1, 128, 128, 128, context);
 
-            pauseMenu = new PauseMenu(pPoint.x/2, pPoint.y/2, pPoint.x/10*3, pPoint.y/10*3, context);
+            pauseMenu = new PauseMenu(pPoint.x/2, pPoint.y/2, pPoint.x/2 - 50, pPoint.y/2 - 50, context);
+
+            aPauseButtons[0] = new Button("Pause Menu", pPoint.x/2, pPoint.y/10*2, 320, 100, context);
+            aPauseButtons[1] = new Button("Resume", pPoint.x/2, pPoint.y/2, 250, 100, context);
+            aPauseButtons[2] = new Button("Return to Menu", pPoint.x/2, pPoint.y/10*8, 380, 100, context);
 
             if (master == null) {
                 Logger.log("Saving master Activity!");
@@ -233,6 +260,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     public void touchEvent(MotionEvent me) {
         Camera cam = world.getCamera();
 
+        if (iFloor == 3) {
+            cam = Floor.GetWorld().getCamera();
+        }
+
         //The current pointer we are checking the onTouchEvent for (0 = first finger)
         int pointerIndex = me.getActionIndex();
 
@@ -243,10 +274,21 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         if (me.getActionMasked() == MotionEvent.ACTION_DOWN || me.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
             if (aButtons[1].GetPressed()) {
                 Logger.log("Options");
-                if (bPaused) {
-                    bPaused = false;
-                } else {
+                if (!bPaused) {
                     bPaused = true;
+                }
+            }
+
+            aPauseButtons[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+            aPauseButtons[2].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+
+            if (bPaused) {
+                if (aPauseButtons[1].GetPressed()) {
+                    bPaused = false;
+                }
+                else if (aPauseButtons[2].GetPressed()) {
+                    bDestroy = true;
+
                 }
             }
         }
@@ -354,6 +396,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl) {
         Camera cam = world.getCamera();
 
+        if (iFloor == 3) {
+            cam = Floor.GetWorld().getCamera();
+        }
+
         //if game is not paused
         if (!bPaused) {
             //Set the movement and rotation data
@@ -384,10 +430,40 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 else yrot += touchTurn;
             }
 
+            //Would do collisions here. check as 2d from top down.
+
+
+
             //Move Camera
             if (touchMove != 0 || touchMoveUp != 0) {
                 SimpleVector moveVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
                 cam.moveCamera(moveVector, 10f);
+                float xTest = cam.getPosition().x;
+                float yTest = cam.getPosition().z;
+                Log.d("tag: ", "x: " + xTest);
+                Log.d("tag: ", "y: " + yTest);
+                if (iFloor == 3) {
+                    /*if (Floor.CollisionsWall(xTest, yTest)
+                            ||Floor.Collisions(xTest, yTest)) {
+                        cam.moveCamera(moveVector, -10f);
+                    }*/
+
+                    int check = Floor.Collisions(xTest, yTest);
+                    if (check == 1) {
+                        SimpleVector testVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
+                        cam.moveCamera(testVector, -10f);
+                    }
+                    else {
+                        if (Floor.CollisionsWallX(xTest)) {
+                            SimpleVector testVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, 0.f);
+                            cam.moveCamera(testVector, -10f);
+                        }
+                        if (Floor.CollisionsWallY(yTest)) {
+                            SimpleVector testVector = new SimpleVector(0.f, 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
+                            cam.moveCamera(testVector, -10f);
+                        }
+                    }
+                }
             }
         }
 
@@ -401,12 +477,19 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             cam.rotateX(xrot);
         }
 
+        if (iFloor == 3 && !bDestroy) {
+            fb.clear(bg);
+            Floor.GetWorld().renderScene(fb);
+            Floor.GetWorld().draw(fb);
+            fb.display();
+        }
+
         //Draw and display 3D objects
-        fb.clear(bg);
+        /*fb.clear(bg);
         world.renderScene(fb);
         world.draw(fb);
         fb.display();
-
+        */
         //TODO Remove
         //Array of x y positions and sizes
         Rect buttons[] = {new Rect(0, 256, 256, 256), new Rect(1664, 256, 256, 256), new Rect(960, 512, 256, 256)};
@@ -417,44 +500,48 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         //Draw and display UI
         //get textures starting x and y, x and y start position on screen, and size to draw
         //BLACK is transparent, or use .png with transparency
-        for (int i = 0; i < 2; i++) {
-            fb.blit(uintT[i], 0, 0, buttons[i].left, buttons[i].top, buttons[i].right, buttons[i].bottom, FrameBuffer.TRANSPARENT_BLITTING);
-        }
+        /*
         //Draw interact text if can interact
         if (object[0].rayIntersectsAABB(cameraVector, cameraView) < 30.f && object[0].getVisibility())
         {
             //Looking at pickable object
             fb.blit(uintT[2], 0, 0, buttons[2].left, buttons[2].top, buttons[2].right, buttons[2].bottom, FrameBuffer.TRANSPARENT_BLITTING);
-        }
+        }*/
 
-        //Draw Joysticks
-        for (int i = 0; i < aMove.length; i++) {
-            aMove[i].Draw(fb);
-        }
+        if (!bDestroy) {
+            //Draw Joysticks
+            for (int i = 0; i < aMove.length; i++) {
+                aMove[i].Draw(fb);
+            }
 
-        //Draw Buttons
-        for (int i = 0; i < aButtons.length; i++) {
-            aButtons[i].Draw(fb);
-        }
+            //Draw Buttons
+            for (int i = 0; i < aButtons.length; i++) {
+                aButtons[i].Draw(fb);
+            }
 
-        if (bPaused) {
-            pauseMenu.Draw(fb);
-        }
+            //Draw pause menu
+            if (bPaused) {
+                pauseMenu.Draw(fb);
 
+                aPauseButtons[0].Draw(fb, AGLFont[0]);
+                aPauseButtons[1].Draw(fb, AGLFont[0]);
+                aPauseButtons[2].Draw(fb, AGLFont[0]);
+            }
 
-        //TODO Clean up text
-        Rectangle tester = new Rectangle();
-        font.getStringBounds("Hello World!", tester);
-        font.blitString(fb, "Hello World!", (pPoint.x/2) - (tester.width/2), pPoint.y/2, 100, RGBColor.WHITE);
-        ////
+            fb.setRenderTarget(uintT[0]);
+            //world.renderScene(fb);
+            if (iFloor == 3) {
+                Floor.GetWorld().renderScene(fb);
+            }
+            fb.removeRenderTarget();
 
-        fb.setRenderTarget(uintT[0]);
-        world.renderScene(fb);
-        fb.removeRenderTarget();
+            //Reset
+            for (int i = 0; i < aButtons.length; i++) {
+                aButtons[i].Reset();
+            }
 
-        //Reset
-        for (int i = 0; i < aButtons.length; i++) {
-            aButtons[i].Reset();
+            aPauseButtons[1].Reset();
+            aPauseButtons[2].Reset();
         }
 
 
@@ -465,6 +552,21 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             time = System.currentTimeMillis();
         }
         fps++;
+
+        if (bDestroy == true) {
+            master = null;
+            fb.dispose();
+            world.dispose();
+            TextureManager.getInstance().flush();
+            if (iFloor == 3) {
+                Floor.Destroy();
+            }
+            Intent intent = new Intent();
+            intent.putExtra("completed", false);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            ((GameActivity) context).setResult(GAME, intent);
+            ((GameActivity) context).finish();
+        }
     }
 
 }
