@@ -1,14 +1,13 @@
 package simonchiu.annihilationintelligence.View;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.opengl.GLSurfaceView;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
-import android.widget.Toast;
 
 import com.threed.jpct.Camera;
 import com.threed.jpct.FrameBuffer;
@@ -24,6 +23,7 @@ import com.threed.jpct.World;
 import com.threed.jpct.util.BitmapHelper;
 import com.threed.jpct.util.MemoryHelper;
 
+import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -33,6 +33,10 @@ import javax.microedition.khronos.opengles.GL10;
 import simonchiu.annihilationintelligence.Activity.GameActivity;
 import simonchiu.annihilationintelligence.Class.Button;
 import simonchiu.annihilationintelligence.Class.Joystick;
+import simonchiu.annihilationintelligence.Class.PauseMenu;
+import simonchiu.annihilationintelligence.Include.AGLFont;
+import simonchiu.annihilationintelligence.Include.Rectangle;
+import simonchiu.annihilationintelligence.R;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -79,11 +83,16 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     //Array of Buttons
     private Button[] aButtons = new Button[2];
 
+    private PauseMenu pauseMenu;
+
     //Screen Size;
     private Point pPoint;
 
     //if game is paused
     private boolean bPaused = false;
+
+    AGLFont font;
+    Paint paint;
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
@@ -95,6 +104,14 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
     //Constructor
     public GameSurfaceView(Context context, Point point) {
+        //TODO clean up text
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setTypeface(Typeface.create((String)null, Typeface.BOLD));
+        paint.setTextSize(30);
+        font = new AGLFont(paint);
+        ////
+
         //Get the context, which allows us to load assets
         this.context = context;
         pPoint = point;
@@ -203,6 +220,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             //Set options button and interact button
             aButtons[0] = new Button(0, pPoint.x - 250, pPoint.y - 556, 128, context);
             aButtons[1] = new Button(1, 128, 128, 128, context);
+
+            pauseMenu = new PauseMenu(pPoint.x/2, pPoint.y/2, pPoint.x/10*3, pPoint.y/10*3, context);
 
             if (master == null) {
                 Logger.log("Saving master Activity!");
@@ -335,104 +354,103 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl) {
         Camera cam = world.getCamera();
 
-        //Set the movement and rotation data
-        float touchMove = -aMove[0].GetHor();
-        float touchMoveUp = aMove[0].GetVer();
-        float touchTurn = aMove[1].GetHor();
-        float touchTurnUp = aMove[1].GetVer();
-
-        //Set rotation data. Rotating in X is Pitch, Y is Yaw
-        //However, in games, inverting x axis affects the yaw of the camera, and inverting the y axis affects the pitch
-        //Therefore, the rotation in pitch (or x) uses the invert y from option data, and the rotation in yaw (or y)
-        //uses the invert x from option data
-
-        //Get amount to rotate in pitch
-        if (touchTurnUp != 0) {
-            if (bOptionData[INVERTY]) xrot -= touchTurnUp;
-            else xrot += touchTurnUp;
-            if (xrot > 90 * DEG_TO_RAD)
-            {
-                xrot = 90 * DEG_TO_RAD;
-            }
-            else if (xrot < -90 * DEG_TO_RAD)
-            {
-                xrot = -90 * DEG_TO_RAD;
-            }
-        }
-
-        //Get amount to rotate in yaw
-        if (touchTurn != 0) {
-            if (bOptionData[INVERTX]) yrot -= touchTurn;
-            else yrot += touchTurn;
-        }
-
-        //if game is not paused, can draw objects properly
+        //if game is not paused
         if (!bPaused) {
+            //Set the movement and rotation data
+            float touchMove = -aMove[0].GetHor();
+            float touchMoveUp = aMove[0].GetVer();
+            float touchTurn = aMove[1].GetHor();
+            float touchTurnUp = aMove[1].GetVer();
+
+            //Set rotation data. Rotating in X is Pitch, Y is Yaw
+            //However, in games, inverting x axis affects the yaw of the camera, and inverting the y axis affects the pitch
+            //Therefore, the rotation in pitch (or x) uses the invert y from option data, and the rotation in yaw (or y)
+            //uses the invert x from option data
+
+            //Get amount to rotate in pitch
+            if (touchTurnUp != 0) {
+                if (bOptionData[INVERTY]) xrot -= touchTurnUp;
+                else xrot += touchTurnUp;
+                if (xrot > 90 * DEG_TO_RAD) {
+                    xrot = 90 * DEG_TO_RAD;
+                } else if (xrot < -90 * DEG_TO_RAD) {
+                    xrot = -90 * DEG_TO_RAD;
+                }
+            }
+
+            //Get amount to rotate in yaw
+            if (touchTurn != 0) {
+                if (bOptionData[INVERTX]) yrot -= touchTurn;
+                else yrot += touchTurn;
+            }
+
             //Move Camera
             if (touchMove != 0 || touchMoveUp != 0) {
                 SimpleVector moveVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
                 cam.moveCamera(moveVector, 10f);
             }
+        }
 
-            //Rotate Camera
-            SimpleVector cameraVector = cam.getPosition();
-            cameraVector.z += 1f;
+        //Rotate Camera
+        SimpleVector cameraVector = cam.getPosition();
+        cameraVector.z += 1f;
+
+        if (!bPaused) {
             cam.lookAt(cameraVector);
             cam.rotateY(yrot);
             cam.rotateX(xrot);
-
-            //instead of outright vector, find in yrot,
-            //then do a pythagoras check for angle?
-            SimpleVector cameraView = new SimpleVector(-sin(yrot), -xrot, cos(yrot));
-            testery = cameraView;
-            /*
-            cameraVector.z -= 1f;
-            if (object[0].rayIntersectsAABB(cameraVector, cameraView) < 30.f)
-            {
-                //Logger.log("HIT!");
-                object[0].setTexture(textures[1]);
-            }
-            else
-            {
-                object[0].setTexture(textures[0]);
-            }*/
-
-            //Draw and display 3D objects
-            fb.clear(bg);
-            world.renderScene(fb);
-            world.draw(fb);
-            fb.display();
-
-            //Array of x y positions and sizes
-            Rect buttons[] = {new Rect(0, 256, 256, 256), new Rect(1664, 256, 256, 256), new Rect(960, 512, 256, 256)};
-
-            //Draw and display UI
-            //get textures starting x and y, x and y start position on screen, and size to draw
-            //BLACK is transparent, or use .png with transparency
-            for (int i = 0; i < 2; i++) {
-                fb.blit(uintT[i], 0, 0, buttons[i].left, buttons[i].top, buttons[i].right, buttons[i].bottom, FrameBuffer.TRANSPARENT_BLITTING);
-            }
-            //Draw interact text if can interact
-            if (object[0].rayIntersectsAABB(cameraVector, cameraView) < 30.f && object[0].getVisibility())
-            {
-                //Looking at pickable object
-                fb.blit(uintT[2], 0, 0, buttons[2].left, buttons[2].top, buttons[2].right, buttons[2].bottom, FrameBuffer.TRANSPARENT_BLITTING);
-            }
-
-            //Draw Joysticks
-            for (int i = 0; i < aMove.length; i++) {
-                aMove[i].Draw(fb);
-            }
-
-            //Draw Buttons
-            for (int i = 0; i < aButtons.length; i++) {
-                aButtons[i].Draw(fb);
-            }
-
-            fb.setRenderTarget(uintT[0]);
-            world.renderScene(fb);
-            fb.removeRenderTarget();
         }
+
+        //Draw and display 3D objects
+        fb.clear(bg);
+        world.renderScene(fb);
+        world.draw(fb);
+        fb.display();
+
+        //TODO Remove
+        //Array of x y positions and sizes
+        Rect buttons[] = {new Rect(0, 256, 256, 256), new Rect(1664, 256, 256, 256), new Rect(960, 512, 256, 256)};
+
+        SimpleVector cameraView = new SimpleVector(-sin(yrot), -xrot, cos(yrot));
+        testery = cameraView;
+
+        //Draw and display UI
+        //get textures starting x and y, x and y start position on screen, and size to draw
+        //BLACK is transparent, or use .png with transparency
+        for (int i = 0; i < 2; i++) {
+            fb.blit(uintT[i], 0, 0, buttons[i].left, buttons[i].top, buttons[i].right, buttons[i].bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        }
+        //Draw interact text if can interact
+        if (object[0].rayIntersectsAABB(cameraVector, cameraView) < 30.f && object[0].getVisibility())
+        {
+            //Looking at pickable object
+            fb.blit(uintT[2], 0, 0, buttons[2].left, buttons[2].top, buttons[2].right, buttons[2].bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        }
+
+        //Draw Joysticks
+        for (int i = 0; i < aMove.length; i++) {
+            aMove[i].Draw(fb);
+        }
+
+        //Draw Buttons
+        for (int i = 0; i < aButtons.length; i++) {
+            aButtons[i].Draw(fb);
+        }
+
+        if (bPaused) {
+            pauseMenu.Draw(fb);
+        }
+
+
+        //TODO Clean up text
+        Rectangle tester = new Rectangle();
+        font.getStringBounds("Hello World!", tester);
+        font.blitString(fb, "Hello World!", (pPoint.x/2) - (tester.width/2), pPoint.y/2, 100, RGBColor.WHITE);
+        ////
+
+        fb.setRenderTarget(uintT[0]);
+        world.renderScene(fb);
+        fb.removeRenderTarget();
 
         //Reset
         for (int i = 0; i < aButtons.length; i++) {

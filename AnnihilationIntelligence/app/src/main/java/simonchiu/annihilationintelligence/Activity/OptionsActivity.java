@@ -29,7 +29,7 @@ public class OptionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
-        //Get options and volume data from Menu activity
+        //Get options and volume data from PauseMenu activity
         this.bOptionData = getIntent().getBooleanArrayExtra("optionData");
         this.iVolume = getIntent().getIntArrayExtra("volumeData");
         //Set orientation

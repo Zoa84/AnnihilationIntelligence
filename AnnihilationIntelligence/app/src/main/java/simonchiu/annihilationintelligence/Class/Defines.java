@@ -14,7 +14,7 @@ public final class Defines {
     public static final int INVERTY = 3;
     public static final int ORIENTATION = 4;
 
-    //Defines for the activity flow to/from the Menu Activity
+    //Defines for the activity flow to/from the PauseMenu Activity
     public static final int OPTIONS = 0;
     public static final int GAME = 1;
 

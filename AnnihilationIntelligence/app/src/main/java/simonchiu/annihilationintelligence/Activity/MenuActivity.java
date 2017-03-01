@@ -20,7 +20,7 @@ import simonchiu.annihilationintelligence.R;
 
 import static simonchiu.annihilationintelligence.Class.Defines.*;
 
-/*The Menu Activity. This is the central hub of the app, and is accessed after the Splash Screen
+/*The PauseMenu Activity. This is the central hub of the app, and is accessed after the Splash Screen
 From here the player can choose to start the game, change options or exit. If exiting using the
 Android buttons, a toast message will appear to ask the player to press again to exit.
  */

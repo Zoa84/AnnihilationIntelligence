@@ -24,7 +24,7 @@ import simonchiu.annihilationintelligence.R;
 import static simonchiu.annihilationintelligence.Class.Defines.*;
 
 /*The Splash Screen Activity, and the starting point of the app. From here it creates a loading screen
-for the player, then moves on to the Menu Activity.
+for the player, then moves on to the PauseMenu Activity.
  */
 
 public class SplashActivity extends AppCompatActivity {
@@ -50,7 +50,7 @@ public class SplashActivity extends AppCompatActivity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    //After loading all necessary data, send it to the Menu Activity
+                    //After loading all necessary data, send it to the PauseMenu Activity
                     Intent intent = new Intent(SplashActivity.this, MenuActivity.class);
                     intent.putExtra("optionData", bOptionData);
                     intent.putExtra("volumeData", iVolume);
