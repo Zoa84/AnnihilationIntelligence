@@ -62,7 +62,7 @@ public class GameActivity extends Activity {
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
 
         //Play music (passing the element to play)
-        if (!Media.getInstance().playMusic(MUSIC_BATTLE, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();
+        PlayMusic(MUSIC_BATTLE);
 
         //TODO necessary?
         if (master != null) {
@@ -162,6 +162,13 @@ public class GameActivity extends Activity {
         return super.onTouchEvent(me);
     }
 
+    public void PlayMusic(int music) {
+        if (!Media.getInstance().playMusic(music, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();
+    }
+
+    public void PlaySound(int sound) {
+        Media.getInstance().playSound(sound, iVolume[SOUND], bOptionData[SOUND]);
+    }
 
     @Override
     public void finish() {

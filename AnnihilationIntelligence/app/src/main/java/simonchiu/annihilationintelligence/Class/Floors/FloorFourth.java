@@ -18,39 +18,36 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import simonchiu.annihilationintelligence.Activity.GameActivity;
-import simonchiu.annihilationintelligence.Class.Button;
 import simonchiu.annihilationintelligence.Class.CollisionMap;
-import simonchiu.annihilationintelligence.Class.Joystick;
-import simonchiu.annihilationintelligence.Class.PauseMenu;
 
 import static simonchiu.annihilationintelligence.Class.Defines.DEG_TO_RAD;
 import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
 
 /**
- * Created by Simon on 01/03/2017.
+ * Created by Simon on 02/03/2017.
  */
 
-public class FloorThird {
-    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2"};
-    private Object3D[] object = new Object3D[32];
+public class FloorFourth {
+    private String[] textures = {"floor", "skybox", "table", "chair", "comp"};
+    private Object3D[] object = new Object3D[28];
     private Object3D[] aObjects = null;
 
     private Light sun = null;
     private static GameActivity master = null;
     private World world = null;
 
-    private CollisionMap[] Collisions = new CollisionMap[10];
-    private int xWall = 34;
-    private int yWall = 34;
+    private CollisionMap[] Collisions = new CollisionMap[9];
+    private int xWall = 35;
+    private int yWall = 35;
 
-    public FloorThird(Context context) {
+    public FloorFourth(Context context) {
         if (master == null) {
 
             world = new World();
-            world.setAmbientLight(100, 100, 100);
+            world.setAmbientLight(20, 20, 20);
 
             sun = new Light(world);
-            sun.setIntensity(100, 100, 100);
+            sun.setIntensity(250, 250, 250);
 
             Texture texture;
 
@@ -68,10 +65,9 @@ public class FloorThird {
             //This is then but into an array called object which contains all the loaded objects together
             //These can be set textures and built
 
-            ObjectLoader(context, 0, "room");
+            ObjectLoader(context, 0, "floor");
 
-            ObjectLoader(context, 1, "floor");
-
+            ObjectLoader(context, 1, "table");
             ObjectLoader(context, 2, "table");
             ObjectLoader(context, 3, "table");
             ObjectLoader(context, 4, "table");
@@ -80,8 +76,8 @@ public class FloorThird {
             ObjectLoader(context, 7, "table");
             ObjectLoader(context, 8, "table");
             ObjectLoader(context, 9, "table");
-            ObjectLoader(context, 10, "table");
 
+            ObjectLoader(context, 10, "chair");
             ObjectLoader(context, 11, "chair");
             ObjectLoader(context, 12, "chair");
             ObjectLoader(context, 13, "chair");
@@ -90,8 +86,8 @@ public class FloorThird {
             ObjectLoader(context, 16, "chair");
             ObjectLoader(context, 17, "chair");
             ObjectLoader(context, 18, "chair");
-            ObjectLoader(context, 19, "chair");
 
+            ObjectLoader(context, 19, "comp");
             ObjectLoader(context, 20, "comp");
             ObjectLoader(context, 21, "comp");
             ObjectLoader(context, 22, "comp");
@@ -100,12 +96,6 @@ public class FloorThird {
             ObjectLoader(context, 25, "comp");
             ObjectLoader(context, 26, "comp");
             ObjectLoader(context, 27, "comp");
-            ObjectLoader(context, 28, "comp");
-
-            ObjectLoader(context, 29, "elev");
-
-            ObjectLoader(context, 30, "door1");
-            ObjectLoader(context, 31, "door2");
 
             Collisions[0] = new CollisionMap(-20, 20, 5, 3);
             Collisions[1] = new CollisionMap(-20, 0, 5, 3);
@@ -117,46 +107,43 @@ public class FloorThird {
             Collisions[7] = new CollisionMap(20, 0, 5, 3);
             Collisions[8] = new CollisionMap(20, -20, 5, 3);
 
-            Collisions[9] = new CollisionMap(-15, 36, 14, 7);
-
             Camera cam = world.getCamera();
-            cam.setPosition(-30f, 0, -30f);
+            cam.setPosition(-35f, 0, -35f);
 
             SimpleVector sv = new SimpleVector();
             sv.set(object[0].getTransformedCenter());
 
-            //object[0].translate(fixTrans(0f, -8.5f, 0f));
+            object[0].translate(fixTrans(0f, -8.5f, 0f));
 
-            object[2].translate(fixTrans(-20f, -6f, -20f));
-            object[3].translate(fixTrans(-20f, -6f, 0f));
-            object[4].translate(fixTrans(-20f, -6f, 20f));
-            object[5].translate(fixTrans(0f, -6f, -20f));
-            object[6].translate(fixTrans(0f, -6f, 0f));
-            object[7].translate(fixTrans(0f, -6f, 20f));
-            object[8].translate(fixTrans(20f, -6f, -20f));
-            object[9].translate(fixTrans(20f, -6f, 0f));
-            object[10].translate(fixTrans(20f, -6f, 20f));
+            object[1].translate(fixTrans(-20f, -6f, -20f));
+            object[2].translate(fixTrans(-20f, -6f, 0f));
+            object[3].translate(fixTrans(-20f, -6f, 20f));
+            object[4].translate(fixTrans(0f, -6f, -20f));
+            object[5].translate(fixTrans(0f, -6f, 0f));
+            object[6].translate(fixTrans(0f, -6f, 20f));
+            object[7].translate(fixTrans(20f, -6f, -20f));
+            object[8].translate(fixTrans(20f, -6f, 0f));
+            object[9].translate(fixTrans(20f, -6f, 20f));
 
-            object[11].translate(fixTrans(-20f, -5.5f, -15.5f));
-            object[12].translate(fixTrans(-20f, -5.5f, 4.5f));
-            object[13].translate(fixTrans(-20f, -5.5f, 24.5f));
-            object[13].rotateY(30 * DEG_TO_RAD);
-            object[14].translate(fixTrans(0f, -5.5f, -15.5f));
-            object[15].translate(fixTrans(0f, -5.5f, 4.5f));
-            object[16].translate(fixTrans(0f, -5.5f, 24.5f));
-            object[17].translate(fixTrans(20f, -5.5f, -15.5f));
-            object[18].translate(fixTrans(20f, -5.5f, 4.5f));
-            object[19].translate(fixTrans(20f, -5.5f, 24.5f));
+            object[10].translate(fixTrans(-20f, -5.5f, -15.5f));
+            object[11].translate(fixTrans(-20f, -5.5f, 4.5f));
+            object[12].translate(fixTrans(-20f, -5.5f, 24.5f));
+            object[13].translate(fixTrans(0f, -5.5f, -15.5f));
+            object[14].translate(fixTrans(0f, -5.5f, 4.5f));
+            object[15].translate(fixTrans(0f, -5.5f, 24.5f));
+            object[16].translate(fixTrans(20f, -5.5f, -15.5f));
+            object[17].translate(fixTrans(20f, -5.5f, 4.5f));
+            object[18].translate(fixTrans(20f, -5.5f, 24.5f));
 
-            object[20].translate(fixTrans(-20f, -1.5f, -20f));
-            object[21].translate(fixTrans(-20f, -1.5f, 0f));
-            object[22].translate(fixTrans(-20f, -1.5f, 20f));
-            object[23].translate(fixTrans(0f, -1.5f, -20f));
-            object[24].translate(fixTrans(0f, -1.5f, 0f));
-            object[25].translate(fixTrans(0f, -1.5f, 20f));
-            object[26].translate(fixTrans(20f, -1.5f, -20f));
-            object[27].translate(fixTrans(20f, -1.5f, 0f));
-            object[28].translate(fixTrans(20f, -1.5f, 20f));
+            object[19].translate(fixTrans(-20f, -1.5f, -20f));
+            object[20].translate(fixTrans(-20f, -1.5f, 0f));
+            object[21].translate(fixTrans(-20f, -1.5f, 20f));
+            object[22].translate(fixTrans(0f, -1.5f, -20f));
+            object[23].translate(fixTrans(0f, -1.5f, 0f));
+            object[24].translate(fixTrans(0f, -1.5f, 20f));
+            object[25].translate(fixTrans(20f, -1.5f, -20f));
+            object[26].translate(fixTrans(20f, -1.5f, 0f));
+            object[27].translate(fixTrans(20f, -1.5f, 20f));
 
             sv.y -= 100;
             sv.z -= 100;
@@ -172,6 +159,10 @@ public class FloorThird {
 
     public World GetWorld() {
         return world;
+    }
+
+    public Light GetSun() {
+        return sun;
     }
 
     public SimpleVector test(){
@@ -234,6 +225,7 @@ public class FloorThird {
                 }
             }
         }
+
         return output;
     }
 
@@ -246,6 +238,13 @@ public class FloorThird {
 
     public boolean CollisionsWallY(float yPos) {
         if (yPos > yWall || yPos < -yWall) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean CollisionsWall(float xPos, float yPos) {
+        if (xPos > xWall || xPos < -xWall || yPos > yWall || yPos < -yWall) {
             return true;
         }
         return false;

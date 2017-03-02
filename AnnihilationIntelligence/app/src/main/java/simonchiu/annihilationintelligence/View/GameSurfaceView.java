@@ -36,6 +36,7 @@ import javax.microedition.khronos.opengles.GL10;
 import simonchiu.annihilationintelligence.Activity.GameActivity;
 import simonchiu.annihilationintelligence.Class.Button;
 import simonchiu.annihilationintelligence.Class.Floors.FloorThird;
+import simonchiu.annihilationintelligence.Class.Floors.FloorFourth;
 import simonchiu.annihilationintelligence.Class.Joystick;
 import simonchiu.annihilationintelligence.Class.PauseMenu;
 import simonchiu.annihilationintelligence.Include.AGLFont;
@@ -63,24 +64,14 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     private World world = null;
     private RGBColor bg = new RGBColor(50, 50, 100);
     private int fps = 0;
-    private Light sun = null;
     private static GameActivity master = null;
     private Context context;
 
-    private float xrot = 0.f;
-    private float yrot = 0.f;
+    //X and Y rotations for the camera
+    private float xRot = 0.f;
+    private float yRot = 0.f;
 
-    private SimpleVector testery = new SimpleVector(0.f, 0.f, 0.f);
-
-    //String of texture names, used to load textures and objects
-    private String[] textures = {"screwdriver", "pointytree", "floor", "skybox", "table", "chair", "lamp"};
-    private Texture[] aTextures = new Texture[textures.length];
-    private Object3D[] object = new Object3D[textures.length];
-    private Object3D[] aObjects = null;
-
-    //Array of strings of UI texture names, and array of textures themselves
-    private String[] uint = {"inv", "inte", "interact"};
-    private Texture[] uintT = new Texture[uint.length];
+    private SimpleVector cameraRay = new SimpleVector(0.f, 0.f, 0.f);
 
     //Array of Joysticks
     private Joystick[] aMove = new Joystick[2];
@@ -93,8 +84,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     //Screen Size;
     private Point pPoint;
 
-    int iFloor = 3;
-    FloorThird Floor;
+    private int iFloor = 3;
+    private FloorThird FloorThird;
+    private FloorFourth FloorFourth;
 
     //if game is paused
     private boolean bPaused = false;
@@ -114,125 +106,24 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
     //Constructor
     public GameSurfaceView(Context context, Point point) {
-        //TODO clean up text
+        //Set up two fonts, one large, one small
         Paint = new Paint();
         Paint.setAntiAlias(true);
         Paint.setTypeface(Typeface.create((String)null, Typeface.BOLD));
         Paint.setTextSize(100);
         AGLFont[0] = new AGLFont(Paint);
-
         Paint.setTextSize(50);
         AGLFont[1] = new AGLFont(Paint);
-        ////
 
         //Get the context, which allows us to load assets
         this.context = context;
+        //The Width and Height of the screen
         pPoint = point;
 
         if (master == null) {
-
-            world = new World();
-            world.setAmbientLight(20, 20, 20);
-
-            sun = new Light(world);
-            sun.setIntensity(250, 250, 250);
-
-
-            Floor = new FloorThird(context);
-
-
-
-
-
-
-            /*Texture texture;
-
-            //For loop loading textures
-            int resID;
-            for (int i = 0; i < textures.length; i++) {
-                resID = context.getResources().getIdentifier(textures[i], "drawable", context.getPackageName());
-                texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 512, 512));
-                TextureManager.getInstance().addTexture(textures[i], texture);
-                aTextures[i] = texture;
-            }
-
-            //Load UI textures
-            for (int i = 0; i < uint.length; i++) {
-                resID = context.getResources().getIdentifier(uint[i], "drawable", context.getPackageName());
-                texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 256, 256));
-                TextureManager.getInstance().addTexture(uint[i], texture);
-                uintT[i] = texture;
-            }
-
-            //Using an input stream, we get the obj by the objects name
-            //and load it to tObjects, which is an array, as the loadobj function returns multiple objects
-            //however in our case, it happens to only be one object each time.
-            //This is then but into an array called object which contains all the loaded objects together
-            //These can be set textures and built
-            InputStream is;
-
-            for (int i = 0; i < textures.length; i++) {
-                try {
-                    is = context.getResources().getAssets().open("objects/" + textures[i] + ".obj");
-                    aObjects = Loader.loadOBJ(is, null, 1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                object[i] = aObjects[0];
-                object[i].setTexture(textures[i]);
-                object[i].build();
-                world.addObject(object[i]);
-
-                //Due to jPCT world axis, rotate around X-axis to draw right-side up
-                object[i].setRotationPivot(SimpleVector.ORIGIN);
-                object[i].rotateX(180 * DEG_TO_RAD);
-                object[i].rotateMesh();
-                object[i].clearRotation();
-            }
-            */
-            Camera cam = world.getCamera();
-            cam.moveCamera(Camera.CAMERA_MOVEOUT, 100);
-
-            SimpleVector sv = new SimpleVector();
-            //sv.set(object[0].getTransformedCenter());
-            sv.set(Floor.test());
-
-            //Use Maya scene to draw whole scene
-            //Create a load object from scene function, reversing all necessary values
-                /*
-                Need opposite Y translates
-                Need opposite Z translates
-                Need opposite X Rotates
-                Need opposite Y Rotates
-                */
-
-            /*
-            object[1].translate(fixTrans(25, 0, 0));
-            object[2].translate(fixTrans(0f, -8.5f, 0f));
-            object[3].scale(50);
-            object[3].translate(fixTrans(0, 0, 100));
-            object[4].translate(fixTrans(-10f, -6f, 0f));
-            object[5].translate(fixTrans(-11f, -5.5f, 4f));
-            object[5].rotateY(20f * DEG_TO_RAD);
-            object[6].translate(fixTrans(-7f, -3.5f, 0f));
-            object[6].rotateY(30 * DEG_TO_RAD);
-
-            //Like shaders, ROTATE then TRANSLATE
-            //Must also rotate and translate mesh for collisions
-            object[0].rotateX(25 * DEG_TO_RAD);
-            object[0].rotateZ(90 * DEG_TO_RAD);
-            object[0].rotateMesh();
-            object[0].clearRotation();
-
-            object[0].translate(fixTrans(-12f, -3.4f, 0f));
-            object[0].translateMesh();
-            object[0].clearTranslation();*/
-
-            sv.y -= 100;
-            sv.z -= 100;
-            sun.setPosition(sv);
-            MemoryHelper.compact();
+            //Load the floors
+            FloorThird = new FloorThird(context);
+            //FloorFourth = new FloorFourth(context);
 
             //Initialise Joystick array
             //Set as 300 pixels away from both corners, with a radius of 128
@@ -258,10 +149,11 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     }
 
     public void touchEvent(MotionEvent me) {
-        Camera cam = world.getCamera();
+        Camera cam = new Camera();
 
+        //Get Camera of current floor
         if (iFloor == 3) {
-            cam = Floor.GetWorld().getCamera();
+            cam = FloorThird.GetWorld().getCamera();
         }
 
         //The current pointer we are checking the onTouchEvent for (0 = first finger)
@@ -275,6 +167,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             if (aButtons[1].GetPressed()) {
                 Logger.log("Options");
                 if (!bPaused) {
+                    ((GameActivity) context).PlaySound(SOUND_SELECT);
                     bPaused = true;
                 }
             }
@@ -284,11 +177,12 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
             if (bPaused) {
                 if (aPauseButtons[1].GetPressed()) {
+                    ((GameActivity) context).PlaySound(SOUND_SELECT);
                     bPaused = false;
                 }
                 else if (aPauseButtons[2].GetPressed()) {
+                    ((GameActivity) context).PlaySound(SOUND_SELECT);
                     bDestroy = true;
-
                 }
             }
         }
@@ -307,10 +201,12 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 if (aButtons[0].GetPressed()) {
                     SimpleVector tester = cam.getPosition();
                     tester.z += 1;
-                    if (object[0].rayIntersectsAABB(tester, testery) < 30.f) {
+                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                    /*
+                    if (object[0].rayIntersectsAABB(tester, cameraRay) < 30.f) {
                         //Logger.log("HIT!");
                         object[0].setVisibility(false);
-                    }
+                    }*/
                 }
             }
             //Action is down for any finger other than first
@@ -325,10 +221,12 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 if (aButtons[0].GetPressed()) {
                     SimpleVector tester = cam.getPosition();
                     tester.z += 1;
-                    if (object[0].rayIntersectsAABB(tester, testery) < 30.f) {
+                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                    /*
+                    if (object[0].rayIntersectsAABB(tester, cameraRay) < 30.f) {
                         //Logger.log("HIT!");
                         object[0].setVisibility(false);
-                    }
+                    }*/
                 }
             }
 
@@ -394,10 +292,11 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     }
 
     public void onDrawFrame(GL10 gl) {
-        Camera cam = world.getCamera();
+        Camera cam = new Camera();
 
+        //Get Camera of current floor
         if (iFloor == 3) {
-            cam = Floor.GetWorld().getCamera();
+            cam = FloorThird.GetWorld().getCamera();
         }
 
         //if game is not paused
@@ -415,51 +314,44 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
             //Get amount to rotate in pitch
             if (touchTurnUp != 0) {
-                if (bOptionData[INVERTY]) xrot -= touchTurnUp;
-                else xrot += touchTurnUp;
-                if (xrot > 90 * DEG_TO_RAD) {
-                    xrot = 90 * DEG_TO_RAD;
-                } else if (xrot < -90 * DEG_TO_RAD) {
-                    xrot = -90 * DEG_TO_RAD;
+                if (bOptionData[INVERTY]) xRot -= touchTurnUp;
+                else xRot += touchTurnUp;
+                if (xRot > 90 * DEG_TO_RAD) {
+                    xRot = 90 * DEG_TO_RAD;
+                } else if (xRot < -90 * DEG_TO_RAD) {
+                    xRot = -90 * DEG_TO_RAD;
                 }
             }
 
             //Get amount to rotate in yaw
             if (touchTurn != 0) {
-                if (bOptionData[INVERTX]) yrot -= touchTurn;
-                else yrot += touchTurn;
+                if (bOptionData[INVERTX]) yRot -= touchTurn;
+                else yRot += touchTurn;
             }
-
-            //Would do collisions here. check as 2d from top down.
-
-
 
             //Move Camera
             if (touchMove != 0 || touchMoveUp != 0) {
-                SimpleVector moveVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
+                SimpleVector moveVector = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
                 cam.moveCamera(moveVector, 10f);
-                float xTest = cam.getPosition().x;
-                float yTest = cam.getPosition().z;
-                Log.d("tag: ", "x: " + xTest);
-                Log.d("tag: ", "y: " + yTest);
-                if (iFloor == 3) {
-                    /*if (Floor.CollisionsWall(xTest, yTest)
-                            ||Floor.Collisions(xTest, yTest)) {
-                        cam.moveCamera(moveVector, -10f);
-                    }*/
+                float xCamPos = cam.getPosition().x;
+                float yCamPos = cam.getPosition().z;
 
-                    int check = Floor.Collisions(xTest, yTest);
+                //Check collisions on current floor
+                //If colliding with anything, move back to original position
+                if (iFloor == 3) {
+                    int check = FloorThird.Collisions(xCamPos, yCamPos);
                     if (check == 1) {
-                        SimpleVector testVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
+                        SimpleVector testVector = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
                         cam.moveCamera(testVector, -10f);
                     }
                     else {
-                        if (Floor.CollisionsWallX(xTest)) {
-                            SimpleVector testVector = new SimpleVector((touchMove * cos(yrot)) - (touchMoveUp * sin(yrot)), 0.f, 0.f);
+                        //Wall Collisions
+                        if (FloorThird.CollisionsWallX(xCamPos)) {
+                            SimpleVector testVector = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, 0.f);
                             cam.moveCamera(testVector, -10f);
                         }
-                        if (Floor.CollisionsWallY(yTest)) {
-                            SimpleVector testVector = new SimpleVector(0.f, 0.f, (touchMoveUp * cos(yrot)) + (touchMove * sin(yrot)));
+                        if (FloorThird.CollisionsWallY(yCamPos)) {
+                            SimpleVector testVector = new SimpleVector(0.f, 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
                             cam.moveCamera(testVector, -10f);
                         }
                     }
@@ -473,51 +365,26 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
         if (!bPaused) {
             cam.lookAt(cameraVector);
-            cam.rotateY(yrot);
-            cam.rotateX(xrot);
+            cam.rotateY(yRot);
+            cam.rotateX(xRot);
         }
 
         if (iFloor == 3 && !bDestroy) {
             fb.clear(bg);
-            Floor.GetWorld().renderScene(fb);
-            Floor.GetWorld().draw(fb);
+            FloorThird.GetWorld().renderScene(fb);
+            FloorThird.GetWorld().draw(fb);
             fb.display();
         }
 
-        //Draw and display 3D objects
-        /*fb.clear(bg);
-        world.renderScene(fb);
-        world.draw(fb);
-        fb.display();
-        */
-        //TODO Remove
-        //Array of x y positions and sizes
-        Rect buttons[] = {new Rect(0, 256, 256, 256), new Rect(1664, 256, 256, 256), new Rect(960, 512, 256, 256)};
-
-        SimpleVector cameraView = new SimpleVector(-sin(yrot), -xrot, cos(yrot));
-        testery = cameraView;
+        cameraRay = new SimpleVector(-sin(yRot), -xRot, cos(yRot));
 
         //Draw and display UI
-        //get textures starting x and y, x and y start position on screen, and size to draw
-        //BLACK is transparent, or use .png with transparency
-        /*
-        //Draw interact text if can interact
-        if (object[0].rayIntersectsAABB(cameraVector, cameraView) < 30.f && object[0].getVisibility())
-        {
-            //Looking at pickable object
-            fb.blit(uintT[2], 0, 0, buttons[2].left, buttons[2].top, buttons[2].right, buttons[2].bottom, FrameBuffer.TRANSPARENT_BLITTING);
-        }*/
-
         if (!bDestroy) {
             //Draw Joysticks
-            for (int i = 0; i < aMove.length; i++) {
-                aMove[i].Draw(fb);
-            }
+            for (int i = 0; i < aMove.length; i++) {aMove[i].Draw(fb);}
 
             //Draw Buttons
-            for (int i = 0; i < aButtons.length; i++) {
-                aButtons[i].Draw(fb);
-            }
+            for (int i = 0; i < aButtons.length; i++) {aButtons[i].Draw(fb);}
 
             //Draw pause menu
             if (bPaused) {
@@ -528,23 +395,16 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 aPauseButtons[2].Draw(fb, AGLFont[0]);
             }
 
-            fb.setRenderTarget(uintT[0]);
-            //world.renderScene(fb);
             if (iFloor == 3) {
-                Floor.GetWorld().renderScene(fb);
+                FloorThird.GetWorld().renderScene(fb);
             }
             fb.removeRenderTarget();
 
             //Reset
-            for (int i = 0; i < aButtons.length; i++) {
-                aButtons[i].Reset();
-            }
-
+            for (int i = 0; i < aButtons.length; i++) {aButtons[i].Reset();}
             aPauseButtons[1].Reset();
             aPauseButtons[2].Reset();
         }
-
-
 
         if (System.currentTimeMillis() - time >= 1000) {
             //Logger.log(fps + "fps");
@@ -553,13 +413,11 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
         fps++;
 
-        if (bDestroy == true) {
+        if (bDestroy) {
             master = null;
             fb.dispose();
-            world.dispose();
-            TextureManager.getInstance().flush();
             if (iFloor == 3) {
-                Floor.Destroy();
+                FloorThird.Destroy();
             }
             Intent intent = new Intent();
             intent.putExtra("completed", false);
