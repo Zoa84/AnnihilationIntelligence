@@ -1,7 +1,9 @@
 TODO Next Time
 
 
-Create a pause menu, create as a Menu class, which can be drawn when the game is paused, and will draw a Pause title, a Resume, Return to Menu, Options?
+Create third floor and props and stuff
+Create fourth floor and props and stuff
+Create a link between the two floors
 
 Create or otherwise source a floor with objects in it, and import to game activity.
 
@@ -16,7 +18,37 @@ Have pictures be clickable?
 
 !!Keep options as is, passing the volume and sound. Not only does this allow us to change the volume of certain music/ sound (e.g. decreasing music for certain sound/ voice) but it is also generally better to not rely on singletons (could research for report?)
 
-!!Do Fortnightly reports and sign off
-
 Continue writing up about anything at any time (even on phone/ laptop)
 
+
+For a simpler? version, only do floors g,1,2,3,4. This gives  the game a chance to have the start, showing off moving in a 3d environment on phone and stuff, and allows simple puzzles, like collecting keycards.
+This version would have:
+
+Collect key 1 from desk to go to floor 4
+See elevator go live on floor 4 but don't enter
+Go to floor 3, use elevator to go to floor 2
+get key 2, go to floor 1
+get screwdriver from floor 1
+go to floor 2 and use on electrics to get code
+go to floor 1, input code
+go to floor g
+walk out
+
+:. 2 key cards, 1 screwdriver
+note on 4th floor elev (simple overlay when looking at it?)
+have selecting objects (screwdriver) from inventory to then use
+Interact with doors, items, stairs - pickup items, when looking at door or elev, click interact, pauses game and has buttons for where to go
+game over screen (ui overlay saying game over, and return to menu)
+win screen (saying congratulations and return to menu)
+sound for picking up items, successful interactions
+1 music, unless want more
+
+
+
+
+
+elev - -15, 4, -36
+
+door1 - 
+
+door2 - 
