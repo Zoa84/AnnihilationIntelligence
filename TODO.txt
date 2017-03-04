@@ -42,13 +42,3 @@ game over screen (ui overlay saying game over, and return to menu)
 win screen (saying congratulations and return to menu)
 sound for picking up items, successful interactions
 1 music, unless want more
-
-
-
-
-
-elev - -15, 4, -36
-
-door1 - 
-
-door2 - 

@@ -17,22 +17,23 @@ import simonchiu.annihilationintelligence.Include.Rectangle;
 
 //A Button class. This is created with a position and size, and can be drawn to the screen
 //The update will take the x and y position of a finger to see if it has pressed the button
-//The game can use the GetPressed function to return if the button has bee pressed, and will
+//The game can use the GetPressed function to return if the button has been pressed, and will
 //reset this when drawn
 //This class does not hold any functionality in terms of what the button does,
-//but provides a method of letting the program know what functionality we want
+//but provides a method of letting the program know a button has been pressed
 
 public class Button {
-    private int iXPos;
-    private int iYPos;
-    private int iXSize;
-    private int iYSize;
-    private boolean bPressed = false;
-    private Rect rButton;
-    private Texture texture;
-    private String sText;
-    private boolean bText = false;
+    private int iXPos;                  //X position of the button (the origin is the center)
+    private int iYPos;                  //Y position of the button (the origin is the center)
+    private int iXSize;                 //The size in X of the button (from the origin)
+    private int iYSize;                 //The size in Y of the button (from the origin)
+    private boolean bPressed = false;   //If the button has been pressed
+    private Rect rButton;               //The rectangle shape of the button, used to draw the button
+    private Texture texture;            //The texture of the button
+    private String sText;               //The text to draw on top of the button (if used)
+    private boolean bText = false;      //If there is text to draw
 
+    //Constructor with text to draw on the button
     public Button(String text, int xPos, int yPos, int xSize, int ySize, Context context) {
         iXPos = xPos;
         iYPos = yPos;
@@ -44,12 +45,13 @@ public class Button {
         //Set position of button using construction parameters
         rButton = new Rect(iXPos - iXSize, iYPos - iYSize, iXSize*2, iYSize*2);
 
-        int resID;
         //Load Button
+        int resID;
         resID = context.getResources().getIdentifier("img_button_pause", "drawable", context.getPackageName());
         texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
     }
 
+    //Constructor without text to draw
     public Button(int type, int xPos, int yPos, int size, Context context) {
         iXPos = xPos;
         iYPos = yPos;
@@ -59,33 +61,40 @@ public class Button {
         //Set position of button using construction parameters
         rButton = new Rect(iXPos - iXSize, iYPos - iYSize, iXSize*2, iYSize*2);
 
-        int resID;
         //Load Button
+        int resID;
         resID = context.getResources().getIdentifier("img_button_" + Integer.toString(type), "drawable", context.getPackageName());
         texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iXSize*2, iYSize*2));
     }
 
+    //Update to check if the button has been pressed
     public void Update(float xPos, float yPos) {
         if (iXPos - iXSize < xPos && iYPos - iYSize < yPos && iXPos + iXSize > xPos && iYPos + iYSize > yPos) {
             bPressed = true;
         }
     }
 
+    //Draw function without text
     public void Draw(FrameBuffer fb) {
         fb.blit(texture, 0, 0, rButton.left, rButton.top, rButton.right, rButton.bottom, FrameBuffer.TRANSPARENT_BLITTING);
     }
 
+    //Draw function with text (taking a font to draw with)
     public void Draw(FrameBuffer fb, AGLFont font) {
         fb.blit(texture, 0, 0, rButton.left, rButton.top, rButton.right, rButton.bottom, FrameBuffer.TRANSPARENT_BLITTING);
-        Rectangle rect = new Rectangle();
-        font.getStringBounds(sText, rect);
-        font.blitString(fb, sText, iXPos - (rect.width/2), iYPos + 25, 100, RGBColor.WHITE);
+        if (bText) {
+            Rectangle rect = new Rectangle();
+            font.getStringBounds(sText, rect);
+            font.blitString(fb, sText, iXPos - (rect.width / 2), iYPos + 25, 100, RGBColor.WHITE);
+        }
     }
 
+    //Returns if the button has been pressed
     public boolean GetPressed() {
         return bPressed;
     }
 
+    //Reset the button press
     public void Reset() {
         bPressed = false;
     }

@@ -4,8 +4,10 @@ package simonchiu.annihilationintelligence;
  * Created by Simon on 02/03/2017.
  */
 
-public class Unused {
+//An unused Unused class, used simply to hold old data which might be useful later
+//Will likely be removed when finished
 
+public class Unused {
 
     //GameSurfaceView - Old Texture and object loader
     /*Texture texture;

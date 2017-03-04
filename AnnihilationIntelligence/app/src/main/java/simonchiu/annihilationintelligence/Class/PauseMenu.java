@@ -11,34 +11,21 @@ import com.threed.jpct.util.BitmapHelper;
  * Created by Simon on 28/02/2017.
  */
 
+//PauseMenu class, which is used to draw the box to cover the background
+//This is actually a very basic class, as the Resume and Return to Menu is done via the buttons and the GameSurfaceView
+
 public class PauseMenu {
-    private int iXPos;
-    private int iYPos;
-    private int iXSize;
-    private int iYSize;
     private Texture texture;
     private Rect rMenu;
 
-    private Rect rResume;
-    private Rect rReturn;
-
     public PauseMenu(int xPos, int yPos, int xSize, int ySize, Context context) {
-        iXPos = xPos;
-        iYPos = yPos;
-        iXSize = xSize;
-        iYSize = ySize;
+        //Set position of the menu using construction parameters
+        rMenu = new Rect(xPos - xSize, yPos - ySize, xSize*2, ySize*2);
 
-        //Set position of button using construction parameters
-        rMenu = new Rect(iXPos - iXSize, iYPos - iYSize, iXSize*2, iYSize*2);
-
+        //Load Menu background
         int resID;
-        //Load Button
         resID = context.getResources().getIdentifier("img_pause_menu", "drawable", context.getPackageName());
         texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
-    }
-
-    public void Update() {
-
     }
 
     public void Draw(FrameBuffer fb) {

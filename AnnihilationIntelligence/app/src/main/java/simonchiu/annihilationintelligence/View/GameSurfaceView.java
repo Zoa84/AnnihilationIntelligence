@@ -1,34 +1,22 @@
 package simonchiu.annihilationintelligence.View;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.opengl.GLSurfaceView;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.threed.jpct.Camera;
 import com.threed.jpct.FrameBuffer;
-import com.threed.jpct.Light;
-import com.threed.jpct.Loader;
 import com.threed.jpct.Logger;
 import com.threed.jpct.Object3D;
 import com.threed.jpct.RGBColor;
 import com.threed.jpct.SimpleVector;
 import com.threed.jpct.Texture;
-import com.threed.jpct.TextureManager;
 import com.threed.jpct.World;
 import com.threed.jpct.util.BitmapHelper;
-import com.threed.jpct.util.MemoryHelper;
-
-import java.awt.font.TextAttribute;
-import java.io.IOException;
-import java.io.InputStream;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -37,18 +25,15 @@ import simonchiu.annihilationintelligence.Activity.GameActivity;
 import simonchiu.annihilationintelligence.Class.Button;
 import simonchiu.annihilationintelligence.Class.Floors.FloorThird;
 import simonchiu.annihilationintelligence.Class.Floors.FloorFourth;
+import simonchiu.annihilationintelligence.Class.Inventory;
 import simonchiu.annihilationintelligence.Class.Joystick;
 import simonchiu.annihilationintelligence.Class.PauseMenu;
 import simonchiu.annihilationintelligence.Include.AGLFont;
-import simonchiu.annihilationintelligence.Include.Rectangle;
-import simonchiu.annihilationintelligence.R;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-import static java.security.AccessController.getContext;
 import static simonchiu.annihilationintelligence.Class.Defines.*;
-import static simonchiu.annihilationintelligence.Class.TransformFix.*;
 
 /**
  * Created by Simon on 16/02/2017.
@@ -84,6 +69,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     //Screen Size;
     private Point pPoint;
 
+    //Distance to interact
+    private float iDistance = 20f;
+
     private int iFloor = 3;
     private FloorThird FloorThird;
     private FloorFourth FloorFourth;
@@ -92,22 +80,23 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     private boolean bPaused = false;
 
     private AGLFont[] AGLFont = new AGLFont[2];
-    private Paint Paint = new Paint();
     private Button[] aPauseButtons = new Button[3];
     private boolean bDestroy = false;
 
-    private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
-    private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
+    private Inventory Inventory;                    //The inventory, manages collection, and selecting items
 
-    public void setOptions(boolean[] optionData, int[] volume) {
+    private Texture tInteract = null;
+
+    private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
+
+    public void setOptions(boolean[] optionData) {
         bOptionData = optionData;
-        iVolume = volume;
     }
 
     //Constructor
     public GameSurfaceView(Context context, Point point) {
         //Set up two fonts, one large, one small
-        Paint = new Paint();
+        Paint Paint = new Paint();
         Paint.setAntiAlias(true);
         Paint.setTypeface(Typeface.create((String)null, Typeface.BOLD));
         Paint.setTextSize(100);
@@ -140,6 +129,13 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             aPauseButtons[0] = new Button("Pause Menu", pPoint.x/2, pPoint.y/10*2, 320, 100, context);
             aPauseButtons[1] = new Button("Resume", pPoint.x/2, pPoint.y/2, 250, 100, context);
             aPauseButtons[2] = new Button("Return to Menu", pPoint.x/2, pPoint.y/10*8, 380, 100, context);
+
+            Inventory = new Inventory(pPoint, context);
+
+            //Load interact text
+            int resID;
+            resID = context.getResources().getIdentifier("img_interact", "drawable", context.getPackageName());
+            tInteract = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 128, 128));
 
             if (master == null) {
                 Logger.log("Saving master Activity!");
@@ -199,14 +195,27 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
                 //if Interact button is pressed
                 if (aButtons[0].GetPressed()) {
-                    SimpleVector tester = cam.getPosition();
-                    tester.z += 1;
-                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                    Object3D[] objects = null;
+                    if (iFloor == 3) {
+                        objects = FloorThird.GetInteObjects();
+                        for (int i = 0; i < objects.length; i++) {
+                            if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                                if (i == 3 && !Inventory.GetInventory(0)) {
+                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                    FloorThird.Interact(i);
+                                    Inventory.SetInventory(0);
+                                }
+                            }
+                        }
+                    }
                     /*
                     if (object[0].rayIntersectsAABB(tester, cameraRay) < 30.f) {
                         //Logger.log("HIT!");
                         object[0].setVisibility(false);
                     }*/
+                }
+                else {
+                    if (Inventory.Update(me.getX(pointerIndex), me.getY(pointerIndex))) {((GameActivity) context).PlaySound(SOUND_SELECT);}
                 }
             }
             //Action is down for any finger other than first
@@ -219,14 +228,27 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
                 //if Interact button is pressed
                 if (aButtons[0].GetPressed()) {
-                    SimpleVector tester = cam.getPosition();
-                    tester.z += 1;
-                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                    Object3D[] objects = null;
+                    if (iFloor == 3) {
+                        objects = FloorThird.GetInteObjects();
+                        for (int i = 0; i < objects.length; i++) {
+                            if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                                if (i == 3 && Inventory.GetInventory(0)) {
+                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                    FloorThird.Interact(i);
+                                    Inventory.SetInventory(0);
+                                }
+                            }
+                        }
+                    }
                     /*
                     if (object[0].rayIntersectsAABB(tester, cameraRay) < 30.f) {
                         //Logger.log("HIT!");
                         object[0].setVisibility(false);
                     }*/
+                }
+                else {
+                    if (Inventory.Update(me.getX(pointerIndex), me.getY(pointerIndex))) {((GameActivity) context).PlaySound(SOUND_SELECT);}
                 }
             }
 
@@ -339,8 +361,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 //Check collisions on current floor
                 //If colliding with anything, move back to original position
                 if (iFloor == 3) {
-                    int check = FloorThird.Collisions(xCamPos, yCamPos);
-                    if (check == 1) {
+                    boolean check = FloorThird.Collisions(xCamPos, yCamPos);
+                    if (check) {
                         SimpleVector testVector = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
                         cam.moveCamera(testVector, -10f);
                     }
@@ -360,15 +382,15 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
 
         //Rotate Camera
-        SimpleVector cameraVector = cam.getPosition();
-        cameraVector.z += 1f;
-
         if (!bPaused) {
+            SimpleVector cameraVector = cam.getPosition();
+            cameraVector.z += 1f;
             cam.lookAt(cameraVector);
             cam.rotateY(yRot);
             cam.rotateX(xRot);
         }
 
+        //Draw current floor
         if (iFloor == 3 && !bDestroy) {
             fb.clear(bg);
             FloorThird.GetWorld().renderScene(fb);
@@ -386,18 +408,35 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             //Draw Buttons
             for (int i = 0; i < aButtons.length; i++) {aButtons[i].Draw(fb);}
 
+            //Draw the inventory (if collected)
+            Inventory.Draw(fb);
+
+            //Draw message if looking at a usable object
+            if (iFloor == 3) {
+                Object3D[] objects = FloorThird.GetInteObjects();
+                for (int i = 0; i < objects.length; i++) {
+                    if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                        if (i == 3) {
+                            if (!Inventory.GetInventory(0)) {
+                                fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 64, (pPoint.y / 2) - 64, 128, 128, FrameBuffer.TRANSPARENT_BLITTING);
+                            }
+                        }
+                        else {
+                            fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 64, (pPoint.y / 2) - 64, 128, 128, FrameBuffer.TRANSPARENT_BLITTING);
+                        }
+                    }
+                }
+            }
+
             //Draw pause menu
             if (bPaused) {
                 pauseMenu.Draw(fb);
-
                 aPauseButtons[0].Draw(fb, AGLFont[0]);
                 aPauseButtons[1].Draw(fb, AGLFont[0]);
                 aPauseButtons[2].Draw(fb, AGLFont[0]);
             }
 
-            if (iFloor == 3) {
-                FloorThird.GetWorld().renderScene(fb);
-            }
+            fb.display();
             fb.removeRenderTarget();
 
             //Reset
@@ -413,12 +452,15 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
         fps++;
 
+        //If game is being destroyed (returning to menu or closing app) reset data
+        //Java does nnot use destructors like C++, meaning some data must be reset manually
         if (bDestroy) {
             master = null;
             fb.dispose();
             if (iFloor == 3) {
                 FloorThird.Destroy();
             }
+            Inventory.Reset();
             Intent intent = new Intent();
             intent.putExtra("completed", false);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -89,8 +89,7 @@ public class GameActivity extends Activity {
         Point screenSize = new Point(metrics.widthPixels, metrics.heightPixels);
 
         renderer = new GameSurfaceView(this, screenSize);
-
-        renderer.setOptions(bOptionData, iVolume);
+        renderer.setOptions(bOptionData);
 
         mGLView.setRenderer(renderer);
         setContentView(mGLView);
@@ -172,6 +171,7 @@ public class GameActivity extends Activity {
 
     @Override
     public void finish() {
+        Media.getInstance().stopMusic();
         super.finish();
     }
 }

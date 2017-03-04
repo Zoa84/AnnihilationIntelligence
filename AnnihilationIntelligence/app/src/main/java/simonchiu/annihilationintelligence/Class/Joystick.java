@@ -12,12 +12,13 @@ import com.threed.jpct.util.BitmapHelper;
  */
 
 //Joystick class - Creates joysticks for the HUD, and allows usage of the Joysticks to simulate
-//real joysticks
+//real joysticks. Includes functionality for getting the amount to move in X or Y, as well
+//as draw the joystick and the position
 
 public class Joystick {
     private int iXPos;                              //X position of joystick (origin is middle)
     private int iYPos;                              //Y position of joystick
-    private int iSize;                              //x/y extents
+    private int iSize;                              //X/Y extents
     private int iLimit;                             //Limits for joystick recognition
     private int iState;                             //State for pointer to joystick
     private float fScale;                           //Scale for joystick to movement
@@ -50,8 +51,8 @@ public class Joystick {
         aTextures[1] = texture;
     }
 
-    //Have an update function run in the update, can either be used if finger is in boundary, or set with parameters of
-    //the fingers x and y and use an if statement to decide if within bounds
+    //Update function which is run in the update of the game
+    //Gets the X and Y position of a finger, and checks if within the limit to use
     public void Update(float xPos, float yPos) {
         float fLength = ((iXPos - xPos) * (iXPos - xPos)) + ((iYPos - yPos) * (iYPos - yPos));
         if (fLength < iLimit*iLimit) {

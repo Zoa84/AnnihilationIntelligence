@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -23,20 +20,19 @@ import simonchiu.annihilationintelligence.R;
 
 import static simonchiu.annihilationintelligence.Class.Defines.*;
 
-/*The Splash Screen Activity, and the starting point of the app. From here it creates a loading screen
-for the player, then moves on to the PauseMenu Activity.
- */
+//The Splash Screen Activity, and the starting point of the app. From here it creates a loading screen
+//for the player, then moves on to the PauseMenu Activity. This screen allows us to load data before the app is properly running
 
 public class SplashActivity extends AppCompatActivity {
 
-    boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
-    int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
+    boolean[] bOptionData = new boolean[5];                             //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
+    int[] iVolume = new int[2];                                         //Array of the volume for music (0) and sound (1)
     String[] sMusicName = {"menu", "battle", "score", "settings"};      //File names for music files
     String[] sSoundName = {"death", "fire", "hit", "select", "time"};   //File names for sound files
 
     AssetFileDescriptor descriptor;
 
-    Toast toast;
+    Toast toast;                    //Variable to hold a toast message
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +108,6 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         //After loading from text file, set the current splash screen to correct orientation
-        //OR do this just as it is loading during parsing
         if (bOptionData[ORIENTATION]) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
 

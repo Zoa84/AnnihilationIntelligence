@@ -18,10 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import simonchiu.annihilationintelligence.Activity.GameActivity;
-import simonchiu.annihilationintelligence.Class.Button;
 import simonchiu.annihilationintelligence.Class.CollisionMap;
-import simonchiu.annihilationintelligence.Class.Joystick;
-import simonchiu.annihilationintelligence.Class.PauseMenu;
 
 import static simonchiu.annihilationintelligence.Class.Defines.DEG_TO_RAD;
 import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
@@ -31,8 +28,8 @@ import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
  */
 
 public class FloorThird {
-    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2"};
-    private Object3D[] object = new Object3D[32];
+    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2", "key1"};
+    private Object3D[] object = new Object3D[33];
     private Object3D[] aObjects = null;
 
     private Light sun = null;
@@ -40,8 +37,11 @@ public class FloorThird {
     private World world = null;
 
     private CollisionMap[] Collisions = new CollisionMap[10];
-    private int xWall = 34;
-    private int yWall = 34;
+    private int xWallLeft = 34;
+    private int xWallRight = -34;
+    private int yWallFront = -34;
+    private int yWallBack = 28;
+    private Object3D[] aInteObjects = new Object3D[4];
 
     public FloorThird(Context context) {
         if (master == null) {
@@ -107,6 +107,8 @@ public class FloorThird {
             ObjectLoader(context, 30, "door1");
             ObjectLoader(context, 31, "door2");
 
+            ObjectLoader(context, 32, "key1");
+
             Collisions[0] = new CollisionMap(-20, 20, 5, 3);
             Collisions[1] = new CollisionMap(-20, 0, 5, 3);
             Collisions[2] = new CollisionMap(-20, -20, 5, 3);
@@ -120,7 +122,7 @@ public class FloorThird {
             Collisions[9] = new CollisionMap(-15, 36, 14, 7);
 
             Camera cam = world.getCamera();
-            cam.setPosition(-30f, 0, -30f);
+            cam.setPosition(-15f, 0, -30f);
 
             SimpleVector sv = new SimpleVector();
             sv.set(object[0].getTransformedCenter());
@@ -157,6 +159,14 @@ public class FloorThird {
             object[26].translate(fixTrans(20f, -1.5f, -20f));
             object[27].translate(fixTrans(20f, -1.5f, 0f));
             object[28].translate(fixTrans(20f, -1.5f, 20f));
+
+            object[32].translate(fixTrans(-24f, -3.4f, 20f));
+            object[32].rotateY(-20 * DEG_TO_RAD);
+
+            aInteObjects[0] = object[29];
+            aInteObjects[1] = object[30];
+            aInteObjects[2] = object[31];
+            aInteObjects[3] = object[32];
 
             sv.y -= 100;
             sv.z -= 100;
@@ -206,48 +216,46 @@ public class FloorThird {
         object[i].clearRotation();
     }
 
-    private int CollisionsX(float xPos, int i) {
-        if (Collisions[i].CheckX(xPos))
-        {
-            return i;
-        }
-        return -1;
-    }
-
-    private int CollisionsY(float yPos, int i) {
-        if (Collisions[i].CheckY(yPos))
-        {
-            return i;
-        }
-        return -1;
-    }
-
-    public int Collisions(float xPos, float yPos) {
-        int output = 0;
+    public boolean Collisions(float xPos, float yPos) {
         for (int i = 0; i < Collisions.length; i++) {
-            int test = CollisionsX(xPos, i);
-            if (test != -1) {
-                test = CollisionsY(yPos, test);
-                if (test != -1) {
-                    output = 1;                     //Collision in X and Y
-                    return output;
-                }
+            if (Collisions[i].Check(xPos, yPos)) {
+                return true;
             }
         }
-        return output;
+        return false;
     }
 
     public boolean CollisionsWallX(float xPos) {
-        if (xPos > xWall || xPos < -xWall) {
+        if (xPos > xWallLeft || xPos < xWallRight) {
             return true;
         }
         return false;
     }
 
     public boolean CollisionsWallY(float yPos) {
-        if (yPos > yWall || yPos < -yWall) {
+        if (yPos > yWallBack || yPos < yWallFront) {
             return true;
         }
         return false;
+    }
+
+    public Object3D[] GetInteObjects() {
+        return aInteObjects;
+    }
+
+    public void Interact(int i) {
+        if (i == 0) {
+            //elev
+        }
+        else if (i == 1) {
+            //door1
+        }
+        else if (i == 2) {
+            //door2
+        }
+        else if (i == 3) {
+            //key1
+            object[32].setVisibility(false);
+        }
     }
 }

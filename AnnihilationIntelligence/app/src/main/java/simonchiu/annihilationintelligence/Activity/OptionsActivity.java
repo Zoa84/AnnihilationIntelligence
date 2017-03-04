@@ -32,6 +32,7 @@ public class OptionsActivity extends AppCompatActivity {
         //Get options and volume data from PauseMenu activity
         this.bOptionData = getIntent().getBooleanArrayExtra("optionData");
         this.iVolume = getIntent().getIntArrayExtra("volumeData");
+
         //Set orientation
         if (bOptionData[ORIENTATION]) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
@@ -131,11 +132,11 @@ public class OptionsActivity extends AppCompatActivity {
                 Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
             }
         });
+
         sVolume[SOUND].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 iVolume[SOUND] = progress;
-                //MUSIC changes
             }
 
             @Override

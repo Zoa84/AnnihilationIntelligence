@@ -2,8 +2,6 @@ package simonchiu.annihilationintelligence.Activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.AssetFileDescriptor;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -20,15 +18,14 @@ import simonchiu.annihilationintelligence.R;
 
 import static simonchiu.annihilationintelligence.Class.Defines.*;
 
-/*The PauseMenu Activity. This is the central hub of the app, and is accessed after the Splash Screen
-From here the player can choose to start the game, change options or exit. If exiting using the
-Android buttons, a toast message will appear to ask the player to press again to exit.
- */
+//The Menu Activity. This is the central hub of the app, and is accessed after the Splash Screen
+//From here the player can choose to start the game, change options or exit. If exiting using the
+//Android buttons, a toast message will appear to ask the player to press again to exit.
 
 public class MenuActivity extends AppCompatActivity {
 
-    private boolean back = false;   //If the back button has been pressed
-    private Toast toast;            //Variable to hold a toast message
+    private boolean back = false;                   //If the back button has been pressed
+    private Toast toast;                            //Variable to hold a toast message
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
@@ -74,7 +71,7 @@ public class MenuActivity extends AppCompatActivity {
         finish();
     }
 
-    //End the game if trying to leave from menu
+    //End the app if trying to leave from menu
     @Override
     public void onBackPressed(){
         Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
@@ -100,6 +97,7 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+    //Function called when a child activity returns with a result
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
@@ -113,10 +111,13 @@ public class MenuActivity extends AppCompatActivity {
         //If returning from the Game Activity
         else if (resultCode == GAME) {
             bCompleted = data.getBooleanExtra("completed", false);
+            //TODO change when game is completed/ ended
+            if (bCompleted) {toast = Toast.makeText(this, "Game Completed", Toast.LENGTH_SHORT);}
+            else {toast = Toast.makeText(this, "Game Not Completed", Toast.LENGTH_SHORT);}
+            toast.show();
         }
 
         if (!Media.getInstance().playMusic(MUSIC_MENU, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();
-
     }
 
     //Set the orientation, checking what the orientation has been set to

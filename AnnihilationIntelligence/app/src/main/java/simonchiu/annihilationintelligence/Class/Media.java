@@ -4,21 +4,18 @@ import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.widget.Toast;
-
 import java.io.IOException;
 
 /**
  * Created by Simon on 13/02/2017.
  */
 
-/*Media Class, a Singleton class which holds loaded music and sound files, and also plays them
- */
+//Media Class, a Singleton class which holds loaded music and sound files, and also plays them
 
 public class Media {
-    private AssetFileDescriptor[] descriptor = new AssetFileDescriptor[4];  //Array of music files
-    private MediaPlayer mediaPlayer = new MediaPlayer();                    //The Media player, which plays the music files
-    private int[] iSounds = new int[5];                                     //Array of sound files
+    private AssetFileDescriptor[] descriptor = new AssetFileDescriptor[4];          //Array of music files
+    private MediaPlayer mediaPlayer = new MediaPlayer();                            //The Media player, which plays the music files
+    private int[] iSounds = new int[5];                                             //Array of sound files
     private SoundPool soundpool = new SoundPool(5, AudioManager.STREAM_MUSIC,0);    //Loads and plays the sound files
 
     //Sets the loaded music file to the array of music

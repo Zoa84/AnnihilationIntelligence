@@ -12,6 +12,7 @@ import com.threed.jpct.SimpleVector;
 
 public class TransformFix {
 
+    //Fixes translations from Maya to j-PCT axis
     public static SimpleVector fixTrans(SimpleVector vector)
     {
         SimpleVector translate = new SimpleVector();
@@ -22,6 +23,7 @@ public class TransformFix {
         return translate;
     }
 
+    //Fixes translations from Maya to j-PCT axis
     public static SimpleVector fixTrans(float x, float y, float z)
     {
         SimpleVector translate = new SimpleVector();
@@ -32,6 +34,7 @@ public class TransformFix {
         return translate;
     }
 
+    //Fixes rotations from Maya to j-PCT axis
     public static SimpleVector fixRot(SimpleVector vector)
     {
         SimpleVector translate = new SimpleVector();
@@ -42,6 +45,7 @@ public class TransformFix {
         return translate;
     }
 
+    //Fixes rotations from Maya to j-PCT axis
     public static SimpleVector fixRot(float x, float y, float z)
     {
         SimpleVector translate = new SimpleVector();
