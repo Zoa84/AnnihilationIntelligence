@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
 
     AssetFileDescriptor descriptor;
 
-    Toast toast;                    //Variable to hold a toast message
+    Toast toast;                                      //Variable to hold a toast message
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

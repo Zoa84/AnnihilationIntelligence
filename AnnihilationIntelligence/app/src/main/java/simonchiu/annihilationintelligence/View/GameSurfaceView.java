@@ -15,7 +15,6 @@ import com.threed.jpct.Object3D;
 import com.threed.jpct.RGBColor;
 import com.threed.jpct.SimpleVector;
 import com.threed.jpct.Texture;
-import com.threed.jpct.World;
 import com.threed.jpct.util.BitmapHelper;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -46,7 +45,6 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     //Variables for game surface view
     private long time = System.currentTimeMillis();
     private FrameBuffer fb = null;
-    private World world = null;
     private RGBColor bg = new RGBColor(50, 50, 100);
     private int fps = 0;
     private static GameActivity master = null;
@@ -163,8 +161,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             if (aButtons[1].GetPressed()) {
                 Logger.log("Options");
                 if (!bPaused) {
-                    ((GameActivity) context).PlaySound(SOUND_SELECT);
-                    bPaused = true;
+                    TogglePaused();
                 }
             }
 
@@ -173,8 +170,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
             if (bPaused) {
                 if (aPauseButtons[1].GetPressed()) {
-                    ((GameActivity) context).PlaySound(SOUND_SELECT);
-                    bPaused = false;
+                    TogglePaused();
                 }
                 else if (aPauseButtons[2].GetPressed()) {
                     ((GameActivity) context).PlaySound(SOUND_SELECT);
@@ -300,6 +296,11 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 }
             }
         }
+    }
+
+    public void TogglePaused() {
+        ((GameActivity) context).PlaySound(SOUND_SELECT);
+        bPaused = !bPaused;
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {

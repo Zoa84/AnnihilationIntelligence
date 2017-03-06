@@ -6,7 +6,7 @@ package simonchiu.annihilationintelligence.Class;
 
 //The collision map, used to detect collisions. Instead of 3D collisions with meshes,
 //since the player cannot jump, we only need to consider collisions in X and Z, changed
-//to X and Y to simplify it. These become Axis-Aligned Bounding Box collisions, checking if
+//to X and Y to simplify it. These become Bounding Box collisions, checking if
 //we have collided in one axis, then the other
 
 public class CollisionMap {

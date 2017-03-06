@@ -25,7 +25,7 @@ import static simonchiu.annihilationintelligence.Class.Defines.*;
 public class MenuActivity extends AppCompatActivity {
 
     private boolean back = false;                   //If the back button has been pressed
-    private Toast toast;                            //Variable to hold a toast message
+    private Toast toast;          //Variable to hold a toast message
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
@@ -76,7 +76,7 @@ public class MenuActivity extends AppCompatActivity {
     public void onBackPressed(){
         Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
         if (!back) {
-            toast.cancel();
+            if (toast != null) {toast.cancel();}
             toast = Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT);
             toast.show();
             back = true;

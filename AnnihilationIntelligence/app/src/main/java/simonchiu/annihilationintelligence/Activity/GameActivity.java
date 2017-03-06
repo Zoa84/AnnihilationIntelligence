@@ -110,7 +110,7 @@ public class GameActivity extends Activity {
     //Return to menu todo change to show a pause menu, DOES NOT end the game in any way
     @Override
     public void onBackPressed(){
-        if (!back) {
+        /*if (!back) {
             toast = Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT);
             toast.show();
             back = true;
@@ -127,7 +127,9 @@ public class GameActivity extends Activity {
         else{
             toast.cancel();
             super.onBackPressed();
-        }
+        }*/
+
+        renderer.TogglePaused();
     }
 
     @Override
