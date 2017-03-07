@@ -6,7 +6,9 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.opengl.GLSurfaceView;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.threed.jpct.Camera;
 import com.threed.jpct.FrameBuffer;
@@ -27,7 +29,9 @@ import simonchiu.annihilationintelligence.Class.Floors.FloorFourth;
 import simonchiu.annihilationintelligence.Class.Inventory;
 import simonchiu.annihilationintelligence.Class.Joystick;
 import simonchiu.annihilationintelligence.Class.PauseMenu;
+import simonchiu.annihilationintelligence.Class.TextBuffer;
 import simonchiu.annihilationintelligence.Include.AGLFont;
+import simonchiu.annihilationintelligence.Include.Rectangle;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -83,7 +87,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
     private Inventory Inventory;                    //The inventory, manages collection, and selecting items
 
-    private Texture tInteract = null;
+    private TextBuffer TextBuffer = new TextBuffer();
+
+    private Texture tInteract = null, tDot = null;
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
 
@@ -133,7 +139,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             //Load interact text
             int resID;
             resID = context.getResources().getIdentifier("img_interact", "drawable", context.getPackageName());
-            tInteract = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 128, 128));
+            tInteract = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 256, 256));
+            resID = context.getResources().getIdentifier("img_dot", "drawable", context.getPackageName());
+            tDot = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
 
             if (master == null) {
                 Logger.log("Saving master Activity!");
@@ -196,10 +204,28 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         objects = FloorThird.GetInteObjects();
                         for (int i = 0; i < objects.length; i++) {
                             if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
-                                if (i == 3 && !Inventory.GetInventory(0)) {
+                                if (i == 3) {
+                                    if (!Inventory.GetInventory(0)) {
+                                        ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                        String text = FloorThird.Interact(i);
+                                        Inventory.SetInventory(0);
+                                        TextBuffer.AddText(text, 3000);
+                                    }
+                                }
+                                //Test for fun
+                                else if (i == 1) {
                                     ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                    FloorThird.Interact(i);
-                                    Inventory.SetInventory(0);
+                                    String text = FloorThird.Interact(i);
+                                    //Test Text Buffer
+                                    TextBuffer.AddText("When I was six years old, I broke my leg.", 3000);
+                                    TextBuffer.AddText("I was running from my brother and his friends.", 6000);
+                                    TextBuffer.AddText("I tasted the sweet perfume of the mountain as I rolled down.", 9000);
+                                    TextBuffer.AddText("I remember then. Take me back to when, I...", 12000);
+                                }
+                                else {
+                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                    String text = FloorThird.Interact(i);
+                                    TextBuffer.AddText(text, 3000);
                                 }
                             }
                         }
@@ -229,10 +255,28 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         objects = FloorThird.GetInteObjects();
                         for (int i = 0; i < objects.length; i++) {
                             if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
-                                if (i == 3 && Inventory.GetInventory(0)) {
+                                if (i == 3) {
+                                    if (!Inventory.GetInventory(0)) {
+                                        ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                        String text = FloorThird.Interact(i);
+                                        Inventory.SetInventory(0);
+                                        TextBuffer.AddText(text, 3000);
+                                    }
+                                }
+                                //Test for fun
+                                else if (i == 1) {
                                     ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                    FloorThird.Interact(i);
-                                    Inventory.SetInventory(0);
+                                    String text = FloorThird.Interact(i);
+                                    //Test Text Buffer
+                                    TextBuffer.AddText("When I was six years old, I broke my leg.", 3000);
+                                    TextBuffer.AddText("I was running from my brother and his friends.", 6000);
+                                    TextBuffer.AddText("I tasted the sweet perfume of the mountain as I rolled down.", 9000);
+                                    TextBuffer.AddText("I remember then. Take me back to when, I...", 12000);
+                                }
+                                else {
+                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                    String text = FloorThird.Interact(i);
+                                    TextBuffer.AddText(text, 3000);
                                 }
                             }
                         }
@@ -419,13 +463,24 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                     if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
                         if (i == 3) {
                             if (!Inventory.GetInventory(0)) {
-                                fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 64, (pPoint.y / 2) - 64, 128, 128, FrameBuffer.TRANSPARENT_BLITTING);
+                                fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 128, (pPoint.y / 2) - 64, 256, 256, FrameBuffer.TRANSPARENT_BLITTING);
                             }
                         }
                         else {
-                            fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 64, (pPoint.y / 2) - 64, 128, 128, FrameBuffer.TRANSPARENT_BLITTING);
+                            fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 128, (pPoint.y / 2) - 64, 256, 256, FrameBuffer.TRANSPARENT_BLITTING);
                         }
                     }
+                }
+            }
+
+            //Draw dot sight
+            fb.blit(tDot, 0, 0, (pPoint.x / 2) - 32, (pPoint.y / 2) - 32, 64, 64, FrameBuffer.TRANSPARENT_BLITTING);
+
+            //Draw Text/Subtitles
+            String[] sText = TextBuffer.GetText();
+            if (sText != null) {
+                for (int i = 0; i < sText.length; i++) {
+                    DrawText(fb, AGLFont[1], sText[i], 25, 350 + i*100);
                 }
             }
 
@@ -468,6 +523,12 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             ((GameActivity) context).setResult(GAME, intent);
             ((GameActivity) context).finish();
         }
+    }
+
+    public void DrawText(FrameBuffer fb, AGLFont font, String text, int xPos, int yPos) {
+        Rectangle rect = new Rectangle();
+        font.getStringBounds(text, rect);
+        font.blitString(fb, text, xPos, yPos, 100, RGBColor.WHITE);
     }
 
 }

@@ -163,10 +163,10 @@ public class FloorThird {
             object[32].translate(fixTrans(-24f, -3.4f, 20f));
             object[32].rotateY(-20 * DEG_TO_RAD);
 
-            aInteObjects[0] = object[29];
-            aInteObjects[1] = object[30];
-            aInteObjects[2] = object[31];
-            aInteObjects[3] = object[32];
+            aInteObjects[0] = object[29];   //elevator
+            aInteObjects[1] = object[30];   //door 1 - right door
+            aInteObjects[2] = object[31];   //door 2 - left door
+            aInteObjects[3] = object[32];   //keycard 1
 
             sv.y -= 100;
             sv.z -= 100;
@@ -243,19 +243,27 @@ public class FloorThird {
         return aInteObjects;
     }
 
-    public void Interact(int i) {
+    public String Interact(int i) {
         if (i == 0) {
-            //elev
+            //elev - Available after entering 4th floor
+            Logger.log("Elevator");
+            return "The elevator isn't working";
         }
         else if (i == 1) {
-            //door1
+            //door1 - Check if we have the right item
+            Logger.log("Door1");
+            return "The door is locked. It needs a key card";
         }
         else if (i == 2) {
-            //door2
+            //door2 - Check if we have the right item
+            Logger.log("Door2");
+            return "The door is locked. It needs a key card";
         }
         else if (i == 3) {
-            //key1
+            //key1 - Pickup item
             object[32].setVisibility(false);
+            return "Got Keycard Lv1";
         }
+        return null;
     }
 }

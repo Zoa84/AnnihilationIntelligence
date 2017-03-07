@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 
 import com.threed.jpct.FrameBuffer;
+import com.threed.jpct.Logger;
 import com.threed.jpct.Texture;
 import com.threed.jpct.util.BitmapHelper;
 
