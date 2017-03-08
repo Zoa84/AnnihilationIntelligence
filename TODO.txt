@@ -3,11 +3,44 @@ TODO Next Time
 
 Create third floor and props and stuff
 Create fourth floor and props and stuff
-Create a link between the two floors
 
 Create or otherwise source a floor with objects in it, and import to game activity.
 
-Change or source new music and sound. Currently using "example" music from previous work
+Choose total number of musics and sounds, and create temporary versions for testing
+(change later)
+
+
+menu mus
+options mus
+game mus
+select snd
+fail snd
+locked snd
+pickup snd
+
+unlocked?/stair noise
+elevator ding
+elevator movement?
+death sound
+
+
+
+Game Over state
+
+note next to elevator
+reading the note (check interim story)
+
+open elevator
+and using the elevator when open ("The elevator's open. Go inside?")
+game over
+
+using elevator normally for travel (draw an elevator panel with buttons?
+
+loading screen between levels (draw if floor == -1)
+
+
+
+
 
 
 
@@ -19,6 +52,8 @@ Have pictures be clickable?
 !!Keep options as is, passing the volume and sound. Not only does this allow us to change the volume of certain music/ sound (e.g. decreasing music for certain sound/ voice) but it is also generally better to not rely on singletons (could research for report?)
 
 Continue writing up about anything at any time (even on phone/ laptop)
+
+
 
 
 For a simpler? version, only do floors g,1,2,3,4. This gives  the game a chance to have the start, showing off moving in a 3d environment on phone and stuff, and allows simple puzzles, like collecting keycards.
@@ -42,3 +77,8 @@ game over screen (ui overlay saying game over, and return to menu)
 win screen (saying congratulations and return to menu)
 sound for picking up items, successful interactions
 1 music, unless want more
+
+
+
+
+Write up topics
