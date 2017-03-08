@@ -27,7 +27,7 @@ import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
  * Created by Simon on 01/03/2017.
  */
 
-public class FloorThird {
+public class FloorThird extends Floor{
     private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2", "key1"};
     private Object3D[] object = new Object3D[33];
     private Object3D[] aObjects = null;
@@ -121,13 +121,10 @@ public class FloorThird {
 
             Collisions[9] = new CollisionMap(-15, 36, 14, 7);
 
-            Camera cam = world.getCamera();
-            cam.setPosition(-15f, 0, -30f);
+            SetPosition(0);
 
             SimpleVector sv = new SimpleVector();
             sv.set(object[0].getTransformedCenter());
-
-            //object[0].translate(fixTrans(0f, -8.5f, 0f));
 
             object[2].translate(fixTrans(-20f, -6f, -20f));
             object[3].translate(fixTrans(-20f, -6f, 0f));
@@ -184,36 +181,16 @@ public class FloorThird {
         return world;
     }
 
-    public SimpleVector test(){
-        return object[0].getTransformedCenter();
+    public void SetPosition(int i) {
+        SetPosition(i, world);
     }
 
     public void Destroy() {
-        master = null;
-        world.dispose();
-        TextureManager.getInstance().flush();
+        Destroy(master, world);
     }
 
     private void ObjectLoader(Context context, int i, String name) {
-        InputStream is;
-
-        try {
-            is = context.getResources().getAssets().open("objects/" + name + ".obj");
-            aObjects = Loader.loadOBJ(is, null, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        object[i] = aObjects[0];
-        object[i].setTexture(name);
-        object[i].build();
-        world.addObject(object[i]);
-
-        //Due to jPCT world axis, rotate around X-axis to draw right-side up
-        object[i].setRotationPivot(SimpleVector.ORIGIN);
-        object[i].rotateX(180 * DEG_TO_RAD);
-        object[i].rotateMesh();
-        object[i].clearRotation();
+        ObjectLoader(context, i, name, aObjects, object, world);
     }
 
     public boolean Collisions(float xPos, float yPos) {
@@ -226,17 +203,11 @@ public class FloorThird {
     }
 
     public boolean CollisionsWallX(float xPos) {
-        if (xPos > xWallLeft || xPos < xWallRight) {
-            return true;
-        }
-        return false;
+        return (xPos > xWallLeft || xPos < xWallRight);
     }
 
     public boolean CollisionsWallY(float yPos) {
-        if (yPos > yWallBack || yPos < yWallFront) {
-            return true;
-        }
-        return false;
+        return (yPos > yWallBack || yPos < yWallFront);
     }
 
     public Object3D[] GetInteObjects() {
@@ -246,17 +217,14 @@ public class FloorThird {
     public String Interact(int i) {
         if (i == 0) {
             //elev - Available after entering 4th floor
-            Logger.log("Elevator");
             return "The elevator isn't working";
         }
         else if (i == 1) {
             //door1 - Check if we have the right item
-            Logger.log("Door1");
             return "The door is locked. It needs a key card";
         }
         else if (i == 2) {
             //door2 - Check if we have the right item
-            Logger.log("Door2");
             return "The door is locked. It needs a key card";
         }
         else if (i == 3) {

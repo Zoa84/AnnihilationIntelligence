@@ -116,7 +116,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         if (master == null) {
             //Load the floors
             FloorThird = new FloorThird(context);
-            //FloorFourth = new FloorFourth(context);
+            FloorFourth = new FloorFourth(context);
 
             //Initialise Joystick array
             //Set as 300 pixels away from both corners, with a radius of 128
@@ -157,6 +157,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         if (iFloor == 3) {
             cam = FloorThird.GetWorld().getCamera();
         }
+        else if (iFloor == 4) {
+            cam = FloorFourth.GetWorld().getCamera();
+        }
 
         //The current pointer we are checking the onTouchEvent for (0 = first finger)
         int pointerIndex = me.getActionIndex();
@@ -191,105 +194,13 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         if (!bPaused) {
             //Action is down for first finger
             if (me.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                if (me.getX(pointerIndex) < pPoint.x / 2) {
-                    aMove[0].SetState(pointerIndex + 1);
-                } else {
-                    aMove[1].SetState(pointerIndex + 1);
-                }
-
                 //if Interact button is pressed
-                if (aButtons[0].GetPressed()) {
-                    Object3D[] objects = null;
-                    if (iFloor == 3) {
-                        objects = FloorThird.GetInteObjects();
-                        for (int i = 0; i < objects.length; i++) {
-                            if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
-                                if (i == 3) {
-                                    if (!Inventory.GetInventory(0)) {
-                                        ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                        String text = FloorThird.Interact(i);
-                                        Inventory.SetInventory(0);
-                                        TextBuffer.AddText(text, 3000);
-                                    }
-                                }
-                                //Test for fun
-                                else if (i == 1) {
-                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                    String text = FloorThird.Interact(i);
-                                    //Test Text Buffer
-                                    TextBuffer.AddText("When I was six years old, I broke my leg.", 3000);
-                                    TextBuffer.AddText("I was running from my brother and his friends.", 6000);
-                                    TextBuffer.AddText("I tasted the sweet perfume of the mountain as I rolled down.", 9000);
-                                    TextBuffer.AddText("I remember then. Take me back to when, I...", 12000);
-                                }
-                                else {
-                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                    String text = FloorThird.Interact(i);
-                                    TextBuffer.AddText(text, 3000);
-                                }
-                            }
-                        }
-                    }
-                    /*
-                    if (object[0].rayIntersectsAABB(tester, cameraRay) < 30.f) {
-                        //Logger.log("HIT!");
-                        object[0].setVisibility(false);
-                    }*/
-                }
-                else {
-                    if (Inventory.Update(me.getX(pointerIndex), me.getY(pointerIndex))) {((GameActivity) context).PlaySound(SOUND_SELECT);}
-                }
+                InteractUpdate(cam, me, pointerIndex);
             }
             //Action is down for any finger other than first
             if (me.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
-                if (me.getX(pointerIndex) < pPoint.x / 2) {
-                    aMove[0].SetState(pointerIndex + 1);
-                } else {
-                    aMove[1].SetState(pointerIndex + 1);
-                }
-
                 //if Interact button is pressed
-                if (aButtons[0].GetPressed()) {
-                    Object3D[] objects = null;
-                    if (iFloor == 3) {
-                        objects = FloorThird.GetInteObjects();
-                        for (int i = 0; i < objects.length; i++) {
-                            if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
-                                if (i == 3) {
-                                    if (!Inventory.GetInventory(0)) {
-                                        ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                        String text = FloorThird.Interact(i);
-                                        Inventory.SetInventory(0);
-                                        TextBuffer.AddText(text, 3000);
-                                    }
-                                }
-                                //Test for fun
-                                else if (i == 1) {
-                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                    String text = FloorThird.Interact(i);
-                                    //Test Text Buffer
-                                    TextBuffer.AddText("When I was six years old, I broke my leg.", 3000);
-                                    TextBuffer.AddText("I was running from my brother and his friends.", 6000);
-                                    TextBuffer.AddText("I tasted the sweet perfume of the mountain as I rolled down.", 9000);
-                                    TextBuffer.AddText("I remember then. Take me back to when, I...", 12000);
-                                }
-                                else {
-                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                    String text = FloorThird.Interact(i);
-                                    TextBuffer.AddText(text, 3000);
-                                }
-                            }
-                        }
-                    }
-                    /*
-                    if (object[0].rayIntersectsAABB(tester, cameraRay) < 30.f) {
-                        //Logger.log("HIT!");
-                        object[0].setVisibility(false);
-                    }*/
-                }
-                else {
-                    if (Inventory.Update(me.getX(pointerIndex), me.getY(pointerIndex))) {((GameActivity) context).PlaySound(SOUND_SELECT);}
-                }
+                InteractUpdate(cam, me, pointerIndex);
             }
 
             //Action is up for last finger, so reset all
@@ -342,6 +253,137 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
     }
 
+    //Update for the interact buttons. This is repeated between ACTION_DOWN and ACTION_POINTER_DOWN, so
+    //it has been created as a function
+    private void InteractUpdate(Camera cam, MotionEvent me, int pointerIndex) {
+        if (me.getX(pointerIndex) < pPoint.x / 2) {
+            aMove[0].SetState(pointerIndex + 1);
+        } else {
+            aMove[1].SetState(pointerIndex + 1);
+        }
+
+        if (aButtons[0].GetPressed()) {
+            Object3D[] objects = null;
+            if (iFloor == 3) {
+                objects = FloorThird.GetInteObjects();
+                for (int i = 0; i < objects.length; i++) {
+                    if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                        //Elevator
+                        if (i == 0) {
+                            if (Inventory.GetSelected(3)) {
+                                ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                String text = "Which floor (how do?)";
+                                TextBuffer.AddText(text, 3000);
+                            }
+                            else {
+                                ((GameActivity) context).PlaySound(SOUND_FAIL);
+                                String text = FloorThird.Interact(i);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                        //Door 1 (Right)
+                        else if (i == 1) {
+                            if (Inventory.GetSelected(0)) {
+                                ((GameActivity) context).PlaySound(SOUND_SELECT);
+
+                                iFloor = -1;
+                                xRot = 0.f;
+                                yRot = 180.f * DEG_TO_RAD;
+                                FloorFourth.SetPosition(2);
+                                new CountDownTimer(2000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    public void onFinish() {
+                                        iFloor = 4;
+                                        TextBuffer.AddText("Was that noise from the elevator?", 3000);
+                                        ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                    }
+                                }.start();
+                            }
+                            else {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = FloorThird.Interact(i);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                        //Door 2 (Left)
+                        else if (i == 2){
+                            if (Inventory.GetSelected(0)) {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = "The Keycard won't work on this door";
+                                TextBuffer.AddText(text, 3000);
+                            }
+                            else {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = FloorThird.Interact(i);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                        //Keycard 1
+                        else if (i == 3) {
+                            if (!Inventory.GetInventory(0)) {
+                                ((GameActivity) context).PlaySound(SOUND_PICKUP);
+                                String text = FloorThird.Interact(i);
+                                Inventory.SetInventory(0);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (iFloor == 4) {
+                objects = FloorFourth.GetInteObjects();
+                for (int i = 0; i < objects.length; i++) {
+                    if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                        //"Elevator
+                        if (i == 0) {
+                            if (Inventory.GetSelected(3)) {
+                                ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                String text = "Which floor (how do?)";
+                                TextBuffer.AddText(text, 3000);
+                            }
+                            else {
+                                ((GameActivity) context).PlaySound(SOUND_FAIL);
+                                String text = FloorFourth.Interact(i);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                        //Door2 (Left)
+                        else if (i == 1) {
+                            if (Inventory.GetSelected(0)) {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+
+                                iFloor = -1;
+                                xRot = 0.f;
+                                yRot = 180.f * DEG_TO_RAD;
+                                FloorThird.SetPosition(3);
+                                new CountDownTimer(2000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    public void onFinish() {
+                                        iFloor = 3;
+                                    }
+                                }.start();
+                            }
+                            else {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = FloorFourth.Interact(i);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                    }
+                }
+            }
+            Inventory.ResetUse();
+        }
+        //Check if its pressing the items
+        else {
+            if (Inventory.Update(me.getX(pointerIndex), me.getY(pointerIndex))) {((GameActivity) context).PlaySound(SOUND_SELECT);}
+        }
+    }
+
     public void TogglePaused() {
         ((GameActivity) context).PlaySound(SOUND_SELECT);
         bPaused = !bPaused;
@@ -364,6 +406,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         //Get Camera of current floor
         if (iFloor == 3) {
             cam = FloorThird.GetWorld().getCamera();
+        }
+        else if (iFloor == 4) {
+            cam = FloorFourth.GetWorld().getCamera();
         }
 
         //if game is not paused
@@ -397,7 +442,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             }
 
             //Move Camera
-            if (touchMove != 0 || touchMoveUp != 0) {
+            if (iFloor != -1 && touchMove != 0 || touchMoveUp != 0) {
                 SimpleVector moveVector = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
                 cam.moveCamera(moveVector, 10f);
                 float xCamPos = cam.getPosition().x;
@@ -408,18 +453,36 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 if (iFloor == 3) {
                     boolean check = FloorThird.Collisions(xCamPos, yCamPos);
                     if (check) {
-                        SimpleVector testVector = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
-                        cam.moveCamera(testVector, -10f);
+                        SimpleVector Move = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
+                        cam.moveCamera(Move, -10f);
                     }
                     else {
                         //Wall Collisions
                         if (FloorThird.CollisionsWallX(xCamPos)) {
-                            SimpleVector testVector = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, 0.f);
-                            cam.moveCamera(testVector, -10f);
+                            SimpleVector Move = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, 0.f);
+                            cam.moveCamera(Move, -10f);
                         }
                         if (FloorThird.CollisionsWallY(yCamPos)) {
-                            SimpleVector testVector = new SimpleVector(0.f, 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
-                            cam.moveCamera(testVector, -10f);
+                            SimpleVector Move = new SimpleVector(0.f, 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
+                            cam.moveCamera(Move, -10f);
+                        }
+                    }
+                }
+                else if (iFloor == 4) {
+                    boolean check = FloorFourth.Collisions(xCamPos, yCamPos);
+                    if (check) {
+                        SimpleVector Move = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
+                        cam.moveCamera(Move, -10f);
+                    }
+                    else {
+                        //Wall Collisions
+                        if (FloorFourth.CollisionsWallX(xCamPos)) {
+                            SimpleVector Move = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, 0.f);
+                            cam.moveCamera(Move, -10f);
+                        }
+                        if (FloorFourth.CollisionsWallY(yCamPos)) {
+                            SimpleVector Move = new SimpleVector(0.f, 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
+                            cam.moveCamera(Move, -10f);
                         }
                     }
                 }
@@ -427,7 +490,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
 
         //Rotate Camera
-        if (!bPaused) {
+        if (!bPaused && iFloor != -1) {
             SimpleVector cameraVector = cam.getPosition();
             cameraVector.z += 1f;
             cam.lookAt(cameraVector);
@@ -436,17 +499,26 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
 
         //Draw current floor
+        if (iFloor == -1) {
+            fb.clear(bg);
+        }
         if (iFloor == 3 && !bDestroy) {
             fb.clear(bg);
             FloorThird.GetWorld().renderScene(fb);
             FloorThird.GetWorld().draw(fb);
             fb.display();
         }
+        else if (iFloor == 4 && !bDestroy) {
+            fb.clear(bg);
+            FloorFourth.GetWorld().renderScene(fb);
+            FloorFourth.GetWorld().draw(fb);
+            fb.display();
+        }
 
         cameraRay = new SimpleVector(-sin(yRot), -xRot, cos(yRot));
 
         //Draw and display UI
-        if (!bDestroy) {
+        if (!bDestroy && iFloor != -1) {
             //Draw Joysticks
             for (int i = 0; i < aMove.length; i++) {aMove[i].Draw(fb);}
 
@@ -459,6 +531,21 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             //Draw message if looking at a usable object
             if (iFloor == 3) {
                 Object3D[] objects = FloorThird.GetInteObjects();
+                for (int i = 0; i < objects.length; i++) {
+                    if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                        if (i == 3) {
+                            if (!Inventory.GetInventory(0)) {
+                                fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 128, (pPoint.y / 2) - 64, 256, 256, FrameBuffer.TRANSPARENT_BLITTING);
+                            }
+                        }
+                        else {
+                            fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 128, (pPoint.y / 2) - 64, 256, 256, FrameBuffer.TRANSPARENT_BLITTING);
+                        }
+                    }
+                }
+            }
+            else if (iFloor == 4) {
+                Object3D[] objects = FloorFourth.GetInteObjects();
                 for (int i = 0; i < objects.length; i++) {
                     if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
                         if (i == 3) {
@@ -513,10 +600,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         if (bDestroy) {
             master = null;
             fb.dispose();
-            if (iFloor == 3) {
-                FloorThird.Destroy();
-            }
+            FloorThird.Destroy();
+            FloorFourth.Destroy();
             Inventory.Reset();
+            Inventory.ResetUse();
             Intent intent = new Intent();
             intent.putExtra("completed", false);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

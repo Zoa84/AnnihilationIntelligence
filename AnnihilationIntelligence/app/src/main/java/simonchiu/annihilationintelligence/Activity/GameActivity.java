@@ -62,7 +62,7 @@ public class GameActivity extends Activity {
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
 
         //Play music (passing the element to play)
-        PlayMusic(MUSIC_BATTLE);
+        PlayMusic(MUSIC_GAME);
 
         //TODO necessary?
         if (master != null) {

@@ -21,16 +21,14 @@ public final class Defines {
 
     //Defines for music names
     public static final int MUSIC_MENU = 0;
-    public static final int MUSIC_BATTLE = 1;
-    public static final int MUSIC_SCORE = 2;
-    public static final int MUSIC_SETTINGS = 3;
+    public static final int MUSIC_GAME = 1;
+    public static final int MUSIC_OPTIONS = 2;
 
     //Define for sound names
-    public static final int SOUND_DEATH = 0;
-    public static final int SOUND_FIRE = 1;
-    public static final int SOUND_HIT = 2;
-    public static final int SOUND_SELECT = 3;
-    public static final int SOUND_TIME = 4;
+    public static final int SOUND_SELECT = 0;
+    public static final int SOUND_FAIL = 1;
+    public static final int SOUND_LOCKED = 2;
+    public static final int SOUND_PICKUP = 3;
 
     //Defines for maths
     public static final float DEG_TO_RAD = 3.141f / 180f;

@@ -20,7 +20,8 @@ import com.threed.jpct.util.BitmapHelper;
 
 public class Inventory {
     private boolean bInventory[] = {false, false, false};       //Array of whether we have picked up the item
-    private boolean bInventoryUse[] = {false, false, false};    //Array of whether an item is selected. This could be changed to a single integer, but could be used for selecting multiple items
+    //Array of whether an item is selected. This could be changed to a single integer, but could be used for selecting multiple items
+    private boolean bInventoryUse[] = {false, false, false, false};    //3 = elevatorUnlocked
     private int iXPos[] = new int[3];                           //Array of the X positions of the icons for the inventory
     private int iYPos[] = new int[3];                           //Array of the Y positions of the icons for the inventory
     private int iSize = 128;                                    //The size of the icon (extents)
@@ -90,6 +91,10 @@ public class Inventory {
         return false;
     }
 
+    public boolean GetSelected(int i) {
+        return bInventoryUse[i];
+    }
+
     //Draw the inventory (if collected), and draw if being used
     public void Draw(FrameBuffer fb) {
         for (int i = 0; i < bInventory.length; i++) {
@@ -109,5 +114,12 @@ public class Inventory {
         bInventory[0] = false;
         bInventory[1] = false;
         bInventory[2] = false;
+    }
+
+    //Reset inventory
+    public void ResetUse() {
+        bInventoryUse[0] = false;
+        bInventoryUse[1] = false;
+        bInventoryUse[2] = false;
     }
 }

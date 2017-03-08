@@ -38,7 +38,7 @@ public class OptionsActivity extends AppCompatActivity {
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
 
         //Play music (passing the element to play)
-        if (!Media.getInstance().playMusic(MUSIC_SETTINGS, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();
+        if (!Media.getInstance().playMusic(MUSIC_OPTIONS, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();
 
         //Settings for the Music
         cCheckBox[MUSIC] = (CheckBox) findViewById(R.id.cMusic);
@@ -51,7 +51,7 @@ public class OptionsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 bOptionData[MUSIC] = cCheckBox[MUSIC].isChecked();
-                Media.getInstance().playMusic(MUSIC_SETTINGS, iVolume[MUSIC], bOptionData[MUSIC]);
+                Media.getInstance().playMusic(MUSIC_OPTIONS, iVolume[MUSIC], bOptionData[MUSIC]);
                 Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
             }
         });

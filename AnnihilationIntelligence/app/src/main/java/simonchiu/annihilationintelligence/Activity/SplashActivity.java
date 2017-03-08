@@ -27,8 +27,8 @@ public class SplashActivity extends AppCompatActivity {
 
     boolean[] bOptionData = new boolean[5];                             //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     int[] iVolume = new int[2];                                         //Array of the volume for music (0) and sound (1)
-    String[] sMusicName = {"menu", "battle", "score", "settings"};      //File names for music files
-    String[] sSoundName = {"death", "fire", "hit", "select", "time"};   //File names for sound files
+    String[] sMusicName = {"menu", "game", "options"};      //File names for music files
+    String[] sSoundName = {"select", "fail", "locked", "pickup"};   //File names for sound files
 
     AssetFileDescriptor descriptor;
 
@@ -113,12 +113,12 @@ public class SplashActivity extends AppCompatActivity {
 
         //Load music
         for (int i = 0; i < sMusicName.length; i++) {
-            loadMusic("music/example/" + sMusicName[i] + ".ogg", i);
+            loadMusic("music/" + sMusicName[i] + ".ogg", i);
         }
 
         //Load sound
         for (int i = 0; i < sSoundName.length; i++) {
-            loadSound("sound/example/" + sSoundName[i] + ".ogg", i);
+            loadSound("sound/" + sSoundName[i] + ".ogg", i);
         }
 
         toast = Toast.makeText(this, "Data Loaded", Toast.LENGTH_SHORT);

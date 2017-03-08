@@ -27,27 +27,30 @@ import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
  * Created by Simon on 02/03/2017.
  */
 
-public class FloorFourth {
-    private String[] textures = {"floor", "skybox", "table", "chair", "comp"};
-    private Object3D[] object = new Object3D[28];
+public class FloorFourth extends Floor {
+    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2"};
+    private Object3D[] object = new Object3D[31];
     private Object3D[] aObjects = null;
 
     private Light sun = null;
     private static GameActivity master = null;
     private World world = null;
 
-    private CollisionMap[] Collisions = new CollisionMap[9];
-    private int xWall = 35;
-    private int yWall = 35;
+    private CollisionMap[] Collisions = new CollisionMap[10];
+    private int xWallLeft = 34;
+    private int xWallRight = -34;
+    private int yWallFront = -34;
+    private int yWallBack = 28;
+    private Object3D[] aInteObjects = new Object3D[2];
 
     public FloorFourth(Context context) {
         if (master == null) {
 
             world = new World();
-            world.setAmbientLight(20, 20, 20);
+            world.setAmbientLight(100, 100, 100);
 
             sun = new Light(world);
-            sun.setIntensity(250, 250, 250);
+            sun.setIntensity(100, 100, 100);
 
             Texture texture;
 
@@ -65,9 +68,10 @@ public class FloorFourth {
             //This is then but into an array called object which contains all the loaded objects together
             //These can be set textures and built
 
-            ObjectLoader(context, 0, "floor");
+            ObjectLoader(context, 0, "room");
 
-            ObjectLoader(context, 1, "table");
+            ObjectLoader(context, 1, "floor");
+
             ObjectLoader(context, 2, "table");
             ObjectLoader(context, 3, "table");
             ObjectLoader(context, 4, "table");
@@ -76,8 +80,8 @@ public class FloorFourth {
             ObjectLoader(context, 7, "table");
             ObjectLoader(context, 8, "table");
             ObjectLoader(context, 9, "table");
+            ObjectLoader(context, 10, "table");
 
-            ObjectLoader(context, 10, "chair");
             ObjectLoader(context, 11, "chair");
             ObjectLoader(context, 12, "chair");
             ObjectLoader(context, 13, "chair");
@@ -86,8 +90,8 @@ public class FloorFourth {
             ObjectLoader(context, 16, "chair");
             ObjectLoader(context, 17, "chair");
             ObjectLoader(context, 18, "chair");
+            ObjectLoader(context, 19, "chair");
 
-            ObjectLoader(context, 19, "comp");
             ObjectLoader(context, 20, "comp");
             ObjectLoader(context, 21, "comp");
             ObjectLoader(context, 22, "comp");
@@ -96,6 +100,11 @@ public class FloorFourth {
             ObjectLoader(context, 25, "comp");
             ObjectLoader(context, 26, "comp");
             ObjectLoader(context, 27, "comp");
+            ObjectLoader(context, 28, "comp");
+
+            ObjectLoader(context, 29, "elev");
+
+            ObjectLoader(context, 30, "door2");
 
             Collisions[0] = new CollisionMap(-20, 20, 5, 3);
             Collisions[1] = new CollisionMap(-20, 0, 5, 3);
@@ -107,43 +116,45 @@ public class FloorFourth {
             Collisions[7] = new CollisionMap(20, 0, 5, 3);
             Collisions[8] = new CollisionMap(20, -20, 5, 3);
 
-            Camera cam = world.getCamera();
-            cam.setPosition(-35f, 0, -35f);
+            Collisions[9] = new CollisionMap(-15, 36, 14, 7);
+
+            SetPosition(2);
 
             SimpleVector sv = new SimpleVector();
             sv.set(object[0].getTransformedCenter());
 
-            object[0].translate(fixTrans(0f, -8.5f, 0f));
+            object[2].translate(fixTrans(-20f, -6f, -20f));
+            object[3].translate(fixTrans(-20f, -6f, 0f));
+            object[4].translate(fixTrans(-20f, -6f, 20f));
+            object[5].translate(fixTrans(0f, -6f, -20f));
+            object[6].translate(fixTrans(0f, -6f, 0f));
+            object[7].translate(fixTrans(0f, -6f, 20f));
+            object[8].translate(fixTrans(20f, -6f, -20f));
+            object[9].translate(fixTrans(20f, -6f, 0f));
+            object[10].translate(fixTrans(20f, -6f, 20f));
 
-            object[1].translate(fixTrans(-20f, -6f, -20f));
-            object[2].translate(fixTrans(-20f, -6f, 0f));
-            object[3].translate(fixTrans(-20f, -6f, 20f));
-            object[4].translate(fixTrans(0f, -6f, -20f));
-            object[5].translate(fixTrans(0f, -6f, 0f));
-            object[6].translate(fixTrans(0f, -6f, 20f));
-            object[7].translate(fixTrans(20f, -6f, -20f));
-            object[8].translate(fixTrans(20f, -6f, 0f));
-            object[9].translate(fixTrans(20f, -6f, 20f));
+            object[11].translate(fixTrans(-20f, -5.5f, -15.5f));
+            object[12].translate(fixTrans(-20f, -5.5f, 4.5f));
+            object[13].translate(fixTrans(-20f, -5.5f, 24.5f));
+            object[14].translate(fixTrans(0f, -5.5f, -15.5f));
+            object[15].translate(fixTrans(0f, -5.5f, 4.5f));
+            object[16].translate(fixTrans(0f, -5.5f, 24.5f));
+            object[17].translate(fixTrans(20f, -5.5f, -15.5f));
+            object[18].translate(fixTrans(20f, -5.5f, 4.5f));
+            object[19].translate(fixTrans(20f, -5.5f, 24.5f));
 
-            object[10].translate(fixTrans(-20f, -5.5f, -15.5f));
-            object[11].translate(fixTrans(-20f, -5.5f, 4.5f));
-            object[12].translate(fixTrans(-20f, -5.5f, 24.5f));
-            object[13].translate(fixTrans(0f, -5.5f, -15.5f));
-            object[14].translate(fixTrans(0f, -5.5f, 4.5f));
-            object[15].translate(fixTrans(0f, -5.5f, 24.5f));
-            object[16].translate(fixTrans(20f, -5.5f, -15.5f));
-            object[17].translate(fixTrans(20f, -5.5f, 4.5f));
-            object[18].translate(fixTrans(20f, -5.5f, 24.5f));
+            object[20].translate(fixTrans(-20f, -1.5f, -20f));
+            object[21].translate(fixTrans(-20f, -1.5f, 0f));
+            object[22].translate(fixTrans(-20f, -1.5f, 20f));
+            object[23].translate(fixTrans(0f, -1.5f, -20f));
+            object[24].translate(fixTrans(0f, -1.5f, 0f));
+            object[25].translate(fixTrans(0f, -1.5f, 20f));
+            object[26].translate(fixTrans(20f, -1.5f, -20f));
+            object[27].translate(fixTrans(20f, -1.5f, 0f));
+            object[28].translate(fixTrans(20f, -1.5f, 20f));
 
-            object[19].translate(fixTrans(-20f, -1.5f, -20f));
-            object[20].translate(fixTrans(-20f, -1.5f, 0f));
-            object[21].translate(fixTrans(-20f, -1.5f, 20f));
-            object[22].translate(fixTrans(0f, -1.5f, -20f));
-            object[23].translate(fixTrans(0f, -1.5f, 0f));
-            object[24].translate(fixTrans(0f, -1.5f, 20f));
-            object[25].translate(fixTrans(20f, -1.5f, -20f));
-            object[26].translate(fixTrans(20f, -1.5f, 0f));
-            object[27].translate(fixTrans(20f, -1.5f, 20f));
+            aInteObjects[0] = object[29];   //elevator
+            aInteObjects[1] = object[30];   //door 2 - left door
 
             sv.y -= 100;
             sv.z -= 100;
@@ -161,92 +172,52 @@ public class FloorFourth {
         return world;
     }
 
-    public Light GetSun() {
-        return sun;
-    }
-
-    public SimpleVector test(){
-        return object[0].getTransformedCenter();
+    public void SetPosition(int i) {
+        SetPosition(i, world);
     }
 
     public void Destroy() {
-        master = null;
-        world.dispose();
-        TextureManager.getInstance().flush();
+        Destroy(master, world);
     }
 
     private void ObjectLoader(Context context, int i, String name) {
-        InputStream is;
-
-        try {
-            is = context.getResources().getAssets().open("objects/" + name + ".obj");
-            aObjects = Loader.loadOBJ(is, null, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        object[i] = aObjects[0];
-        object[i].setTexture(name);
-        object[i].build();
-        world.addObject(object[i]);
-
-        //Due to jPCT world axis, rotate around X-axis to draw right-side up
-        object[i].setRotationPivot(SimpleVector.ORIGIN);
-        object[i].rotateX(180 * DEG_TO_RAD);
-        object[i].rotateMesh();
-        object[i].clearRotation();
+        ObjectLoader(context, i, name, aObjects, object, world);
     }
 
-    private int CollisionsX(float xPos, int i) {
-        if (Collisions[i].CheckX(xPos))
-        {
-            return i;
-        }
-        return -1;
-    }
-
-    private int CollisionsY(float yPos, int i) {
-        if (Collisions[i].CheckY(yPos))
-        {
-            return i;
-        }
-        return -1;
-    }
-
-    public int Collisions(float xPos, float yPos) {
-        int output = 0;
+    public boolean Collisions(float xPos, float yPos) {
         for (int i = 0; i < Collisions.length; i++) {
-            int test = CollisionsX(xPos, i);
-            if (test != -1) {
-                test = CollisionsY(yPos, test);
-                if (test != -1) {
-                    output = 1;                     //Collision in X and Y
-                    return output;
-                }
+            if (Collisions[i].Check(xPos, yPos)) {
+                return true;
             }
         }
-
-        return output;
+        return false;
     }
 
     public boolean CollisionsWallX(float xPos) {
-        if (xPos > xWall || xPos < -xWall) {
-            return true;
-        }
-        return false;
+        return (xPos > xWallLeft || xPos < xWallRight);
     }
 
     public boolean CollisionsWallY(float yPos) {
-        if (yPos > yWall || yPos < -yWall) {
-            return true;
-        }
-        return false;
+        return (yPos > yWallBack || yPos < yWallFront);
     }
 
-    public boolean CollisionsWall(float xPos, float yPos) {
-        if (xPos > xWall || xPos < -xWall || yPos > yWall || yPos < -yWall) {
-            return true;
+    public Object3D[] GetInteObjects() {
+        return aInteObjects;
+    }
+
+    public String Interact(int i) {
+        if (i == 0) {
+            //elev - Available after entering 4th floor
+            return "The elevator isn't working";
         }
-        return false;
+        else if (i == 1) {
+            //door1 - Check if we have the right item
+            return "The door is locked. It needs a key card";
+        }
+        else if (i == 2) {
+            //door2 - Check if we have the right item
+            return "The door is locked. It needs a key card";
+        }
+        return null;
     }
 }
