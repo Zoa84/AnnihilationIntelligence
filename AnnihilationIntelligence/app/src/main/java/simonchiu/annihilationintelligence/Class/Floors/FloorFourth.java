@@ -28,8 +28,8 @@ import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
  */
 
 public class FloorFourth extends Floor {
-    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2"};
-    private Object3D[] object = new Object3D[31];
+    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2", "note", "elev_open"};
+    private Object3D[] object = new Object3D[33];
     private Object3D[] aObjects = null;
 
     private Light sun = null;
@@ -41,10 +41,17 @@ public class FloorFourth extends Floor {
     private int xWallRight = -34;
     private int yWallFront = -34;
     private int yWallBack = 28;
-    private Object3D[] aInteObjects = new Object3D[2];
+    private Object3D[] aInteObjects = new Object3D[3];
+    private boolean bElevDeath;
+
+    Context context;
 
     public FloorFourth(Context context) {
         if (master == null) {
+
+            this.context = context;
+
+            bElevDeath = true;
 
             world = new World();
             world.setAmbientLight(100, 100, 100);
@@ -102,9 +109,11 @@ public class FloorFourth extends Floor {
             ObjectLoader(context, 27, "comp");
             ObjectLoader(context, 28, "comp");
 
-            ObjectLoader(context, 29, "elev");
+            ObjectLoader(context, 29, "elev_open");
 
             ObjectLoader(context, 30, "door2");
+
+            ObjectLoader(context, 31, "note");
 
             Collisions[0] = new CollisionMap(-20, 20, 5, 3);
             Collisions[1] = new CollisionMap(-20, 0, 5, 3);
@@ -155,6 +164,7 @@ public class FloorFourth extends Floor {
 
             aInteObjects[0] = object[29];   //elevator
             aInteObjects[1] = object[30];   //door 2 - left door
+            aInteObjects[2] = object[31];   //note
 
             sv.y -= 100;
             sv.z -= 100;
@@ -168,6 +178,15 @@ public class FloorFourth extends Floor {
         }
     }
 
+    public void SetElevSafe() {
+        bElevDeath = false;
+        ObjectLoader(context, 29, "elev");
+    }
+
+    public boolean GetElevSafe() {
+        return bElevDeath;
+    }
+
     public World GetWorld() {
         return world;
     }
@@ -177,7 +196,8 @@ public class FloorFourth extends Floor {
     }
 
     public void Destroy() {
-        Destroy(master, world);
+        Destroy(world);
+        master = null;
     }
 
     private void ObjectLoader(Context context, int i, String name) {
@@ -208,15 +228,15 @@ public class FloorFourth extends Floor {
     public String Interact(int i) {
         if (i == 0) {
             //elev - Available after entering 4th floor
-            return "The elevator isn't working";
+            return "Which floor?";
         }
         else if (i == 1) {
-            //door1 - Check if we have the right item
+            //door2 - Check if we have the right item
             return "The door is locked. It needs a key card";
         }
         else if (i == 2) {
             //door2 - Check if we have the right item
-            return "The door is locked. It needs a key card";
+            return "It reads: Warning: Take care when using the";
         }
         return null;
     }

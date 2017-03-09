@@ -186,7 +186,8 @@ public class FloorThird extends Floor{
     }
 
     public void Destroy() {
-        Destroy(master, world);
+        Destroy(world);
+        master = null;
     }
 
     private void ObjectLoader(Context context, int i, String name) {
@@ -217,7 +218,7 @@ public class FloorThird extends Floor{
     public String Interact(int i) {
         if (i == 0) {
             //elev - Available after entering 4th floor
-            return "The elevator isn't working";
+            return "Which floor?";
         }
         else if (i == 1) {
             //door1 - Check if we have the right item

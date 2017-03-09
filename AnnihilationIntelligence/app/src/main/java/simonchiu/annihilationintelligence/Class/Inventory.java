@@ -91,6 +91,10 @@ public class Inventory {
         return false;
     }
 
+    public void SetSelected(int i) {
+        bInventoryUse[i] = true;
+    }
+
     public boolean GetSelected(int i) {
         return bInventoryUse[i];
     }
@@ -111,15 +115,18 @@ public class Inventory {
 
     //Reset inventory
     public void Reset() {
-        bInventory[0] = false;
-        bInventory[1] = false;
-        bInventory[2] = false;
+        for (int i = 0; i < bInventory.length; i++) {
+            bInventory[i] = false;
+        }
+        for (int i = 0; i < bInventoryUse.length; i++) {
+            bInventoryUse[i] = false;
+        }
     }
 
-    //Reset inventory
+    //Reset selected inventory
     public void ResetUse() {
-        bInventoryUse[0] = false;
-        bInventoryUse[1] = false;
-        bInventoryUse[2] = false;
+        for (int i = 0; i < 3; i++) {
+            bInventoryUse[i] = false;
+        }
     }
 }

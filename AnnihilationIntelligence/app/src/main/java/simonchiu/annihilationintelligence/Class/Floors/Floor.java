@@ -43,8 +43,7 @@ public class Floor {
         }
     }
 
-    public void Destroy(GameActivity master, World world) {
-        master = null;
+    public void Destroy(World world) {
         world.dispose();
         TextureManager.getInstance().flush();
     }
