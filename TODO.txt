@@ -27,16 +27,13 @@ death sound
 
 Game Over state
 
-note next to elevator
-reading the note (check interim story)
-
-open elevator
-and using the elevator when open ("The elevator's open. Go inside?")
+and using the elevator when open ("The elevator's open. Go inside?"), or just game over
 game over
 
 using elevator normally for travel (draw an elevator panel with buttons?
-
-loading screen between levels (draw if floor == -1)
+say min is 600 pixels, so whole panel and buttons and text fit within 600 in y (horizontal phone)
+create a grey background like an elevator and draw rect like the pause menu
+create buttons and text, also need a cancel, or just click current floor?
 
 
 
@@ -82,3 +79,19 @@ sound for picking up items, successful interactions
 
 
 Write up topics
+
+Text Buffer
+
+Changing floors
+
+
+
+
+For testing or when completed
+
+Talk about testing the code during development
+Testing the code post development
+Testing with other people, recording their thoughts and stuff, and what I can learn from it
+All the topics ive talked about in Stuff
+Changes to shorten the game to fit the deadline
+About keeping to schedule and changes to that, refer to interim
