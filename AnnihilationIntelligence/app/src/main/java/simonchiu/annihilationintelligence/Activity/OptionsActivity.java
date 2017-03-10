@@ -193,4 +193,14 @@ public class OptionsActivity extends AppCompatActivity {
         finish();
     }
 
+    //Change the orientation using the images
+    public void OriLeft (View view) {
+        rgOrien.check(R.id.rLeft);
+    }
+
+    //Change the orientation using the images
+    public void OriRight (View view) {
+        rgOrien.check(R.id.rRight);
+    }
+
 }

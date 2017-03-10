@@ -1,14 +1,7 @@
 TODO Next Time
 
-
-Create third floor and props and stuff
-Create fourth floor and props and stuff
-
-Create or otherwise source a floor with objects in it, and import to game activity.
-
 Choose total number of musics and sounds, and create temporary versions for testing
 (change later)
-
 
 menu mus
 options mus
@@ -25,15 +18,10 @@ death sound
 
 
 
-Game Over state
+sound code for elevator/death, changing death messages
 
-and using the elevator when open ("The elevator's open. Go inside?"), or just game over
-game over
-
-using elevator normally for travel (draw an elevator panel with buttons?
-say min is 600 pixels, so whole panel and buttons and text fit within 600 in y (horizontal phone)
-create a grey background like an elevator and draw rect like the pause menu
-create buttons and text, also need a cancel, or just click current floor?
+add floors 2, 1 and G, then incorporate to elev and doors, then continue on work
+design these 3 floors, objects, textures etc, prepare design so can programme
 
 
 
@@ -41,10 +29,7 @@ create buttons and text, also need a cancel, or just click current floor?
 
 
 
-Options
-Have pictures be clickable?
-
-
+make pause menu nicer? (white boarder around menu)
 
 !!Keep options as is, passing the volume and sound. Not only does this allow us to change the volume of certain music/ sound (e.g. decreasing music for certain sound/ voice) but it is also generally better to not rely on singletons (could research for report?)
 
@@ -84,6 +69,10 @@ Text Buffer
 
 Changing floors
 
+assets under drawable, cant separate, so use stuff like img_ to sep from object textures
+
+compatibility, creating for higher api levels, different phones, cant run an intensive app on an old phone, using higher api for more features
+
 
 
 
@@ -95,3 +84,6 @@ Testing with other people, recording their thoughts and stuff, and what I can le
 All the topics ive talked about in Stuff
 Changes to shorten the game to fit the deadline
 About keeping to schedule and changes to that, refer to interim
+Creating the game by starting on other stuff instead of game, talk about games jams and how should be working on the game and not the extras, talk about being a perfectionist?
+what i did when i had problems, searching online for help, tutorials or forums?
+focusing mostly on game engine, when creating actual game, was actual fairly quick due to created architecture, adding in objects takes a few line, new textures or buttons are also quick, basically all about that game engine

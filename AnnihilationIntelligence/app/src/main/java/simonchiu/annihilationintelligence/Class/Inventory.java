@@ -43,11 +43,11 @@ public class Inventory {
         //Load item icon textures
         int resID;
         resID = context.getResources().getIdentifier("img_inv_key1_off", "drawable", context.getPackageName());
-        tTexture[0] = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 256, 256));
+        tTexture[0] = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 256, 256), true);
         resID = context.getResources().getIdentifier("img_inv_key2_off", "drawable", context.getPackageName());
-        tTexture[1] = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 256, 256));
+        tTexture[1] = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 256, 256), true);
         resID = context.getResources().getIdentifier("img_inv_screwdriver_off", "drawable", context.getPackageName());
-        tTexture[2] = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 256, 256));
+        tTexture[2] = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 256, 256), true);
 
         //Load selected item icon textures
         resID = context.getResources().getIdentifier("img_inv_key1_on", "drawable", context.getPackageName());

@@ -113,7 +113,7 @@ public class MenuActivity extends AppCompatActivity {
             bCompleted = data.getBooleanExtra("completed", false);
             //TODO change when game is completed/ ended
             if (bCompleted) {toast = Toast.makeText(this, "Game Completed", Toast.LENGTH_SHORT);}
-            else {toast = Toast.makeText(this, "Game Not Completed", Toast.LENGTH_SHORT);}
+            else {toast = Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT);}
             toast.show();
         }
 

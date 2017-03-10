@@ -8,31 +8,36 @@
     tools:context="simonchiu.annihilationintelligence.Activity.OptionsActivity"
     android:weightSum="1.0" >
 
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/img_options">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp" >
+                android:layout_margin="20dp"
+                android:padding="5dp"
+                android:background="@drawable/img_white">
 
                 <TextView
                     android:text="@string/sMusic"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
+                    android:layout_gravity="center"
                     android:textAlignment="center" />
 
                 <SeekBar
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:maxHeight="1000dp"
                     android:id="@+id/sMusic"
                     android:max="99"
                     android:layout_weight="0.6"/>
@@ -40,6 +45,7 @@
                 <CheckBox
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:id="@+id/cMusic"
                     android:layout_weight="0.1"/>
 
@@ -48,18 +54,23 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp" >
+                android:layout_margin="20dp"
+                android:padding="5dp"
+                android:background="@drawable/img_white">
 
                 <TextView
                     android:text="@string/sSound"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
+                    android:layout_gravity="center"
                     android:textAlignment="center" />
 
                 <SeekBar
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:maxHeight="1000dp"
                     android:id="@+id/sSound"
                     android:max="99"
                     android:layout_weight="0.6"/>
@@ -67,6 +78,7 @@
                 <CheckBox
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:id="@+id/cSound"
                     android:layout_weight="0.1"/>
 
@@ -75,18 +87,22 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp" >
+                android:layout_margin="20dp"
+                android:padding="5dp"
+                android:background="@drawable/img_white">
 
                 <TextView
                     android:text="@string/sInvX"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.4"
+                    android:layout_gravity="center"
                     android:textAlignment="center" />
 
                 <CheckBox
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:id="@+id/cInvX"
                     android:layout_weight="0.1"/>
 
@@ -95,11 +111,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.4"
+                    android:layout_gravity="center"
                     android:textAlignment="center" />
 
                 <CheckBox
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:id="@+id/cInvY"
                     android:layout_weight="0.1"/>
 
@@ -108,7 +126,9 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp" >
+                android:layout_margin="20dp"
+                android:padding="5dp"
+                android:background="@drawable/img_white">
 
                 <TableRow
                     android:layout_width="0dp"
@@ -138,6 +158,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             app:srcCompat="@drawable/img_left_ori"
+                            android:onClick="OriLeft"
                             android:layout_weight="0.3"/>
 
                         <RadioButton
@@ -150,6 +171,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             app:srcCompat="@drawable/img_right_ori"
+                            android:onClick="OriRight"
                             android:layout_weight="0.3"/>
 
                         <RadioButton
@@ -167,7 +189,7 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp" >
+                android:layout_margin="20dp">
 
                 <Button
                     android:text="@string/sRestore"

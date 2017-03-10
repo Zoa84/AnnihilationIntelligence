@@ -7,12 +7,8 @@ import android.os.CountDownTimer;
  */
 
 public class TextBuffer {
-    int iTextNums = 0;
-    String[] sText = new String[4];
-
-    public TextBuffer() {
-
-    }
+    private int iTextNums = 0;
+    private String[] sText = new String[4];
 
     public void AddText(String text, int time) {
         if (iTextNums <4) {
@@ -24,10 +20,7 @@ public class TextBuffer {
                 }
 
                 public void onFinish() {
-                    iTextNums--;
-                    for (int i = 0; i < iTextNums; i++) {
-                        sText[i] = sText[i+1];
-                    }
+                    DeleteText();
                 }
             }.start();
         }
@@ -42,6 +35,18 @@ public class TextBuffer {
             return returnText;
         }
         return null;
+    }
+
+    private void DeleteText() {
+        iTextNums--;
+        for (int i = 0; i < iTextNums; i++) {
+            sText[i] = sText[i+1];
+        }
+    }
+
+    public void DeleteAll() {
+        iTextNums = 0;
+        sText = new String[4];
     }
 
 }

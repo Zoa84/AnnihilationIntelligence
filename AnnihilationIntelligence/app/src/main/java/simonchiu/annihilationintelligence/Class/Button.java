@@ -48,7 +48,7 @@ public class Button {
         //Load Button
         int resID;
         resID = context.getResources().getIdentifier("img_button_pause", "drawable", context.getPackageName());
-        texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
+        texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64), true);
     }
 
     //Constructor without text to draw
@@ -64,7 +64,7 @@ public class Button {
         //Load Button
         int resID;
         resID = context.getResources().getIdentifier("img_button_" + Integer.toString(type), "drawable", context.getPackageName());
-        texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iXSize*2, iYSize*2));
+        texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iXSize*2, iYSize*2), true);
     }
 
     //Update to check if the button has been pressed

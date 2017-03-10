@@ -24,6 +24,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import simonchiu.annihilationintelligence.Activity.GameActivity;
 import simonchiu.annihilationintelligence.Class.Button;
+import simonchiu.annihilationintelligence.Class.ElevMenu;
 import simonchiu.annihilationintelligence.Class.Floors.FloorThird;
 import simonchiu.annihilationintelligence.Class.Floors.FloorFourth;
 import simonchiu.annihilationintelligence.Class.Inventory;
@@ -65,6 +66,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     private Button[] aButtons = new Button[2];
 
     private PauseMenu pauseMenu;
+    private Button[] aPauseButtons = new Button[3];
+
+    private ElevMenu ElevMenu;
+    private Button[] aElevButtons = new Button[5];
 
     //Screen Size;
     private Point pPoint;
@@ -80,14 +85,14 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     private boolean bPaused = false;
 
     private AGLFont[] AGLFont = new AGLFont[2];
-    private Button[] aPauseButtons = new Button[3];
-    private boolean bDestroy = false;
+
+    private boolean bDestroy = false, bElev = false;
 
     private Inventory Inventory;                    //The inventory, manages collection, and selecting items
 
     private TextBuffer TextBuffer = new TextBuffer();
 
-    private Texture tInteract = null, tDot = null, tLoading = null;
+    private Texture tInteract = null, tDot = null, tLoading = null, tGameOver = null, tBlack = null;
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
 
@@ -128,9 +133,17 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
             pauseMenu = new PauseMenu(pPoint.x/2, pPoint.y/2, pPoint.x/2 - 50, pPoint.y/2 - 50, context);
 
+            ElevMenu = new ElevMenu(pPoint, context);
+
             aPauseButtons[0] = new Button("Pause Menu", pPoint.x/2, pPoint.y/10*2, 320, 100, context);
             aPauseButtons[1] = new Button("Resume", pPoint.x/2, pPoint.y/2, 250, 100, context);
             aPauseButtons[2] = new Button("Return to Menu", pPoint.x/2, pPoint.y/10*8, 380, 100, context);
+
+            aElevButtons[0] = new Button(2, pPoint.x/5*2, 50 + ((pPoint.y-100)/6), 64, context);
+            aElevButtons[1] = new Button(2, pPoint.x/5*2, 50 + 2*((pPoint.y-100)/6), 64, context);
+            aElevButtons[2] = new Button(2, pPoint.x/5*2, 50 + 3*((pPoint.y-100)/6), 64, context);
+            aElevButtons[3] = new Button(2, pPoint.x/5*2, 50 + 4*((pPoint.y-100)/6), 64, context);
+            aElevButtons[4] = new Button(2, pPoint.x/5*2, 50 + 5*((pPoint.y-100)/6), 64, context);
 
             Inventory = new Inventory(pPoint, context);
 
@@ -142,6 +155,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             tDot = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
             resID = context.getResources().getIdentifier("img_loading", "drawable", context.getPackageName());
             tLoading = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 512, 512));
+            resID = context.getResources().getIdentifier("img_gameover", "drawable", context.getPackageName());
+            tGameOver = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 512, 512));
+            resID = context.getResources().getIdentifier("img_black", "drawable", context.getPackageName());
+            tBlack = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
 
             if (master == null) {
                 Logger.log("Saving master Activity!");
@@ -262,6 +279,101 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             aMove[1].SetState(pointerIndex + 1);
         }
 
+        if (bElev) {
+            //Do buttons
+            for (int i = 0; i < aElevButtons.length; i++) {
+                aElevButtons[i].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                if (aElevButtons[i].GetPressed()) {
+                    bElev = false;
+                    //Goto floor 4
+                    if (i == 0) {
+                        if (iFloor != 4) {
+                            iFloor = -1;
+                            xRot = 0.f;
+                            yRot = 180.f * DEG_TO_RAD;
+                            FloorFourth.SetPosition(1);
+                            new CountDownTimer(2000, 1000) {
+                                public void onTick(long millisUntilFinished) {
+                                }
+
+                                public void onFinish() {
+                                    TextBuffer.DeleteAll();
+                                    iFloor = 4;
+                                }
+                            }.start();
+                        }
+                        //Already on this floor
+                        else {
+                            ((GameActivity) context).PlaySound(SOUND_FAIL);
+                            String text = "I'm already on this floor";
+                            TextBuffer.AddText(text, 3000);
+                        }
+                    }
+                    //Goto floor 3
+                    else if (i == 1) {
+                        if (iFloor != 3) {
+                            iFloor = -1;
+                            xRot = 0.f;
+                            yRot = 180.f * DEG_TO_RAD;
+                            FloorThird.SetPosition(1);
+                            new CountDownTimer(2000, 1000) {
+                                public void onTick(long millisUntilFinished) {
+                                }
+
+                                public void onFinish() {
+                                    TextBuffer.DeleteAll();
+                                    iFloor = 3;
+                                }
+                            }.start();
+                        }
+                        //Already on this floor
+                        else {
+                            ((GameActivity) context).PlaySound(SOUND_FAIL);
+                            String text = "I'm already on this floor";
+                            TextBuffer.AddText(text, 3000);
+                        }
+                    }
+                    //Goto floor 2
+                    else if (i == 2) {
+                        if (iFloor != 2) {
+
+                        }
+                        //Already on this floor
+                        else {
+                            ((GameActivity) context).PlaySound(SOUND_FAIL);
+                            String text = "I'm already on this floor";
+                            TextBuffer.AddText(text, 3000);
+                        }
+                    }
+                    //Goto floor 1
+                    else if (i == 3) {
+                        if (iFloor != 1) {
+
+                        }
+                        //Already on this floor
+                        else {
+                            ((GameActivity) context).PlaySound(SOUND_FAIL);
+                            String text = "I'm already on this floor";
+                            TextBuffer.AddText(text, 3000);
+                        }
+                    }
+                    //Goto ground floor
+                    else if (i == 4) {
+                        if (iFloor != 0) {
+
+                        }
+                        //Already on this floor
+                        else {
+                            ((GameActivity) context).PlaySound(SOUND_FAIL);
+                            String text = "I'm already on this floor";
+                            TextBuffer.AddText(text, 3000);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
         if (aButtons[0].GetPressed()) {
             Object3D[] objects;
             if (iFloor == 3) {
@@ -278,7 +390,13 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_SELECT);
                                 String text = FloorThird.Interact(i);
-                                TextBuffer.AddText(text, 3000);
+                                if (bElev) {
+                                    bElev = false;
+                                }
+                                else {
+                                    TextBuffer.AddText(text, 3000);
+                                    bElev = true;
+                                }
                             }
                         }
                         //Door 1 (Right)
@@ -298,6 +416,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     }
 
                                     public void onFinish() {
+                                        TextBuffer.DeleteAll();
                                         iFloor = 4;
                                         if (!Inventory.GetSelected(3)) {
                                             TextBuffer.AddText("Was that noise from the elevator?", 3000);
@@ -346,13 +465,29 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         if (i == 0) {
                             if (FloorFourth.GetElevSafe()) {
                                 ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                String text = "Are you sure?";
-                                TextBuffer.AddText(text, 3000);
+
+                                //Game over from using unsafe elevator
+                                iFloor = -2;
+                                new CountDownTimer(3000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    public void onFinish() {
+                                        bDestroy = true;
+                                    }
+                                }.start();
+
                             }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_SELECT);
                                 String text = FloorFourth.Interact(i);
-                                TextBuffer.AddText(text, 3000);
+                                if (bElev) {
+                                    bElev = false;
+                                }
+                                else {
+                                    TextBuffer.AddText(text, 3000);
+                                    bElev = true;
+                                }
                             }
                         }
                         //Door2 (Left)
@@ -369,6 +504,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     }
 
                                     public void onFinish() {
+                                        TextBuffer.DeleteAll();
                                         iFloor = 3;
                                         FloorFourth.SetElevSafe();
                                     }
@@ -383,6 +519,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         else if (i == 2) {
                             ((GameActivity) context).PlaySound(SOUND_SELECT);
                             String text = FloorFourth.Interact(i);
+                            TextBuffer.DeleteAll();
                             TextBuffer.AddText(text, 5000);
                             TextBuffer.AddText("elevator. It is controlled by the AI which", 5000);
                             TextBuffer.AddText("controls when the elevator moves or stops", 5000);
@@ -427,7 +564,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
 
         //if game is not paused
-        if (!bPaused) {
+        if (!bPaused && !bElev) {
             //Set the movement and rotation data
             float touchMove = -aMove[0].GetHor();
             float touchMoveUp = aMove[0].GetVer();
@@ -505,7 +642,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
 
         //Rotate Camera
-        if (!bPaused && iFloor != -1) {
+        if (!bPaused && iFloor != -1 && !bElev) {
             SimpleVector cameraVector = cam.getPosition();
             cameraVector.z += 1f;
             cam.lookAt(cameraVector);
@@ -514,12 +651,20 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
 
         //Draw current floor
-        if (iFloor == -1) {
+        if (iFloor == -2) {
             fb.clear(bg);
+            fb.blit(tBlack, 0, 0, 0, 0, pPoint.x, pPoint.y, FrameBuffer.OPAQUE_BLITTING);
+            fb.blit(tGameOver, 0, 0, (pPoint.x/2) - 256, (pPoint.y/2) - 256, 512, 512, FrameBuffer.TRANSPARENT_BLITTING);
+            DrawText(fb, AGLFont[1], "The elevator doors closed and crushed you", pPoint.x/2, (pPoint.y/2) + 100, true);
+            fb.display();
+        }
+        else if (iFloor == -1) {
+            fb.clear(bg);
+            fb.blit(tBlack, 0, 0, 0, 0, pPoint.x, pPoint.y, FrameBuffer.OPAQUE_BLITTING);
             fb.blit(tLoading, 0, 0, (pPoint.x/2) - 256, (pPoint.y/2) - 256, 512, 512, FrameBuffer.TRANSPARENT_BLITTING);
             fb.display();
         }
-        if (iFloor == 3 && !bDestroy) {
+        else if (iFloor == 3 && !bDestroy) {
             fb.clear(bg);
             FloorThird.GetWorld().renderScene(fb);
             FloorThird.GetWorld().draw(fb);
@@ -533,7 +678,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
 
         //Draw and display UI
-        if (!bDestroy && iFloor != -1) {
+        if (!bDestroy && iFloor != -1 && iFloor != -2) {
             //Draw Joysticks
             for (int i = 0; i < aMove.length; i++) {aMove[i].Draw(fb);}
 
@@ -582,7 +727,21 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             String[] sText = TextBuffer.GetText();
             if (sText != null) {
                 for (int i = 0; i < sText.length; i++) {
-                    DrawText(fb, AGLFont[1], sText[i], 25, 350 + i*100);
+                    DrawText(fb, AGLFont[1], sText[i], 25, 350 + i*100, false);
+                }
+            }
+
+            //Draw elevator buttons
+            if (bElev) {
+                ElevMenu.Draw(fb);
+                for (int i = 0; i < aElevButtons.length; i++) {
+                    aElevButtons[i].Draw(fb);
+                    if (i != 4) {
+                        DrawText(fb, AGLFont[0], Integer.toString(4 - i), pPoint.x / 5 * 3, 250 + i * ((pPoint.y - 100) / 6), true);
+                    }
+                    else {
+                        DrawText(fb, AGLFont[0], "G", pPoint.x / 5 * 3, 250 + i * ((pPoint.y - 100) / 6), true);
+                    }
                 }
             }
 
@@ -599,6 +758,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
             //Reset
             for (int i = 0; i < aButtons.length; i++) {aButtons[i].Reset();}
+            for (int i = 0; i < aElevButtons.length; i++) {aElevButtons[i].Reset();}
             aPauseButtons[1].Reset();
             aPauseButtons[2].Reset();
         }
@@ -628,10 +788,15 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
     }
 
-    private void DrawText(FrameBuffer fb, AGLFont font, String text, int xPos, int yPos) {
-        Rectangle rect = new Rectangle();
-        font.getStringBounds(text, rect);
-        font.blitString(fb, text, xPos, yPos, 100, RGBColor.WHITE);
+    private void DrawText(FrameBuffer fb, AGLFont font, String text, int xPos, int yPos, boolean center) {
+        if (center) {
+            Rectangle rect = new Rectangle();
+            font.getStringBounds(text, rect);
+            font.blitString(fb, text, xPos - (rect.width/2), yPos, 100, RGBColor.WHITE);
+        }
+        else {
+            font.blitString(fb, text, xPos, yPos, 100, RGBColor.WHITE);
+        }
     }
 
 }

@@ -43,7 +43,7 @@ public class Joystick {
         Texture texture;
         //Load Joystick background
         resID = context.getResources().getIdentifier("img_joystick_bg", "drawable", context.getPackageName());
-        texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iSize*2, iSize*2));
+        texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iSize*2, iSize*2), true);
         aTextures[0] = texture;
         //Load Joystick button
         resID = context.getResources().getIdentifier("img_joystick_button", "drawable", context.getPackageName());
