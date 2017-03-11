@@ -24,12 +24,12 @@ import static simonchiu.annihilationintelligence.Class.Defines.DEG_TO_RAD;
 import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
 
 /**
- * Created by Simon on 02/03/2017.
+ * Created by Simon on 11/03/2017.
  */
 
-public class FloorFourth extends Floor {
-    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door2", "note", "elev_open"};
-    private Object3D[] object = new Object3D[33];
+public class FloorGround extends Floor{
+    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1"};
+    private Object3D[] object = new Object3D[31];
     private Object3D[] aObjects = null;
 
     private Light sun = null;
@@ -39,19 +39,12 @@ public class FloorFourth extends Floor {
     private CollisionMap[] Collisions = new CollisionMap[10];
     private int xWallLeft = 33;
     private int xWallRight = -33;
-    private int yWallFront = -34;
+    private int yWallFront = -32;
     private int yWallBack = 28;
-    private Object3D[] aInteObjects = new Object3D[3];
-    private boolean bElevDeath;
+    private Object3D[] aInteObjects = new Object3D[2];
 
-    Context context;
-
-    public FloorFourth(Context context) {
+    public FloorGround(Context context) {
         if (master == null) {
-
-            this.context = context;
-
-            bElevDeath = true;
 
             world = new World();
             world.setAmbientLight(100, 100, 100);
@@ -109,11 +102,9 @@ public class FloorFourth extends Floor {
             ObjectLoader(context, 27, "comp");
             ObjectLoader(context, 28, "comp");
 
-            ObjectLoader(context, 29, "elev_open");
+            ObjectLoader(context, 29, "elev");
 
-            ObjectLoader(context, 30, "door2");
-
-            ObjectLoader(context, 31, "note");
+            ObjectLoader(context, 30, "door1");
 
             Collisions[0] = new CollisionMap(-20, 20, 5, 3);
             Collisions[1] = new CollisionMap(-20, 0, 5, 3);
@@ -127,7 +118,7 @@ public class FloorFourth extends Floor {
 
             Collisions[9] = new CollisionMap(-15, 36, 14, 7);
 
-            SetPosition(2);
+            SetPosition(3);
 
             SimpleVector sv = new SimpleVector();
             sv.set(object[0].getTransformedCenter());
@@ -163,8 +154,7 @@ public class FloorFourth extends Floor {
             object[28].translate(fixTrans(20f, -1.5f, 20f));
 
             aInteObjects[0] = object[29];   //elevator
-            aInteObjects[1] = object[30];   //door 2 - left door
-            aInteObjects[2] = object[31];   //note
+            aInteObjects[1] = object[30];   //door 1 - right door
 
             sv.y -= 100;
             sv.z -= 100;
@@ -176,15 +166,6 @@ public class FloorFourth extends Floor {
                 master = ((GameActivity) context);
             }
         }
-    }
-
-    public void SetElevSafe() {
-        bElevDeath = false;
-        ObjectLoader(context, 29, "elev");
-    }
-
-    public boolean GetElevSafe() {
-        return bElevDeath;
     }
 
     public World GetWorld() {
@@ -231,12 +212,8 @@ public class FloorFourth extends Floor {
             return "Which floor?";
         }
         else if (i == 1) {
-            //door2 - Check if we have the right item
+            //door1 - Check if we have the right item
             return "The door is locked. It needs a key card";
-        }
-        else if (i == 2) {
-            //door2 - Check if we have the right item
-            return "It reads: Warning: Take care when using the";
         }
         return null;
     }

@@ -20,11 +20,25 @@ death sound
 
 sound code for elevator/death, changing death messages
 
-add floors 2, 1 and G, then incorporate to elev and doors, then continue on work
-design these 3 floors, objects, textures etc, prepare design so can programme
+
+
+create proper ground floor
+setup interactions, etc
 
 
 
+
+
+
+
+
+
+for 2nd puzzle,
+can see electrical box, but cant open
+goto 1st floor and get screw driver and open the one on 1st floor, needs a code
+goto 2nd floor, when opened, theres a small note
+it reads: Hey it's Steve. If you need to reset the power, just watchout, the machines been acting a little weird and keeps giving the wrong code. You can get the master code from Dave's desk. I think he's on this floor?
+the note will give the right code
 
 
 

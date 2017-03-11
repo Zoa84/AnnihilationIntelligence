@@ -39,6 +39,7 @@ public class TextBuffer {
 
     private void DeleteText() {
         iTextNums--;
+        if (iTextNums < 0) {iTextNums = 0;}
         for (int i = 0; i < iTextNums; i++) {
             sText[i] = sText[i+1];
         }

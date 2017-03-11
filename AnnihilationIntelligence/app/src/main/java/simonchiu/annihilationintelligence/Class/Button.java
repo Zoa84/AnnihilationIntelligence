@@ -51,7 +51,7 @@ public class Button {
         texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64), true);
     }
 
-    //Constructor without text to draw
+    //Constructor without text to draw, taking a button type
     public Button(int type, int xPos, int yPos, int size, Context context) {
         iXPos = xPos;
         iYPos = yPos;
@@ -64,6 +64,22 @@ public class Button {
         //Load Button
         int resID;
         resID = context.getResources().getIdentifier("img_button_" + Integer.toString(type), "drawable", context.getPackageName());
+        texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iXSize*2, iYSize*2), true);
+    }
+
+    //Constructor without text to draw, for number pad
+    public Button(String number, int xPos, int yPos, int size, Context context) {
+        iXPos = xPos;
+        iYPos = yPos;
+        iXSize = size;
+        iYSize = size;
+
+        //Set position of button using construction parameters
+        rButton = new Rect(iXPos - iXSize, iYPos - iYSize, iXSize*2, iYSize*2);
+
+        //Load Button
+        int resID;
+        resID = context.getResources().getIdentifier("img_button_num" + number, "drawable", context.getPackageName());
         texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iXSize*2, iYSize*2), true);
     }
 

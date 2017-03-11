@@ -37,8 +37,8 @@ public class FloorThird extends Floor{
     private World world = null;
 
     private CollisionMap[] Collisions = new CollisionMap[10];
-    private int xWallLeft = 34;
-    private int xWallRight = -34;
+    private int xWallLeft = 33;
+    private int xWallRight = -33;
     private int yWallFront = -34;
     private int yWallBack = 28;
     private Object3D[] aInteObjects = new Object3D[4];

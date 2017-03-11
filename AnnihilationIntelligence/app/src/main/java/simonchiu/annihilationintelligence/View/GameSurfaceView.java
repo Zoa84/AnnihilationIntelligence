@@ -25,10 +25,14 @@ import javax.microedition.khronos.opengles.GL10;
 import simonchiu.annihilationintelligence.Activity.GameActivity;
 import simonchiu.annihilationintelligence.Class.Button;
 import simonchiu.annihilationintelligence.Class.ElevMenu;
+import simonchiu.annihilationintelligence.Class.Floors.FloorGround;
+import simonchiu.annihilationintelligence.Class.Floors.FloorSecond;
 import simonchiu.annihilationintelligence.Class.Floors.FloorThird;
 import simonchiu.annihilationintelligence.Class.Floors.FloorFourth;
+import simonchiu.annihilationintelligence.Class.Floors.FloorFirst;
 import simonchiu.annihilationintelligence.Class.Inventory;
 import simonchiu.annihilationintelligence.Class.Joystick;
+import simonchiu.annihilationintelligence.Class.NumPad;
 import simonchiu.annihilationintelligence.Class.PauseMenu;
 import simonchiu.annihilationintelligence.Class.TextBuffer;
 import simonchiu.annihilationintelligence.Include.AGLFont;
@@ -71,6 +75,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     private ElevMenu ElevMenu;
     private Button[] aElevButtons = new Button[5];
 
+    private NumPad NumPad;
+    private int[] iNumbers = {10, 10, 10};
+
     //Screen Size;
     private Point pPoint;
 
@@ -80,13 +87,16 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     private int iFloor = 3;
     private FloorThird FloorThird;
     private FloorFourth FloorFourth;
+    private FloorSecond FloorSecond;
+    private FloorFirst FloorFirst;
+    private FloorGround FloorGround;
 
     //if game is paused
     private boolean bPaused = false;
 
     private AGLFont[] AGLFont = new AGLFont[2];
 
-    private boolean bDestroy = false, bElev = false;
+    private boolean bDestroy = false, bElev = false, bNumPad = false;
 
     private Inventory Inventory;                    //The inventory, manages collection, and selecting items
 
@@ -135,6 +145,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
             ElevMenu = new ElevMenu(pPoint, context);
 
+            NumPad = new NumPad(pPoint, context);
+
             aPauseButtons[0] = new Button("Pause Menu", pPoint.x/2, pPoint.y/10*2, 320, 100, context);
             aPauseButtons[1] = new Button("Resume", pPoint.x/2, pPoint.y/2, 250, 100, context);
             aPauseButtons[2] = new Button("Return to Menu", pPoint.x/2, pPoint.y/10*8, 380, 100, context);
@@ -176,6 +188,15 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         }
         else if (iFloor == 4) {
             cam = FloorFourth.GetWorld().getCamera();
+        }
+        else if (iFloor == 2) {
+            cam = FloorSecond.GetWorld().getCamera();
+        }
+        else if (iFloor == 1) {
+            cam = FloorFirst.GetWorld().getCamera();
+        }
+        else if (iFloor == 0) {
+            cam = FloorGround.GetWorld().getCamera();
         }
 
         //The current pointer we are checking the onTouchEvent for (0 = first finger)
@@ -288,6 +309,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                     //Goto floor 4
                     if (i == 0) {
                         if (iFloor != 4) {
+                            ((GameActivity) context).PlaySound(SOUND_SELECT);
                             iFloor = -1;
                             xRot = 0.f;
                             yRot = 180.f * DEG_TO_RAD;
@@ -312,6 +334,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                     //Goto floor 3
                     else if (i == 1) {
                         if (iFloor != 3) {
+                            ((GameActivity) context).PlaySound(SOUND_SELECT);
                             iFloor = -1;
                             xRot = 0.f;
                             yRot = 180.f * DEG_TO_RAD;
@@ -336,7 +359,23 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                     //Goto floor 2
                     else if (i == 2) {
                         if (iFloor != 2) {
+                            ((GameActivity) context).PlaySound(SOUND_SELECT);
+                            iFloor = -1;
+                            xRot = 0.f;
+                            yRot = 180.f * DEG_TO_RAD;
+                            if (FloorSecond == null) {
+                                FloorSecond = new FloorSecond(context);
+                            }
+                            FloorSecond.SetPosition(1);
+                            new CountDownTimer(2000, 1000) {
+                                public void onTick(long millisUntilFinished) {
+                                }
 
+                                public void onFinish() {
+                                    TextBuffer.DeleteAll();
+                                    iFloor = 2;
+                                }
+                            }.start();
                         }
                         //Already on this floor
                         else {
@@ -347,34 +386,79 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                     }
                     //Goto floor 1
                     else if (i == 3) {
-                        if (iFloor != 1) {
-
-                        }
-                        //Already on this floor
-                        else {
-                            ((GameActivity) context).PlaySound(SOUND_FAIL);
-                            String text = "I'm already on this floor";
-                            TextBuffer.AddText(text, 3000);
-                        }
+                        ((GameActivity) context).PlaySound(SOUND_FAIL);
+                        String text = "It won't let me go to this floor";
+                        TextBuffer.AddText(text, 3000);
                     }
                     //Goto ground floor
                     else if (i == 4) {
-                        if (iFloor != 0) {
-
-                        }
-                        //Already on this floor
-                        else {
-                            ((GameActivity) context).PlaySound(SOUND_FAIL);
-                            String text = "I'm already on this floor";
-                            TextBuffer.AddText(text, 3000);
-                        }
+                        ((GameActivity) context).PlaySound(SOUND_FAIL);
+                        String text = "It won't let me go to this floor";
+                        TextBuffer.AddText(text, 3000);
                     }
                     break;
                 }
             }
         }
 
-        if (aButtons[0].GetPressed()) {
+        if (bNumPad) {
+            int iButton = NumPad.Update(me.getX(pointerIndex), me.getY(pointerIndex));
+            if (iButton == -1) {
+                //Do nothing
+            }
+            else if (iButton == 10) {
+                ((GameActivity) context).PlaySound(SOUND_SELECT);
+                bNumPad = false;
+                iNumbers[0] = 10;
+                iNumbers[1] = 10;
+                iNumbers[2] = 10;
+            }
+            else if (iButton == 11) {
+                ((GameActivity) context).PlaySound(SOUND_SELECT);
+                //TODO YESSS? check if correct. die if wrong
+
+                if (iNumbers[0] == 3 && iNumbers[1] == 7 && iNumbers[2] == 1)
+                {
+                    Inventory.SetSelected(4);
+                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                    TextBuffer.DeleteAll();
+                    TextBuffer.AddText("It seems to have worked.", 3000);
+                    TextBuffer.AddText("Maybe the keycard reader's working now", 3000);
+                }
+                else {
+                    //Game over from wrong code
+                    iFloor = -3;
+                    new CountDownTimer(3000, 1000) {
+                        public void onTick(long millisUntilFinished) {
+                        }
+
+                        public void onFinish() {
+                            bDestroy = true;
+                        }
+                    }.start();
+                }
+
+                bNumPad = false;
+                iNumbers[0] = 10;
+                iNumbers[1] = 10;
+                iNumbers[2] = 10;
+            }
+            //Pressed a number
+            else {
+                ((GameActivity) context).PlaySound(SOUND_SELECT);
+                if (iNumbers[0] == 10) {
+                    iNumbers[0] = iButton;
+                }
+                else if (iNumbers[1] == 10) {
+                    iNumbers[1] = iButton;
+                }
+                else if (iNumbers[2] == 10) {
+                    iNumbers[2] = iButton;
+                }
+            }
+        }
+
+        if (aButtons[0].GetPressed() && !bNumPad) {
             Object3D[] objects;
             if (iFloor == 3) {
                 objects = FloorThird.GetInteObjects();
@@ -401,7 +485,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         }
                         //Door 1 (Right)
                         else if (i == 1) {
-                            if (Inventory.GetSelected(0)) {
+                            if (Inventory.GetSelected(0) || Inventory.GetSelected(1)) {
                                 ((GameActivity) context).PlaySound(SOUND_SELECT);
 
                                 iFloor = -1;
@@ -439,6 +523,21 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 String text = "The Keycard won't work on this door";
                                 TextBuffer.AddText(text, 3000);
                             }
+                            else if (Inventory.GetSelected(1)) {
+                                iFloor = -1;
+                                xRot = 0.f;
+                                yRot = 180.f * DEG_TO_RAD;
+                                FloorSecond.SetPosition(3);
+                                new CountDownTimer(2000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    public void onFinish() {
+                                        TextBuffer.DeleteAll();
+                                        iFloor = 2;
+                                    }
+                                }.start();
+                            }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
                                 String text = FloorThird.Interact(i);
@@ -464,8 +563,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         //"Elevator
                         if (i == 0) {
                             if (FloorFourth.GetElevSafe()) {
-                                ((GameActivity) context).PlaySound(SOUND_SELECT);
-
+                                //todo add sounds for death?
                                 //Game over from using unsafe elevator
                                 iFloor = -2;
                                 new CountDownTimer(3000, 1000) {
@@ -492,7 +590,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         }
                         //Door2 (Left)
                         else if (i == 1) {
-                            if (Inventory.GetSelected(0)) {
+                            if (Inventory.GetSelected(0) || Inventory.GetSelected(1)) {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
 
                                 iFloor = -1;
@@ -524,6 +622,296 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             TextBuffer.AddText("elevator. It is controlled by the AI which", 5000);
                             TextBuffer.AddText("controls when the elevator moves or stops", 5000);
                             TextBuffer.AddText("in an emergency. Do not use unless called for.", 5000);
+                        }
+                    }
+                }
+            }
+            else if (iFloor == 2) {
+                objects = FloorSecond.GetInteObjects();
+                for (int i = 0; i < objects.length; i++) {
+                    if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                        //"Elevator
+                        if (i == 0) {
+                            ((GameActivity) context).PlaySound(SOUND_SELECT);
+                            String text = FloorSecond.Interact(i);
+                            if (bElev) {
+                                bElev = false;
+                            }
+                            else {
+                                TextBuffer.AddText(text, 3000);
+                                bElev = true;
+                            }
+                        }
+                        //Door1 (Right)
+                        else if (i == 1) {
+                            if (Inventory.GetSelected(0)) {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = "The Keycard won't work on this door";
+                                TextBuffer.AddText(text, 3000);
+                            }
+                            else if (Inventory.GetSelected(1)) {
+                                ((GameActivity) context).PlaySound(SOUND_SELECT);
+
+                                //Goto 3rd floor
+                                iFloor = -1;
+                                xRot = 0.f;
+                                yRot = 180.f * DEG_TO_RAD;
+                                FloorThird.SetPosition(2);
+                                new CountDownTimer(2000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    public void onFinish() {
+                                        TextBuffer.DeleteAll();
+                                        iFloor = 3;
+                                    }
+                                }.start();
+                            }
+                            else {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = FloorSecond.Interact(i);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                        //Door2 (Left)
+                        else if (i == 2) {
+                            if (Inventory.GetSelected(0)) {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = "The Keycard won't work on this door";
+                                TextBuffer.AddText(text, 3000);
+                            }
+                            else if (Inventory.GetSelected(1)) {
+                                ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                //Goto 1st floor
+                                iFloor = -1;
+                                xRot = 0.f;
+                                yRot = 180.f * DEG_TO_RAD;
+                                if (FloorFirst == null) {
+                                    FloorFirst = new FloorFirst(context);
+                                }
+                                FloorFirst.SetPosition(3);
+                                new CountDownTimer(2000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    public void onFinish() {
+                                        TextBuffer.DeleteAll();
+                                        iFloor = 1;
+                                    }
+                                }.start();
+                            }
+                            else {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = FloorSecond.Interact(i);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                        //Keycard 2
+                        else if (i == 3) {
+                            if (!Inventory.GetInventory(1)) {
+                                ((GameActivity) context).PlaySound(SOUND_PICKUP);
+                                String text = FloorSecond.Interact(i);
+                                Inventory.SetInventory(1);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                        //Electrical box
+                        else if (i == 4) {
+                            if (!Inventory.GetSelected(2)) {
+                                if (FloorSecond.GetElec()) {
+                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                    TextBuffer.AddText("It reads: 173. Is that a code?", 3000);
+                                }
+                                else {
+                                    ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                    TextBuffer.AddText("An electrical box. It's locked by screws", 3000);
+                                }
+                            }
+                            else {
+                                if (!FloorSecond.GetElec()) {
+                                    FloorSecond.OpenElec();
+                                    String text = FloorSecond.Interact(i);
+                                    TextBuffer.AddText(text, 3000);
+                                }
+                                else {
+                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                    TextBuffer.AddText("It reads: 173. Is that a code?", 3000);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (iFloor == 1) {
+                objects = FloorFirst.GetInteObjects();
+                for (int i = 0; i < objects.length; i++) {
+                    if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                        //"Elevator
+                        if (i == 0) {
+                            ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                            String text = "The elevator won't work properly";
+                            TextBuffer.AddText(text, 3000);
+                        }
+                        //Door1 (Right)
+                        else if (i == 1) {
+                            if (Inventory.GetSelected(0)) {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = "The Keycard won't work on this door";
+                                TextBuffer.AddText(text, 3000);
+                            }
+                            else if (Inventory.GetSelected(1)) {
+                                ((GameActivity) context).PlaySound(SOUND_SELECT);
+
+                                //Goto 2nd floor
+                                iFloor = -1;
+                                xRot = 0.f;
+                                yRot = 180.f * DEG_TO_RAD;
+                                FloorSecond.SetPosition(2);
+                                new CountDownTimer(2000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    public void onFinish() {
+                                        TextBuffer.DeleteAll();
+                                        iFloor = 2;
+                                    }
+                                }.start();
+                            }
+                            else {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = FloorFirst.Interact(i);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                        //Door2 (Left)
+                        else if (i == 2) {
+                            if (Inventory.GetSelected(4)) {
+                                if (Inventory.GetSelected(0)) {
+                                    ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                    String text = "The Keycard won't work on this door";
+                                    TextBuffer.AddText(text, 3000);
+                                }
+                                else if (Inventory.GetSelected(1)) {
+                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                    //Goto G floor
+                                    iFloor = -1;
+                                    xRot = 0.f;
+                                    yRot = 180.f * DEG_TO_RAD;
+                                    if (FloorGround == null) {
+                                        FloorGround = new FloorGround(context);
+                                    }
+                                    FloorGround.SetPosition(3);
+                                    new CountDownTimer(2000, 1000) {
+                                        public void onTick(long millisUntilFinished) {
+                                        }
+
+                                        public void onFinish() {
+                                            TextBuffer.DeleteAll();
+                                            iFloor = 0;
+                                        }
+                                    }.start();
+                                }
+                                else {
+                                    ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                    String text = FloorFirst.Interact(i);
+                                    TextBuffer.AddText(text, 3000);
+                                }
+                            }
+                            else {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.AddText("The Keycard reader isn't working", 4000);
+                                TextBuffer.AddText("Can I reset it somehow?", 4000);
+                            }
+                        }
+                        //Screwdriver
+                        else if (i == 3) {
+                            if (!Inventory.GetInventory(2)) {
+                                ((GameActivity) context).PlaySound(SOUND_PICKUP);
+                                String text = FloorFirst.Interact(i);
+                                Inventory.SetInventory(2);
+                                TextBuffer.AddText(text, 3000);
+                            }
+                        }
+                        //Electrical box
+                        else if (i == 4) {
+                            if (!Inventory.GetSelected(2)) {
+                                if (FloorFirst.GetElec()) {
+                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                    TextBuffer.AddText("It needs a code", 3000);
+                                    bNumPad = true;
+                                }
+                                else {
+                                    ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                    TextBuffer.AddText("An electrical box. It's locked by screws", 3000);
+                                }
+                            }
+                            else {
+                                if (!FloorFirst.GetElec()) {
+                                    FloorFirst.OpenElec();
+                                    String text = FloorFirst.Interact(i);
+                                    TextBuffer.AddText(text, 3000);
+                                }
+                                else {
+                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                    TextBuffer.DeleteAll();
+                                    TextBuffer.AddText("It needs a code", 3000);
+                                    bNumPad = true;
+                                }
+                            }
+                        }
+                        //Note 2
+                        else if (i == 5) {
+                            ((GameActivity) context).PlaySound(SOUND_SELECT);
+                            String text = FloorFirst.Interact(i);
+                            TextBuffer.DeleteAll();
+                            TextBuffer.AddText(text, 5000);
+                            TextBuffer.AddText("reset the power, the machines been acting", 5000);
+                            TextBuffer.AddText("up a bit. The reset code from the 2nd floor's", 5000);
+                            TextBuffer.AddText("wrong. Just flip the code it gives", 5000);
+                        }
+                    }
+                }
+            }
+            else if (iFloor == 0) {
+                objects = FloorGround.GetInteObjects();
+                for (int i = 0; i < objects.length; i++) {
+                    if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                        //"Elevator
+                        if (i == 0) {
+                            ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                            String text = "The elevator won't work properly";
+                            TextBuffer.AddText(text, 3000);
+                        }
+                        //Door1 (Right)
+                        else if (i == 1) {
+                            if (Inventory.GetSelected(0)) {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = "The Keycard won't work on this door";
+                                TextBuffer.AddText(text, 3000);
+                            }
+                            else if (Inventory.GetSelected(1)) {
+                                ((GameActivity) context).PlaySound(SOUND_SELECT);
+
+                                //Goto 1st floor
+                                iFloor = -1;
+                                xRot = 0.f;
+                                yRot = 180.f * DEG_TO_RAD;
+                                FloorFirst.SetPosition(2);
+                                new CountDownTimer(2000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    public void onFinish() {
+                                        TextBuffer.DeleteAll();
+                                        iFloor = 1;
+                                    }
+                                }.start();
+                            }
+                            else {
+                                ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                String text = FloorGround.Interact(i);
+                                TextBuffer.AddText(text, 3000);
+                            }
                         }
                     }
                 }
@@ -562,9 +950,18 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         else if (iFloor == 4) {
             cam = FloorFourth.GetWorld().getCamera();
         }
+        else if (iFloor == 2) {
+            cam = FloorSecond.GetWorld().getCamera();
+        }
+        else if (iFloor == 1) {
+            cam = FloorFirst.GetWorld().getCamera();
+        }
+        else if (iFloor == 0) {
+            cam = FloorGround.GetWorld().getCamera();
+        }
 
         //if game is not paused
-        if (!bPaused && !bElev) {
+        if (!bPaused && !bElev && !bNumPad) {
             //Set the movement and rotation data
             float touchMove = -aMove[0].GetHor();
             float touchMoveUp = aMove[0].GetVer();
@@ -638,11 +1035,65 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         }
                     }
                 }
+                else if (iFloor == 2) {
+                    boolean check = FloorSecond.Collisions(xCamPos, yCamPos);
+                    if (check) {
+                        SimpleVector Move = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
+                        cam.moveCamera(Move, -10f);
+                    }
+                    else {
+                        //Wall Collisions
+                        if (FloorSecond.CollisionsWallX(xCamPos)) {
+                            SimpleVector Move = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, 0.f);
+                            cam.moveCamera(Move, -10f);
+                        }
+                        if (FloorSecond.CollisionsWallY(yCamPos)) {
+                            SimpleVector Move = new SimpleVector(0.f, 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
+                            cam.moveCamera(Move, -10f);
+                        }
+                    }
+                }
+                else if (iFloor == 1) {
+                    boolean check = FloorFirst.Collisions(xCamPos, yCamPos);
+                    if (check) {
+                        SimpleVector Move = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
+                        cam.moveCamera(Move, -10f);
+                    }
+                    else {
+                        //Wall Collisions
+                        if (FloorFirst.CollisionsWallX(xCamPos)) {
+                            SimpleVector Move = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, 0.f);
+                            cam.moveCamera(Move, -10f);
+                        }
+                        if (FloorFirst.CollisionsWallY(yCamPos)) {
+                            SimpleVector Move = new SimpleVector(0.f, 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
+                            cam.moveCamera(Move, -10f);
+                        }
+                    }
+                }
+                else if (iFloor == 0) {
+                    boolean check = FloorGround.Collisions(xCamPos, yCamPos);
+                    if (check) {
+                        SimpleVector Move = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
+                        cam.moveCamera(Move, -10f);
+                    }
+                    else {
+                        //Wall Collisions
+                        if (FloorGround.CollisionsWallX(xCamPos)) {
+                            SimpleVector Move = new SimpleVector((touchMove * cos(yRot)) - (touchMoveUp * sin(yRot)), 0.f, 0.f);
+                            cam.moveCamera(Move, -10f);
+                        }
+                        if (FloorGround.CollisionsWallY(yCamPos)) {
+                            SimpleVector Move = new SimpleVector(0.f, 0.f, (touchMoveUp * cos(yRot)) + (touchMove * sin(yRot)));
+                            cam.moveCamera(Move, -10f);
+                        }
+                    }
+                }
             }
         }
 
         //Rotate Camera
-        if (!bPaused && iFloor != -1 && !bElev) {
+        if (!bPaused && iFloor != -1 && !bElev && !bNumPad) {
             SimpleVector cameraVector = cam.getPosition();
             cameraVector.z += 1f;
             cam.lookAt(cameraVector);
@@ -650,35 +1101,56 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             cam.rotateX(xRot);
         }
 
-        //Draw current floor
-        if (iFloor == -2) {
+        if (!bDestroy) {
             fb.clear(bg);
+        }
+
+        //Draw current floor
+        if (iFloor == -3) {
+            fb.blit(tBlack, 0, 0, 0, 0, pPoint.x, pPoint.y, FrameBuffer.OPAQUE_BLITTING);
+            fb.blit(tGameOver, 0, 0, (pPoint.x/2) - 256, (pPoint.y/2) - 256, 512, 512, FrameBuffer.TRANSPARENT_BLITTING);
+            DrawText(fb, AGLFont[1], "The electrics malfunctioned and electrocuted you", pPoint.x/2, (pPoint.y/2) + 100, true);
+            fb.display();
+        }
+        else if (iFloor == -2) {
             fb.blit(tBlack, 0, 0, 0, 0, pPoint.x, pPoint.y, FrameBuffer.OPAQUE_BLITTING);
             fb.blit(tGameOver, 0, 0, (pPoint.x/2) - 256, (pPoint.y/2) - 256, 512, 512, FrameBuffer.TRANSPARENT_BLITTING);
             DrawText(fb, AGLFont[1], "The elevator doors closed and crushed you", pPoint.x/2, (pPoint.y/2) + 100, true);
             fb.display();
         }
         else if (iFloor == -1) {
-            fb.clear(bg);
             fb.blit(tBlack, 0, 0, 0, 0, pPoint.x, pPoint.y, FrameBuffer.OPAQUE_BLITTING);
             fb.blit(tLoading, 0, 0, (pPoint.x/2) - 256, (pPoint.y/2) - 256, 512, 512, FrameBuffer.TRANSPARENT_BLITTING);
             fb.display();
         }
         else if (iFloor == 3 && !bDestroy) {
-            fb.clear(bg);
             FloorThird.GetWorld().renderScene(fb);
             FloorThird.GetWorld().draw(fb);
             fb.display();
         }
         else if (iFloor == 4 && !bDestroy) {
-            fb.clear(bg);
             FloorFourth.GetWorld().renderScene(fb);
             FloorFourth.GetWorld().draw(fb);
             fb.display();
         }
+        else if (iFloor == 2 && !bDestroy) {
+            FloorSecond.GetWorld().renderScene(fb);
+            FloorSecond.GetWorld().draw(fb);
+            fb.display();
+        }
+        else if (iFloor == 1 && !bDestroy) {
+            FloorFirst.GetWorld().renderScene(fb);
+            FloorFirst.GetWorld().draw(fb);
+            fb.display();
+        }
+        else if (iFloor == 0 && !bDestroy) {
+            FloorGround.GetWorld().renderScene(fb);
+            FloorGround.GetWorld().draw(fb);
+            fb.display();
+        }
 
         //Draw and display UI
-        if (!bDestroy && iFloor != -1 && iFloor != -2) {
+        if (!bDestroy && iFloor != -1 && iFloor != -2  && iFloor != -3) {
             //Draw Joysticks
             for (int i = 0; i < aMove.length; i++) {aMove[i].Draw(fb);}
 
@@ -719,6 +1191,44 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                     }
                 }
             }
+            else if (iFloor == 2) {
+                Object3D[] objects = FloorSecond.GetInteObjects();
+                for (int i = 0; i < objects.length; i++) {
+                    if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                        if (i == 3) {
+                            if (!Inventory.GetInventory(1)) {
+                                fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 128, (pPoint.y / 2) - 64, 256, 256, FrameBuffer.TRANSPARENT_BLITTING);
+                            }
+                        }
+                        else {
+                            fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 128, (pPoint.y / 2) - 64, 256, 256, FrameBuffer.TRANSPARENT_BLITTING);
+                        }
+                    }
+                }
+            }
+            else if (iFloor == 1) {
+                Object3D[] objects = FloorFirst.GetInteObjects();
+                for (int i = 0; i < objects.length; i++) {
+                    if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                        if (i == 3) {
+                            if (!Inventory.GetInventory(2)) {
+                                fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 128, (pPoint.y / 2) - 64, 256, 256, FrameBuffer.TRANSPARENT_BLITTING);
+                            }
+                        }
+                        else {
+                            fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 128, (pPoint.y / 2) - 64, 256, 256, FrameBuffer.TRANSPARENT_BLITTING);
+                        }
+                    }
+                }
+            }
+            else if (iFloor == 0) {
+                Object3D[] objects = FloorGround.GetInteObjects();
+                for (int i = 0; i < objects.length; i++) {
+                    if (objects[i].rayIntersectsAABB(cam.getPosition(), cam.getDirection()) < iDistance) {
+                        fb.blit(tInteract, 0, 0, (pPoint.x / 2) - 128, (pPoint.y / 2) - 64, 256, 256, FrameBuffer.TRANSPARENT_BLITTING);
+                    }
+                }
+            }
 
             //Draw dot sight
             fb.blit(tDot, 0, 0, (pPoint.x / 2) - 32, (pPoint.y / 2) - 32, 64, 64, FrameBuffer.TRANSPARENT_BLITTING);
@@ -741,6 +1251,24 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                     }
                     else {
                         DrawText(fb, AGLFont[0], "G", pPoint.x / 5 * 3, 250 + i * ((pPoint.y - 100) / 6), true);
+                    }
+                }
+            }
+
+            //Draw Numpad
+            if (bNumPad) {
+                NumPad.Draw(fb);
+                if (iNumbers[0] != 10) {
+                    if (iNumbers[1] != 10) {
+                        if (iNumbers[2] != 10) {
+                            DrawText(fb, AGLFont[0], Integer.toString(iNumbers[0]) + Integer.toString(iNumbers[1]) + Integer.toString(iNumbers[2]), pPoint.x/2, (pPoint.y/2) - 300, true);
+                        }
+                        else {
+                            DrawText(fb, AGLFont[0], Integer.toString(iNumbers[0]) + Integer.toString(iNumbers[1]), pPoint.x/2, (pPoint.y/2) - 300, true);
+                        }
+                    }
+                    else {
+                        DrawText(fb, AGLFont[0], Integer.toString(iNumbers[0]), pPoint.x/2, (pPoint.y/2) - 300, true);
                     }
                 }
             }
@@ -778,6 +1306,15 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             FloorThird.Destroy();
             if (FloorFourth != null) {
                 FloorFourth.Destroy();
+            }
+            if (FloorSecond != null) {
+                FloorSecond.Destroy();
+            }
+            if (FloorFirst != null) {
+                FloorFirst.Destroy();
+            }
+            if (FloorGround != null) {
+                FloorGround.Destroy();
             }
             Inventory.Reset();
             Intent intent = new Intent();

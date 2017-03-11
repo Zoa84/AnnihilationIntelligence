@@ -21,7 +21,7 @@ import com.threed.jpct.util.BitmapHelper;
 public class Inventory {
     private boolean bInventory[] = {false, false, false};       //Array of whether we have picked up the item
     //Array of whether an item is selected. This could be changed to a single integer, but could be used for selecting multiple items
-    private boolean bInventoryUse[] = {false, false, false, false};    //3 = elevatorUnlocked
+    private boolean bInventoryUse[] = {false, false, false, false, false};    //3 = elevatorUnlocked    //4 = electricityReset
     private int iXPos[] = new int[3];                           //Array of the X positions of the icons for the inventory
     private int iYPos[] = new int[3];                           //Array of the Y positions of the icons for the inventory
     private int iSize = 128;                                    //The size of the icon (extents)
