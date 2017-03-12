@@ -28,20 +28,20 @@ import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
  */
 
 public class FloorGround extends Floor{
-    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1"};
-    private Object3D[] object = new Object3D[31];
+    private String[] textures = {"room", "floor", "chair", "comp", "elev", "door1", "reception", "frontdoor"};
+    private Object3D[] object = new Object3D[8];
     private Object3D[] aObjects = null;
 
     private Light sun = null;
     private static GameActivity master = null;
     private World world = null;
 
-    private CollisionMap[] Collisions = new CollisionMap[10];
+    private CollisionMap[] Collisions = new CollisionMap[2];
     private int xWallLeft = 33;
     private int xWallRight = -33;
     private int yWallFront = -32;
     private int yWallBack = 28;
-    private Object3D[] aInteObjects = new Object3D[2];
+    private Object3D[] aInteObjects = new Object3D[3];
 
     public FloorGround(Context context) {
         if (master == null) {
@@ -72,89 +72,33 @@ public class FloorGround extends Floor{
 
             ObjectLoader(context, 1, "floor");
 
-            ObjectLoader(context, 2, "table");
-            ObjectLoader(context, 3, "table");
-            ObjectLoader(context, 4, "table");
-            ObjectLoader(context, 5, "table");
-            ObjectLoader(context, 6, "table");
-            ObjectLoader(context, 7, "table");
-            ObjectLoader(context, 8, "table");
-            ObjectLoader(context, 9, "table");
-            ObjectLoader(context, 10, "table");
+            ObjectLoader(context, 2, "elev");
 
-            ObjectLoader(context, 11, "chair");
-            ObjectLoader(context, 12, "chair");
-            ObjectLoader(context, 13, "chair");
-            ObjectLoader(context, 14, "chair");
-            ObjectLoader(context, 15, "chair");
-            ObjectLoader(context, 16, "chair");
-            ObjectLoader(context, 17, "chair");
-            ObjectLoader(context, 18, "chair");
-            ObjectLoader(context, 19, "chair");
+            ObjectLoader(context, 3, "door1");
 
-            ObjectLoader(context, 20, "comp");
-            ObjectLoader(context, 21, "comp");
-            ObjectLoader(context, 22, "comp");
-            ObjectLoader(context, 23, "comp");
-            ObjectLoader(context, 24, "comp");
-            ObjectLoader(context, 25, "comp");
-            ObjectLoader(context, 26, "comp");
-            ObjectLoader(context, 27, "comp");
-            ObjectLoader(context, 28, "comp");
+            ObjectLoader(context, 4, "frontdoor");
 
-            ObjectLoader(context, 29, "elev");
+            ObjectLoader(context, 5, "reception");
 
-            ObjectLoader(context, 30, "door1");
+            ObjectLoader(context, 6, "chair");
+            ObjectLoader(context, 7, "chair");
 
-            Collisions[0] = new CollisionMap(-20, 20, 5, 3);
-            Collisions[1] = new CollisionMap(-20, 0, 5, 3);
-            Collisions[2] = new CollisionMap(-20, -20, 5, 3);
-            Collisions[3] = new CollisionMap(0, 20, 5, 3);
-            Collisions[4] = new CollisionMap(0, 0, 5, 3);
-            Collisions[5] = new CollisionMap(0, -20, 5, 3);
-            Collisions[6] = new CollisionMap(20, 20, 5, 3);
-            Collisions[7] = new CollisionMap(20, 0, 5, 3);
-            Collisions[8] = new CollisionMap(20, -20, 5, 3);
-
-            Collisions[9] = new CollisionMap(-15, 36, 14, 7);
+            Collisions[0] = new CollisionMap(-15, 36, 14, 7);   //Elevator
+            Collisions[1] = new CollisionMap(-24, -19, 13, 19); //Reception
 
             SetPosition(3);
 
             SimpleVector sv = new SimpleVector();
             sv.set(object[0].getTransformedCenter());
 
-            object[2].translate(fixTrans(-20f, -6f, -20f));
-            object[3].translate(fixTrans(-20f, -6f, 0f));
-            object[4].translate(fixTrans(-20f, -6f, 20f));
-            object[5].translate(fixTrans(0f, -6f, -20f));
-            object[6].translate(fixTrans(0f, -6f, 0f));
-            object[7].translate(fixTrans(0f, -6f, 20f));
-            object[8].translate(fixTrans(20f, -6f, -20f));
-            object[9].translate(fixTrans(20f, -6f, 0f));
-            object[10].translate(fixTrans(20f, -6f, 20f));
+            object[6].translate(fixTrans(-24f, -5.5f, 30f));
+            object[6].rotateY(90f * DEG_TO_RAD);
+            object[7].translate(fixTrans(-24f, -5.5f, 17.5f));
+            object[7].rotateY(105f * DEG_TO_RAD);
 
-            object[11].translate(fixTrans(-20f, -5.5f, -15.5f));
-            object[12].translate(fixTrans(-20f, -5.5f, 4.5f));
-            object[13].translate(fixTrans(-20f, -5.5f, 24.5f));
-            object[14].translate(fixTrans(0f, -5.5f, -15.5f));
-            object[15].translate(fixTrans(0f, -5.5f, 4.5f));
-            object[16].translate(fixTrans(0f, -5.5f, 24.5f));
-            object[17].translate(fixTrans(20f, -5.5f, -15.5f));
-            object[18].translate(fixTrans(20f, -5.5f, 4.5f));
-            object[19].translate(fixTrans(20f, -5.5f, 24.5f));
-
-            object[20].translate(fixTrans(-20f, -1.5f, -20f));
-            object[21].translate(fixTrans(-20f, -1.5f, 0f));
-            object[22].translate(fixTrans(-20f, -1.5f, 20f));
-            object[23].translate(fixTrans(0f, -1.5f, -20f));
-            object[24].translate(fixTrans(0f, -1.5f, 0f));
-            object[25].translate(fixTrans(0f, -1.5f, 20f));
-            object[26].translate(fixTrans(20f, -1.5f, -20f));
-            object[27].translate(fixTrans(20f, -1.5f, 0f));
-            object[28].translate(fixTrans(20f, -1.5f, 20f));
-
-            aInteObjects[0] = object[29];   //elevator
-            aInteObjects[1] = object[30];   //door 1 - right door
+            aInteObjects[0] = object[2];    //elevator
+            aInteObjects[1] = object[3];    //door 1 - right door
+            aInteObjects[2] = object[4];    //Front door
 
             sv.y -= 100;
             sv.z -= 100;
@@ -214,6 +158,10 @@ public class FloorGround extends Floor{
         else if (i == 1) {
             //door1 - Check if we have the right item
             return "The door is locked. It needs a key card";
+        }
+        else if (i == 2) {
+            //front door
+            return "Escaped!";
         }
         return null;
     }

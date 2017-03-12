@@ -129,7 +129,6 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         if (master == null) {
             //Load the floors
             FloorThird = new FloorThird(context);
-            //FloorFourth = new FloorFourth(context);
 
             //Initialise Joystick array
             //Set as 300 pixels away from both corners, with a radius of 128
@@ -176,6 +175,12 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 Logger.log("Saving master Activity!");
                 master = ((GameActivity) context);
             }
+
+            //Starting text dialogue
+            TextBuffer.AddText("Hmm? I must've fell asleep...", 6000);
+            TextBuffer.AddText("Where is everyone? And what time is it?", 6000);
+            TextBuffer.AddText("I'm on the 3rd floor... I think...", 6000);
+            TextBuffer.AddText("Do I work here? I've gotta get out of here", 6000);
         }
     }
 
@@ -300,6 +305,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             aMove[1].SetState(pointerIndex + 1);
         }
 
+        //If we're using the elevator, check for elevator button presses
         if (bElev) {
             //Do buttons
             for (int i = 0; i < aElevButtons.length; i++) {
@@ -321,6 +327,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 public void onFinish() {
                                     TextBuffer.DeleteAll();
                                     iFloor = 4;
+                                    TextBuffer.AddText("4th Floor", 3000);
                                 }
                             }.start();
                         }
@@ -346,6 +353,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 public void onFinish() {
                                     TextBuffer.DeleteAll();
                                     iFloor = 3;
+                                    TextBuffer.AddText("3rd Floor", 3000);
                                 }
                             }.start();
                         }
@@ -374,6 +382,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 public void onFinish() {
                                     TextBuffer.DeleteAll();
                                     iFloor = 2;
+                                    TextBuffer.AddText("2nd Floor", 3000);
                                 }
                             }.start();
                         }
@@ -401,6 +410,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             }
         }
 
+        //If the number pad on floor 1 is open, check for numpad inputs
         if (bNumPad) {
             int iButton = NumPad.Update(me.getX(pointerIndex), me.getY(pointerIndex));
             if (iButton == -1) {
@@ -422,8 +432,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                     Inventory.SetSelected(4);
                     ((GameActivity) context).PlaySound(SOUND_SELECT);
                     TextBuffer.DeleteAll();
-                    TextBuffer.AddText("It seems to have worked.", 3000);
-                    TextBuffer.AddText("Maybe the keycard reader's working now", 3000);
+                    TextBuffer.AddText("It seems to have worked.", 4000);
+                    TextBuffer.AddText("Maybe the keycard reader's working now", 4000);
                 }
                 else {
                     //Game over from wrong code
@@ -458,6 +468,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             }
         }
 
+        //Check if interacting with interactable objects
         if (aButtons[0].GetPressed() && !bNumPad) {
             Object3D[] objects;
             if (iFloor == 3) {
@@ -502,8 +513,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     public void onFinish() {
                                         TextBuffer.DeleteAll();
                                         iFloor = 4;
+                                        TextBuffer.AddText("4th Floor", 3000);
                                         if (!Inventory.GetSelected(3)) {
-                                            TextBuffer.AddText("Was that noise from the elevator?", 3000);
+                                            TextBuffer.AddText("Was that noise from the elevator?", 4000);
                                             ((GameActivity) context).PlaySound(SOUND_SELECT);//todo CHANGE TO ELEVATOR DING?
                                             Inventory.SetSelected(3);
                                         }
@@ -534,6 +546,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
                                     public void onFinish() {
                                         TextBuffer.DeleteAll();
+                                        TextBuffer.AddText("2nd Floor", 3000);
                                         iFloor = 2;
                                     }
                                 }.start();
@@ -603,6 +616,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
                                     public void onFinish() {
                                         TextBuffer.DeleteAll();
+                                        TextBuffer.AddText("3rd Floor", 3000);
                                         iFloor = 3;
                                         FloorFourth.SetElevSafe();
                                     }
@@ -618,10 +632,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             ((GameActivity) context).PlaySound(SOUND_SELECT);
                             String text = FloorFourth.Interact(i);
                             TextBuffer.DeleteAll();
-                            TextBuffer.AddText(text, 5000);
-                            TextBuffer.AddText("elevator. It is controlled by the AI which", 5000);
-                            TextBuffer.AddText("controls when the elevator moves or stops", 5000);
-                            TextBuffer.AddText("in an emergency. Do not use unless called for.", 5000);
+                            TextBuffer.AddText(text, 6000);
+                            TextBuffer.AddText("elevator. It is controlled by the AI which", 6000);
+                            TextBuffer.AddText("controls when the elevator moves or stops", 6000);
+                            TextBuffer.AddText("in an emergency. Do not use unless called for.", 6000);
                         }
                     }
                 }
@@ -663,6 +677,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
                                     public void onFinish() {
                                         TextBuffer.DeleteAll();
+                                        TextBuffer.AddText("3rd Floor", 3000);
                                         iFloor = 3;
                                     }
                                 }.start();
@@ -696,6 +711,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
                                     public void onFinish() {
                                         TextBuffer.DeleteAll();
+                                        TextBuffer.AddText("1st Floor", 3000);
                                         iFloor = 1;
                                     }
                                 }.start();
@@ -773,6 +789,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
                                     public void onFinish() {
                                         TextBuffer.DeleteAll();
+                                        TextBuffer.AddText("2nd Floor", 3000);
                                         iFloor = 2;
                                     }
                                 }.start();
@@ -807,6 +824,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
                                         public void onFinish() {
                                             TextBuffer.DeleteAll();
+                                            TextBuffer.AddText("Ground Floor", 3000);
                                             iFloor = 0;
                                         }
                                     }.start();
@@ -836,9 +854,14 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         else if (i == 4) {
                             if (!Inventory.GetSelected(2)) {
                                 if (FloorFirst.GetElec()) {
-                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                    TextBuffer.AddText("It needs a code", 3000);
-                                    bNumPad = true;
+                                    if (Inventory.GetSelected(4)) {
+                                        ((GameActivity) context).PlaySound(SOUND_FAIL);
+                                        TextBuffer.AddText("I've already put in the right code", 3000);
+                                    }
+                                    else {
+                                        ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                        bNumPad = true;
+                                    }
                                 }
                                 else {
                                     ((GameActivity) context).PlaySound(SOUND_LOCKED);
@@ -852,10 +875,14 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     TextBuffer.AddText(text, 3000);
                                 }
                                 else {
-                                    ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                    TextBuffer.DeleteAll();
-                                    TextBuffer.AddText("It needs a code", 3000);
-                                    bNumPad = true;
+                                    if (Inventory.GetSelected(4)) {
+                                        ((GameActivity) context).PlaySound(SOUND_FAIL);
+                                        TextBuffer.AddText("I've already put in the right code", 3000);
+                                    }
+                                    else {
+                                        ((GameActivity) context).PlaySound(SOUND_SELECT);
+                                        bNumPad = true;
+                                    }
                                 }
                             }
                         }
@@ -864,10 +891,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             ((GameActivity) context).PlaySound(SOUND_SELECT);
                             String text = FloorFirst.Interact(i);
                             TextBuffer.DeleteAll();
-                            TextBuffer.AddText(text, 5000);
-                            TextBuffer.AddText("reset the power, the machines been acting", 5000);
-                            TextBuffer.AddText("up a bit. The reset code from the 2nd floor's", 5000);
-                            TextBuffer.AddText("wrong. Just flip the code it gives", 5000);
+                            TextBuffer.AddText(text, 6000);
+                            TextBuffer.AddText("reset the power, the machines been acting", 6000);
+                            TextBuffer.AddText("up a bit. The reset code from the 2nd floor's", 6000);
+                            TextBuffer.AddText("wrong. Just flip the code it gives", 6000);
                         }
                     }
                 }
@@ -903,6 +930,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
                                     public void onFinish() {
                                         TextBuffer.DeleteAll();
+                                        TextBuffer.AddText("1st Floor", 3000);
                                         iFloor = 1;
                                     }
                                 }.start();
@@ -912,6 +940,11 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 String text = FloorGround.Interact(i);
                                 TextBuffer.AddText(text, 3000);
                             }
+                        }
+                        else if (i == 2) {
+                            ((GameActivity) context).PlaySound(SOUND_SELECT);
+                            String text = FloorGround.Interact(i);
+                            TextBuffer.AddText(text, 3000);
                         }
                     }
                 }
