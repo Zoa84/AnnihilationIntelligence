@@ -5,10 +5,12 @@
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_options">@string/sOptions</string>
 
-    <!--PauseMenu Strings-->
+    <!--MainMenu Strings-->
     <string name="sStart">Start Game</string>
     <string name="sOptions">Options</string>
     <string name="sExit">Exit</string>
+    <string name="sLoading">Loading...</string>
+    <string name="sAI">Annihilation Intelligence</string>
 
     <!--Defines Strings-->
     <string name="sMusic">Music Volume</string>

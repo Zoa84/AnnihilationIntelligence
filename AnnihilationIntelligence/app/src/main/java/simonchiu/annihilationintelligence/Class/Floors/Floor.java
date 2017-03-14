@@ -3,7 +3,6 @@ package simonchiu.annihilationintelligence.Class.Floors;
 import android.content.Context;
 
 import com.threed.jpct.Camera;
-import com.threed.jpct.Light;
 import com.threed.jpct.Loader;
 import com.threed.jpct.Object3D;
 import com.threed.jpct.SimpleVector;
@@ -12,8 +11,6 @@ import com.threed.jpct.World;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import simonchiu.annihilationintelligence.Activity.GameActivity;
 
 import static simonchiu.annihilationintelligence.Class.Defines.DEG_TO_RAD;
 

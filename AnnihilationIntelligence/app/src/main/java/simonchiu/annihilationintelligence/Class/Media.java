@@ -15,7 +15,7 @@ import java.io.IOException;
 public class Media {
     private AssetFileDescriptor[] descriptor = new AssetFileDescriptor[3];          //Array of music files
     private MediaPlayer mediaPlayer = new MediaPlayer();                            //The Media player, which plays the music files
-    private int[] iSounds = new int[4];                                             //Array of sound files
+    private int[] iSounds = new int[10];                                            //Array of sound files
     private SoundPool soundpool = new SoundPool(4, AudioManager.STREAM_MUSIC,0);    //Loads and plays the sound files
 
     //Sets the loaded music file to the array of music

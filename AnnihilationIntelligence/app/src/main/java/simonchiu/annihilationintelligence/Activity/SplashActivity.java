@@ -27,8 +27,22 @@ public class SplashActivity extends AppCompatActivity {
 
     boolean[] bOptionData = new boolean[5];                             //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     int[] iVolume = new int[2];                                         //Array of the volume for music (0) and sound (1)
-    String[] sMusicName = {"menu", "game", "options"};      //File names for music files
-    String[] sSoundName = {"select", "fail", "locked", "pickup"};   //File names for sound files
+    String[] sMusicName = {     //File names for music files
+            "menu",
+            "game",
+            "options"};
+
+    String[] sSoundName = {     //File names for sound files
+            "select",
+            "fail",
+            "locked",
+            "pickup",
+            "stair",
+            "elev_ding",
+            "elev_doors",
+            "code",
+            "win",
+            "death"};
 
     AssetFileDescriptor descriptor;
 

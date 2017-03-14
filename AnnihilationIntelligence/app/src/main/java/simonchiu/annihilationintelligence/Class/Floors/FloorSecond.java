@@ -60,7 +60,7 @@ public class FloorSecond extends Floor{
             int resID;
             for (int i = 0; i < textures.length; i++) {
                 resID = context.getResources().getIdentifier(textures[i], "drawable", context.getPackageName());
-                texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 512, 512));
+                texture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 128, 128));
                 if (!TextureManager.getInstance().containsTexture(textures[i])) { TextureManager.getInstance().addTexture(textures[i], texture); }
             }
 

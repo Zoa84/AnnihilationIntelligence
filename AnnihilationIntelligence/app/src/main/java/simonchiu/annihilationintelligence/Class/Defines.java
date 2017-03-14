@@ -29,6 +29,12 @@ public final class Defines {
     public static final int SOUND_FAIL = 1;
     public static final int SOUND_LOCKED = 2;
     public static final int SOUND_PICKUP = 3;
+    public static final int SOUND_STAIR = 4;
+    public static final int SOUND_ELEV_DING = 5;
+    public static final int SOUND_ELEV_DOORS = 6;
+    public static final int SOUND_CODE = 7;
+    public static final int SOUND_WIN = 8;
+    public static final int SOUND_DEATH = 9;
 
     //Defines for maths
     public static final float DEG_TO_RAD = 3.141f / 180f;
