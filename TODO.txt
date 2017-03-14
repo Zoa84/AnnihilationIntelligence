@@ -6,25 +6,57 @@ Choose total number of musics and sounds, and create temporary versions for test
 menu mus
 options mus
 game mus
-select snd
-fail snd
-locked snd
-pickup snd
 
-unlocked?/stair noise
-elevator ding
-elevator movement?
-death sound
+select snd 	- selecting inventory or interacting sometimes
+fail snd	- unable to use item, etc
+locked snd	- cannot open (doors, elec box)
+pickup snd	- item pickyp
+win snd 	- cheering or whatever for winning
+stair snd	- sound of walking up stairs (record here)
+death snd	- sound of chara dying? (simple scream or specific for elev and elec?)
+elev_ding	- when it appears on floor 4
+elev_doors	- when using normally (into loading screen)
+code snd	- when openning the elec box (sound of screws dropping?)
 
+(order:
+	"select",
+            "fail",
+            "locked",
+            "pickup",
+            "stair",
+            "elev_ding",
+            "elev_doors",
+            "code",
+            "win",
+            "death"};
+)
 
 
 sound code for elevator/death, changing death messages
+stop music on death/win
+
+make music then test runthrough of muse
+
+win screen
+
+elevator on floor 4th should be okay when used outside of floor 4 once?
+
+change how joysticks work when out of range?
+
+move note on floor 4, other side? OR keep hidden, in questionaires it will be reported, then report how i didnt notice as i would skip it myself in testing since i knew
+
+comp in reception, sofas on side? rug?
+
+door knobs lower, or make door overall shorter(compare with recption), reception lower
+OR heighten chara?
 
 
 
-create proper ground floor
-setup interactions, etc
 
+
+
+
+double sound effect from image in options
 
 
 
@@ -87,6 +119,13 @@ assets under drawable, cant separate, so use stuff like img_ to sep from object 
 
 compatibility, creating for higher api levels, different phones, cant run an intensive app on an old phone, using higher api for more features
 
+about making a whole game by myself, setting uvs, making models, music, etc
+
+creating a numpad
+
+testing on emulator, limitations, mostly for screen testing?
+
+low memory and being efficient
 
 
 
