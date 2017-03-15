@@ -4,13 +4,16 @@
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_options">@string/sOptions</string>
+    <string name="title_activity_instructions">How to play</string>
 
     <!--MainMenu Strings-->
     <string name="sStart">Start Game</string>
+    <string name="sInstructions">How to play</string>
     <string name="sOptions">Options</string>
     <string name="sExit">Exit</string>
     <string name="sLoading">Loading...</string>
     <string name="sAI">Annihilation Intelligence</string>
+    <string name="sReturn">Return to menu</string>
 
     <!--Defines Strings-->
     <string name="sMusic">Music Volume</string>

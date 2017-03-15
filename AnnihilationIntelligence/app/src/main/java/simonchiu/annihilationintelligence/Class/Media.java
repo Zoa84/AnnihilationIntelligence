@@ -45,11 +45,8 @@ public class Media {
                 return false;
             }
         }
-        else
-        {
-            stopMusic();
-            return false;
-        }
+        stopMusic();
+        return true;
     }
 
     //Stop the current music

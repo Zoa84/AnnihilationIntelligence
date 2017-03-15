@@ -1,47 +1,11 @@
 TODO Next Time
 
-Choose total number of musics and sounds, and create temporary versions for testing
-(change later)
-
-menu mus
-options mus
-game mus
-
-select snd 	- selecting inventory or interacting sometimes
-fail snd	- unable to use item, etc
-locked snd	- cannot open (doors, elec box)
-pickup snd	- item pickyp
-win snd 	- cheering or whatever for winning
-stair snd	- sound of walking up stairs (record here)
-death snd	- sound of chara dying? (simple scream or specific for elev and elec?)
-elev_ding	- when it appears on floor 4
-elev_doors	- when using normally (into loading screen)
-code snd	- when openning the elec box (sound of screws dropping?)
-
-(order:
-	"select",
-            "fail",
-            "locked",
-            "pickup",
-            "stair",
-            "elev_ding",
-            "elev_doors",
-            "code",
-            "win",
-            "death"};
-)
 
 
-sound code for elevator/death, changing death messages
-stop music on death/win-------------------------
 
-make music then test runthrough of muse
+update graphics
 
-win screen
-
-instructions
-
-
+instructions, update image with updated graphics?
 
 elevator on floor 4th should be okay when used outside of floor 4 once?
 
@@ -54,13 +18,7 @@ comp in reception, sofas on side? rug?
 door knobs lower, or make door overall shorter(compare with recption), reception lower
 OR heighten chara?
 
-
-
-
-
-
-
-double sound effect from image in options
+double sound effect from image in options?
 
 
 
@@ -130,6 +88,10 @@ creating a numpad
 testing on emulator, limitations, mostly for screen testing?
 
 low memory and being efficient
+
+adding instruction activity based on what supervisor said
+
+where i got and created music
 
 
 

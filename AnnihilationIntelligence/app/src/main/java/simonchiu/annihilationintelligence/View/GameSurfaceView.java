@@ -339,6 +339,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         //Already on this floor
                         else {
                             ((GameActivity) context).PlaySound(SOUND_FAIL);
+                            TextBuffer.DeleteAll();
                             String text = "I'm already on this floor";
                             TextBuffer.AddText(text, 3000);
                         }
@@ -366,6 +367,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         else {
                             ((GameActivity) context).PlaySound(SOUND_FAIL);
                             String text = "I'm already on this floor";
+                            TextBuffer.DeleteAll();
                             TextBuffer.AddText(text, 3000);
                         }
                     }
@@ -395,18 +397,21 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         else {
                             ((GameActivity) context).PlaySound(SOUND_FAIL);
                             String text = "I'm already on this floor";
+                            TextBuffer.DeleteAll();
                             TextBuffer.AddText(text, 3000);
                         }
                     }
                     //Goto floor 1
                     else if (i == 3) {
                         ((GameActivity) context).PlaySound(SOUND_FAIL);
+                        TextBuffer.DeleteAll();
                         String text = "It won't let me go to this floor";
                         TextBuffer.AddText(text, 3000);
                     }
                     //Goto ground floor
                     else if (i == 4) {
                         ((GameActivity) context).PlaySound(SOUND_FAIL);
+                        TextBuffer.DeleteAll();
                         String text = "It won't let me go to this floor";
                         TextBuffer.AddText(text, 3000);
                     }

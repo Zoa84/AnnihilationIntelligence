@@ -56,6 +56,14 @@ public class MenuActivity extends AppCompatActivity {
         startActivityForResult(intent, GAME);
     }
 
+    public void instructions (View view){ // Button press how to play
+        Intent intent = new Intent(MenuActivity.this,InstructionsActivity.class);
+        intent.putExtra("optionData", bOptionData);
+        intent.putExtra("volumeData", iVolume);
+        Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
+        startActivity(intent);
+    }
+
     public void options (View view){ // Button press options
         Intent intent = new Intent(MenuActivity.this,OptionsActivity.class);
         intent.putExtra("optionData", bOptionData);

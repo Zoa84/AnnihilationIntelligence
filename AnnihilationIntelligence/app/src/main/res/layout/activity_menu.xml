@@ -17,40 +17,30 @@
         android:adjustViewBounds="true"/>
 
     <Button
-        android:text="@string/sStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/start"
-        app:layout_anchor="@+id/splash_image"
-        app:layout_anchorGravity="center_vertical|center_horizontal"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:onClick="start"/>
-
-    <Button
         android:text="@string/sOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/options"
-        android:layout_below="@+id/start"
-        android:layout_centerHorizontal="true"
         app:layout_anchor="@+id/splash_image"
         app:layout_anchorGravity="center_vertical|center_horizontal"
         android:layout_gravity="bottom|center_horizontal"
-        android:onClick="options"/>
+        android:onClick="options"
+        android:layout_below="@+id/start"
+        android:layout_alignEnd="@+id/start"
+        android:layout_marginEnd="10dp" />
 
     <Button
         android:text="@string/sExit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/exit"
-        android:layout_below="@+id/options"
-        android:layout_alignStart="@+id/options"
         app:layout_anchor="@+id/splash_image"
         app:layout_anchorGravity="bottom|center_horizontal"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:onClick="exit"/>
+        android:onClick="exit"
+        android:layout_marginEnd="13dp"
+        android:layout_below="@+id/instructions"
+        android:layout_alignEnd="@+id/instructions" />
 
     <TextView
         android:text="@string/sAI"
@@ -58,9 +48,34 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView"
         tools:text="Annihilation Intelligence"
-        android:layout_above="@+id/start"
-        android:layout_centerHorizontal="true"
         android:textSize="36sp"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:layout_marginTop="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="@string/sStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/start"
+        app:layout_anchor="@+id/splash_image"
+        app:layout_anchorGravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:onClick="start"
+        android:layout_marginStart="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/textView" />
+
+    <Button
+        android:text="@string/sInstructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/instructions"
+        android:onClick="instructions"
+        android:layout_marginEnd="50dp"
+        android:layout_alignBaseline="@+id/start"
+        android:layout_alignBottom="@+id/start"
+        android:layout_alignEnd="@+id/textView" />
 
 </RelativeLayout>
