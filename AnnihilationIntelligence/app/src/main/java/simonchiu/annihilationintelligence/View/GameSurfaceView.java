@@ -101,7 +101,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
     private TextBuffer TextBuffer = new TextBuffer();
 
-    private Texture tInteract = null, tDot = null, tLoading = null, tGameOver = null, tBlack = null;
+    private Texture tInteract = null, tDot = null, tLoading = null, tGameOver = null, tBlack = null, tWin = null;
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
 
@@ -171,6 +171,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             tGameOver = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 512, 512));
             resID = context.getResources().getIdentifier("img_black", "drawable", context.getPackageName());
             tBlack = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
+            resID = context.getResources().getIdentifier("img_win", "drawable", context.getPackageName());
+            tWin = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 512, 512));
 
             if (master == null) {
                 Logger.log("Saving master Activity!");
@@ -434,7 +436,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 {
                     Inventory.SetSelected(4);
                     ((GameActivity) context).PlaySound(SOUND_PICKUP);
-                    TextBuffer.DeleteAll();
+                    TextBuffer.DeleteAll(4000);
                     TextBuffer.AddText("It seems to have worked.", 4000);
                     TextBuffer.AddText("Maybe the keycard reader's working now", 4000);
                 }
@@ -442,6 +444,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                     //Game over from wrong code
                     iFloor = -3;
                     ((GameActivity) context).PlaySound(SOUND_DEATH);
+                    ((GameActivity) context).StopMusic();
                     new CountDownTimer(3000, 1000) {
                         public void onTick(long millisUntilFinished) {
                         }
@@ -588,6 +591,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 //Game over from using unsafe elevator
                                 iFloor = -2;
                                 ((GameActivity) context).PlaySound(SOUND_DEATH);
+                                ((GameActivity) context).StopMusic();
                                 new CountDownTimer(3000, 1000) {
                                     public void onTick(long millisUntilFinished) {
                                     }
@@ -641,7 +645,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         else if (i == 2) {
                             ((GameActivity) context).PlaySound(SOUND_SELECT);
                             String text = FloorFourth.Interact(i);
-                            TextBuffer.DeleteAll();
+                            TextBuffer.DeleteAll(6000);
                             TextBuffer.AddText(text, 6000);
                             TextBuffer.AddText("elevator. It is controlled by the AI which", 6000);
                             TextBuffer.AddText("controls when the elevator moves or stops", 6000);
@@ -846,6 +850,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_FAIL);
+                                TextBuffer.DeleteAll(4000);
                                 TextBuffer.AddText("The Keycard reader isn't working", 4000);
                                 TextBuffer.AddText("Can I reset it somehow?", 4000);
                             }
@@ -900,7 +905,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         else if (i == 5) {
                             ((GameActivity) context).PlaySound(SOUND_SELECT);
                             String text = FloorFirst.Interact(i);
-                            TextBuffer.DeleteAll();
+                            TextBuffer.DeleteAll(6000);
                             TextBuffer.AddText(text, 6000);
                             TextBuffer.AddText("reset the power, the machines been acting", 6000);
                             TextBuffer.AddText("up a bit. The reset code from the 2nd floor's", 6000);
@@ -953,9 +958,18 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         }
                         //EXIT
                         else if (i == 2) {
+                            //Win
+                            iFloor = 5;
                             ((GameActivity) context).PlaySound(SOUND_WIN);
-                            String text = FloorGround.Interact(i);
-                            TextBuffer.AddText(text, 3000);
+                            ((GameActivity) context).StopMusic();
+                            new CountDownTimer(3000, 1000) {
+                                public void onTick(long millisUntilFinished) {
+                                }
+
+                                public void onFinish() {
+                                    bDestroy = true;
+                                }
+                            }.start();
                         }
                     }
                 }
@@ -1192,9 +1206,15 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             FloorGround.GetWorld().draw(fb);
             fb.display();
         }
+        else if (iFloor == 5) {
+            fb.blit(tBlack, 0, 0, 0, 0, pPoint.x, pPoint.y, FrameBuffer.OPAQUE_BLITTING);
+            fb.blit(tWin, 0, 0, (pPoint.x/2) - 256, (pPoint.y/2) - 256, 512, 512, FrameBuffer.TRANSPARENT_BLITTING);
+            DrawText(fb, AGLFont[1], "You managed to escape the AI! Congratulations!", pPoint.x/2, (pPoint.y/2) + 100, true);
+            fb.display();
+        }
 
         //Draw and display UI
-        if (!bDestroy && iFloor != -1 && iFloor != -2  && iFloor != -3) {
+        if (!bDestroy && iFloor != -1 && iFloor != -2  && iFloor != -3 && iFloor != 5) {
             //Draw Joysticks
             for (int i = 0; i < aMove.length; i++) {aMove[i].Draw(fb);}
 
@@ -1279,11 +1299,21 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
             //Draw Text/Subtitles
             String[] sText = TextBuffer.GetText();
-            if (sText != null) {
+            int[] iOrder = TextBuffer.GetOrder();
+            int j = 0;
+            for (int i = 0; i < sText.length; i++) {
+                if (sText[i] != null && iOrder[i] != -1) {
+                    DrawText(fb, AGLFont[1], sText[i], 25, 350 + j * 100, false);
+                    j++;
+                }
+            }
+
+
+            /*if (sText != null) {
                 for (int i = 0; i < sText.length; i++) {
                     DrawText(fb, AGLFont[1], sText[i], 25, 350 + i*100, false);
                 }
-            }
+            }*/
 
             //Draw elevator buttons
             if (bElev) {
@@ -1362,7 +1392,12 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             }
             Inventory.Reset();
             Intent intent = new Intent();
-            intent.putExtra("completed", false);
+            if (iFloor == 5) {
+                intent.putExtra("completed", true);
+            }
+            else {
+                intent.putExtra("completed", false);
+            }
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             ((GameActivity) context).setResult(GAME, intent);
             ((GameActivity) context).finish();

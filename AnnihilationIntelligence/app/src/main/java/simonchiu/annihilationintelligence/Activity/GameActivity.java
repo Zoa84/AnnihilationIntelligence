@@ -107,28 +107,9 @@ public class GameActivity extends Activity {
         mGLView.onResume();
     }
 
-    //Return to menu todo change to show a pause menu, DOES NOT end the game in any way
+    //Opens pause menu
     @Override
     public void onBackPressed(){
-        /*if (!back) {
-            toast = Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT);
-            toast.show();
-            back = true;
-            new CountDownTimer(2000, 1000){
-                public void onTick(long millisUntilFinished) {
-
-                }
-                public void onFinish() {
-                    back = false;
-                    toast.cancel();
-                }
-            }.start();
-        }
-        else{
-            toast.cancel();
-            super.onBackPressed();
-        }*/
-
         renderer.TogglePaused();
     }
 
@@ -137,7 +118,6 @@ public class GameActivity extends Activity {
         super.onStop();
     }
 
-    //TODO necessary?
     private void copy(Object src) {
         try {
             Logger.log("Copying data from master Activity!");
@@ -171,9 +151,13 @@ public class GameActivity extends Activity {
         Media.getInstance().playSound(sound, iVolume[SOUND], bOptionData[SOUND]);
     }
 
+    public void StopMusic() {
+        Media.getInstance().stopMusic();
+    }
+
     @Override
     public void finish() {
-        Media.getInstance().stopMusic();
+        StopMusic();
         super.finish();
     }
 }

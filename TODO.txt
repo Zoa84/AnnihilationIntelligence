@@ -33,15 +33,19 @@ code snd	- when openning the elec box (sound of screws dropping?)
 
 
 sound code for elevator/death, changing death messages
-stop music on death/win
+stop music on death/win-------------------------
 
 make music then test runthrough of muse
 
 win screen
 
+instructions
+
+
+
 elevator on floor 4th should be okay when used outside of floor 4 once?
 
-change how joysticks work when out of range?
+change how joysticks work when out of range? OR leave for questionaire?
 
 move note on floor 4, other side? OR keep hidden, in questionaires it will be reported, then report how i didnt notice as i would skip it myself in testing since i knew
 
