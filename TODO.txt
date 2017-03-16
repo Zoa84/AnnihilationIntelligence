@@ -59,40 +59,24 @@ go to floor 1, input code
 go to floor g
 walk out
 
-:. 2 key cards, 1 screwdriver
-note on 4th floor elev (simple overlay when looking at it?)
-have selecting objects (screwdriver) from inventory to then use
-Interact with doors, items, stairs - pickup items, when looking at door or elev, click interact, pauses game and has buttons for where to go
-game over screen (ui overlay saying game over, and return to menu)
-win screen (saying congratulations and return to menu)
-sound for picking up items, successful interactions
-1 music, unless want more
 
 
 
 
 Write up topics
 
-Text Buffer
-
-Changing floors
-
-assets under drawable, cant separate, so use stuff like img_ to sep from object textures
-
-compatibility, creating for higher api levels, different phones, cant run an intensive app on an old phone, using higher api for more features
 
 about making a whole game by myself, setting uvs, making models, music, etc
 
-creating a numpad
 
-testing on emulator, limitations, mostly for screen testing?
 
-low memory and being efficient
 
-adding instruction activity based on what supervisor said
 
-where i got and created music
 
+
+
+
+get screenshots
 
 
 For testing or when completed
