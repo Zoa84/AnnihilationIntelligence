@@ -1,7 +1,7 @@
 TODO Next Time
 
 
-
+comment up the project
 
 update graphics
 
@@ -106,3 +106,20 @@ About keeping to schedule and changes to that, refer to interim
 Creating the game by starting on other stuff instead of game, talk about games jams and how should be working on the game and not the extras, talk about being a perfectionist?
 what i did when i had problems, searching online for help, tutorials or forums?
 focusing mostly on game engine, when creating actual game, was actual fairly quick due to created architecture, adding in objects takes a few line, new textures or buttons are also quick, basically all about that game engine
+compare planned time with actual time
+
+
+
+
+
+
+
+
+
+
+
+Abstract
+Contents
+Background
+Summary of Project
+Conclusion
