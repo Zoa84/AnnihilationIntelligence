@@ -94,7 +94,7 @@ compare planned time with actual time
 
 
 
-
+test getting fresh copy from github and running it
 
 
 
