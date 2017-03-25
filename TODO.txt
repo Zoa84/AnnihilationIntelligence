@@ -20,19 +20,13 @@ OR heighten chara?
 
 double sound effect from image in options?
 
+test getting fresh copy from github and running it
 
 
 
 
 
 
-
-for 2nd puzzle,
-can see electrical box, but cant open
-goto 1st floor and get screw driver and open the one on 1st floor, needs a code
-goto 2nd floor, when opened, theres a small note
-it reads: Hey it's Steve. If you need to reset the power, just watchout, the machines been acting a little weird and keeps giving the wrong code. You can get the master code from Dave's desk. I think he's on this floor?
-the note will give the right code
 
 
 
@@ -41,23 +35,6 @@ make pause menu nicer? (white boarder around menu)
 
 !!Keep options as is, passing the volume and sound. Not only does this allow us to change the volume of certain music/ sound (e.g. decreasing music for certain sound/ voice) but it is also generally better to not rely on singletons (could research for report?)
 
-Continue writing up about anything at any time (even on phone/ laptop)
-
-
-
-
-For a simpler? version, only do floors g,1,2,3,4. This gives  the game a chance to have the start, showing off moving in a 3d environment on phone and stuff, and allows simple puzzles, like collecting keycards.
-This version would have:
-
-Collect key 1 from desk to go to floor 4
-See elevator go live on floor 4 but don't enter
-Go to floor 3, use elevator to go to floor 2
-get key 2, go to floor 1
-get screwdriver from floor 1
-go to floor 2 and use on electrics to get code
-go to floor 1, input code
-go to floor g
-walk out
 
 
 
@@ -80,30 +57,46 @@ get screenshots
 
 
 For testing or when completed
-
-Talk about testing the code during development
 Testing the code post development
+
+
+
+Test cases (appendix)
+1A,1B - show data in text file, then data in settings activity, do twice
+2A, 2B - picture of directory before and after loading game, 2nd for without dir
+3 - show moving between activities, ending the game?
+4 - show both radio widgets, explain orientation
+5 - show saving data when pressing back, default and save
+(Test incorrect text file data? missing after loaded?)
+6 - getting calls while app is open, force closing the app
+7 - using android back buttons from menu, settings and in-game
+
+sound effects correct
+Movement
+Turning
+Pausing & resuming?
+Return to menu
+interacting
+equip items
+between floors in elev and stairs
+number pad buttons
+game overs
+winning
+
+
+
+
 Testing with other people, recording their thoughts and stuff, and what I can learn from it
 All the topics ive talked about in Stuff
-Changes to shorten the game to fit the deadline
-About keeping to schedule and changes to that, refer to interim
-Creating the game by starting on other stuff instead of game, talk about games jams and how should be working on the game and not the extras, talk about being a perfectionist?
+
+
+Development
 what i did when i had problems, searching online for help, tutorials or forums?
+
 focusing mostly on game engine, when creating actual game, was actual fairly quick due to created architecture, adding in objects takes a few line, new textures or buttons are also quick, basically all about that game engine
-compare planned time with actual time
 
 
-
-test getting fresh copy from github and running it
-
-
-
-
-
-
-
-Abstract
-Contents
-Background
-Summary of Project
 Conclusion
+compare planned time with actual time
+unable to use much shaders as jpct takes it out. simpler to use therefore, but unable to apply any knowledge from shader programming, or produce any detailed lighting/ effects
+
