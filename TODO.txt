@@ -22,30 +22,15 @@ double sound effect from image in options?
 
 test getting fresh copy from github and running it
 
-
-
-
-
-
-
-
-
-
 make pause menu nicer? (white boarder around menu)
 
+
+
+
+
+
+
 !!Keep options as is, passing the volume and sound. Not only does this allow us to change the volume of certain music/ sound (e.g. decreasing music for certain sound/ voice) but it is also generally better to not rely on singletons (could research for report?)
-
-
-
-
-
-
-Write up topics
-
-
-about making a whole game by myself, setting uvs, making models, music, etc
-
-
 
 
 
@@ -56,11 +41,8 @@ about making a whole game by myself, setting uvs, making models, music, etc
 get screenshots
 
 
-For testing or when completed
+
 Testing the code post development
-
-
-
 Test cases (appendix)
 1A,1B - show data in text file, then data in settings activity, do twice
 2A, 2B - picture of directory before and after loading game, 2nd for without dir
@@ -70,33 +52,61 @@ Test cases (appendix)
 (Test incorrect text file data? missing after loaded?)
 6 - getting calls while app is open, force closing the app
 7 - using android back buttons from menu, settings and in-game
+8 - Movement. Show how much? going outside bounds
+9 - Camera turning. Show locking, and straight up and down
+10 - Pausing, pause menu
+11 - Return to menu, show toast in menu as proof
+12 - picking up items, use on doors, notes, etc
+13 - items selected and unselected. selecting an object while an object is selected
+14 - interacting without, and with an item. interacting with an item but not on an object
 
-sound effects correct
-Movement
-Turning
-Pausing & resuming?
-Return to menu
-interacting
-equip items
-between floors in elev and stairs
-number pad buttons
+ - gameover picture, leaving game
+ - winning picture, leaving game (toast message)
+
 game overs
 winning
 
 
 
+between floors in elev and stairs
+number pad buttons
+
+
 
 Testing with other people, recording their thoughts and stuff, and what I can learn from it
-All the topics ive talked about in Stuff
+
 
 
 Development
 what i did when i had problems, searching online for help, tutorials or forums?
 
+debugging, using logs and error messages?
+
 focusing mostly on game engine, when creating actual game, was actual fairly quick due to created architecture, adding in objects takes a few line, new textures or buttons are also quick, basically all about that game engine
 
 
-Conclusion
-compare planned time with actual time
-unable to use much shaders as jpct takes it out. simpler to use therefore, but unable to apply any knowledge from shader programming, or produce any detailed lighting/ effects
 
+Conclusion
+presentation not needed?
+use of supervisor?
+
+
+figs
+activity diagram
+activity layout for options
+table of inputs
+text character spacing
+pic of scene top down, showing collision area from 2d persp
+pic of inventory texture on and off
+IMAGES for memory management, put in appendix instead?
+New activity diagram with instruction activity
+
+
+
+appendix
+OLD interim stuffs?
+github stuff
+jpct transform fix
+maya scene creation show
+new project time used
+move test cases here?
