@@ -139,7 +139,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             //Initialise Button array
             //Set options button and interact button
             aButtons[0] = new Button(0, pPoint.x - 250, pPoint.y - 556, 128, context);
-            aButtons[1] = new Button(1, 128, 128, 128, context);
+            aButtons[1] = new Button(1, 148, 148, 128, context);
 
             pauseMenu = new PauseMenu(pPoint.x/2, pPoint.y/2, pPoint.x/2 - 50, pPoint.y/2 - 50, context);
 
@@ -267,10 +267,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
             //Update joysticks with touch data
             if (aMove[0].GetState() != 0) {
-                aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex), pointerIndex);
             }
             if (aMove[1].GetState() != 0) {
-                aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex), pointerIndex);
             }
 
             //If the action is moving, then check through all pointers and set them accordingly
@@ -284,16 +284,16 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
 
                     if (pointerId == 0) {
                         if (aMove[0].GetState() == 1) {
-                            aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                            aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex), pointerIndex);
                         } else if (aMove[1].GetState() == 1) {
-                            aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                            aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex), pointerIndex);
                         }
                     }
                     if (pointerId == 1) {
                         if (aMove[0].GetState() == 2) {
-                            aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                            aMove[0].Update(me.getX(pointerIndex), me.getY(pointerIndex), pointerIndex);
                         } else if (aMove[1].GetState() == 2) {
-                            aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex));
+                            aMove[1].Update(me.getX(pointerIndex), me.getY(pointerIndex), pointerIndex);
                         }
                     }
                 }
@@ -652,9 +652,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             String text = FloorFourth.Interact(i);
                             TextBuffer.DeleteAll(6000);
                             TextBuffer.AddText(text, 6000);
-                            TextBuffer.AddText("elevator. It is controlled by the AI which", 6000);
-                            TextBuffer.AddText("controls when the elevator moves or stops", 6000);
-                            TextBuffer.AddText("in an emergency. Do not use unless called for.", 6000);
+                            TextBuffer.AddText("elevator. It is controlled by the AI which controls", 6000);
+                            TextBuffer.AddText("when the elevator moves or stops in an", 6000);
+                            TextBuffer.AddText("emergency. Do not use unless called for.", 6000);
                         }
                     }
                 }
@@ -796,7 +796,7 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             }
                             else if (Inventory.GetSelected(1)) {
                                 //Goto 2nd floor
-                                ((GameActivity) context).PlaySound(SOUND_ELEV_DING);
+                                ((GameActivity) context).PlaySound(SOUND_STAIR);
                                 iFloor = -1;
                                 xRot = 0.f;
                                 yRot = 180.f * DEG_TO_RAD;
@@ -913,8 +913,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             TextBuffer.DeleteAll(6000);
                             TextBuffer.AddText(text, 6000);
                             TextBuffer.AddText("reset the power, the machines been acting", 6000);
-                            TextBuffer.AddText("up a bit. The reset code from the 2nd floor's", 6000);
-                            TextBuffer.AddText("wrong. Just flip the code it gives", 6000);
+                            TextBuffer.AddText("up a bit. The reset code from the 2nd", 6000);
+                            TextBuffer.AddText("floor's wrong. Just flip the code it gives", 6000);
                         }
                     }
                 }
@@ -1340,14 +1340,14 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 if (iNumbers[0] != 10) {
                     if (iNumbers[1] != 10) {
                         if (iNumbers[2] != 10) {
-                            DrawText(fb, AGLFont[0], Integer.toString(iNumbers[0]) + Integer.toString(iNumbers[1]) + Integer.toString(iNumbers[2]), pPoint.x/2, (pPoint.y/2) - 300, true);
+                            DrawText(fb, AGLFont[0], Integer.toString(iNumbers[0]) + Integer.toString(iNumbers[1]) + Integer.toString(iNumbers[2]), pPoint.x/2, (pPoint.y/2) - 250, true);
                         }
                         else {
-                            DrawText(fb, AGLFont[0], Integer.toString(iNumbers[0]) + Integer.toString(iNumbers[1]), pPoint.x/2, (pPoint.y/2) - 300, true);
+                            DrawText(fb, AGLFont[0], Integer.toString(iNumbers[0]) + Integer.toString(iNumbers[1]), pPoint.x/2, (pPoint.y/2) - 250, true);
                         }
                     }
                     else {
-                        DrawText(fb, AGLFont[0], Integer.toString(iNumbers[0]), pPoint.x/2, (pPoint.y/2) - 300, true);
+                        DrawText(fb, AGLFont[0], Integer.toString(iNumbers[0]), pPoint.x/2, (pPoint.y/2) - 250, true);
                     }
                 }
             }

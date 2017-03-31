@@ -28,8 +28,8 @@ import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
  */
 
 public class FloorGround extends Floor{
-    private String[] textures = {"room", "floor", "chair", "comp", "elev", "door1", "reception", "frontdoor"};
-    private Object3D[] object = new Object3D[8];
+    private String[] textures = {"room", "floor", "chair", "comp", "elev", "door1", "reception", "frontdoor", "rug"};
+    private Object3D[] object = new Object3D[11];
     private Object3D[] aObjects = null;
 
     private Light sun = null;
@@ -40,7 +40,7 @@ public class FloorGround extends Floor{
     private int xWallLeft = 33;
     private int xWallRight = -33;
     private int yWallFront = -32;
-    private int yWallBack = 28;
+    private int yWallBack = 30;
     private Object3D[] aInteObjects = new Object3D[3];
 
     public FloorGround(Context context) {
@@ -83,7 +83,11 @@ public class FloorGround extends Floor{
             ObjectLoader(context, 6, "chair");
             ObjectLoader(context, 7, "chair");
 
-            Collisions[0] = new CollisionMap(-15, 36, 14, 7);   //Elevator
+            ObjectLoader(context, 8, "comp");
+            ObjectLoader(context, 9, "comp");
+            ObjectLoader(context, 10, "rug");
+
+            Collisions[0] = new CollisionMap(-15, 36, 14, 3);   //Elevator
             Collisions[1] = new CollisionMap(-24, -19, 13, 19); //Reception
 
             SetPosition(3);
@@ -95,6 +99,11 @@ public class FloorGround extends Floor{
             object[6].rotateY(90f * DEG_TO_RAD);
             object[7].translate(fixTrans(-24f, -5.5f, 17.5f));
             object[7].rotateY(105f * DEG_TO_RAD);
+
+            object[8].translate(fixTrans(-16f, -1.2f, 18.5f));
+            object[8].rotateY(90f * DEG_TO_RAD);
+            object[9].translate(fixTrans(-16f, -1.2f, 30f));
+            object[9].rotateY(90f * DEG_TO_RAD);
 
             aInteObjects[0] = object[2];    //elevator
             aInteObjects[1] = object[3];    //door 1 - right door

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ public class OptionsActivity extends AppCompatActivity {
                 bOptionData[MUSIC] = cCheckBox[MUSIC].isChecked();
                 Media.getInstance().playMusic(MUSIC_OPTIONS, iVolume[MUSIC], bOptionData[MUSIC]);
                 Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
+                sVolume[MUSIC].setEnabled(bOptionData[MUSIC]);
             }
         });
         cCheckBox[SOUND].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -60,6 +62,7 @@ public class OptionsActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 bOptionData[SOUND] = cCheckBox[SOUND].isChecked();
                 Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
+                sVolume[SOUND].setEnabled(bOptionData[SOUND]);
             }
         });
 
@@ -111,8 +114,10 @@ public class OptionsActivity extends AppCompatActivity {
         //Set the seek bars to current settings
         sVolume[MUSIC] = (SeekBar) findViewById(R.id.sMusic);
         sVolume[MUSIC].setProgress(iVolume[MUSIC]);
+        sVolume[MUSIC].setEnabled(bOptionData[MUSIC]);
         sVolume[SOUND] = (SeekBar) findViewById(R.id.sSound);
         sVolume[SOUND].setProgress(iVolume[SOUND]);
+        sVolume[SOUND].setEnabled(bOptionData[MUSIC]);
 
         //Listener for seek bars
         sVolume[MUSIC].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -193,12 +198,14 @@ public class OptionsActivity extends AppCompatActivity {
 
     //Change the orientation using the images
     public void OriLeft (View view) {
-        rgOrien.check(R.id.rLeft);
+        RadioButton rButton = (RadioButton) findViewById(R.id.rLeft);
+        rButton.setChecked(true);
     }
 
     //Change the orientation using the images
     public void OriRight (View view) {
-        rgOrien.check(R.id.rRight);
+        RadioButton rButton = (RadioButton) findViewById(R.id.rRight);
+        rButton.setChecked(true);
     }
 
 }

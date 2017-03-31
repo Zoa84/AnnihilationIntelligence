@@ -15,8 +15,10 @@ import com.threed.jpct.util.BitmapHelper;
 //ElevMenu class.
 
 public class ElevMenu {
-    private Texture tTexture;
+    private Texture tTexture0;
+    private Texture tTexture1;
     private Rect rMenu;
+    private int iBorder = 30;
 
     public ElevMenu(Point pPoint, Context context) {
         //Set position of the menu using construction parameters
@@ -25,10 +27,17 @@ public class ElevMenu {
         //Load Menu background
         int resID;
         resID = context.getResources().getIdentifier("img_grey", "drawable", context.getPackageName());
-        tTexture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
+        tTexture0 = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
+        resID = context.getResources().getIdentifier("img_white", "drawable", context.getPackageName());
+        tTexture1 = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
     }
 
     public void Draw(FrameBuffer fb) {
-        fb.blit(tTexture, 0, 0, rMenu.left, rMenu.top, rMenu.right, rMenu.bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        fb.blit(tTexture0, 0, 0, rMenu.left, rMenu.top, rMenu.right, rMenu.bottom, FrameBuffer.TRANSPARENT_BLITTING);
+
+        fb.blit(tTexture1, 0, 0, rMenu.left, rMenu.top, iBorder, rMenu.bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        fb.blit(tTexture1, 0, 0, rMenu.left, rMenu.top, rMenu.right, iBorder, FrameBuffer.TRANSPARENT_BLITTING);
+        fb.blit(tTexture1, 0, 0, rMenu.left + rMenu.right, rMenu.top + rMenu.bottom, -iBorder, -rMenu.bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        fb.blit(tTexture1, 0, 0, rMenu.left + rMenu.right, rMenu.top + rMenu.bottom, -rMenu.right, -iBorder, FrameBuffer.TRANSPARENT_BLITTING);
     }
 }

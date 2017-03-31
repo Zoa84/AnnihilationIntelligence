@@ -3,77 +3,22 @@ TODO Next Time
 
 comment up the project
 
-update graphics
-
-instructions, update image with updated graphics?
-
-elevator on floor 4th should be okay when used outside of floor 4 once?
-
-change how joysticks work when out of range? OR leave for questionaire?
-
 move note on floor 4, other side? OR keep hidden, in questionaires it will be reported, then report how i didnt notice as i would skip it myself in testing since i knew
 
-comp in reception, sofas on side? rug?
-
-door knobs lower, or make door overall shorter(compare with recption), reception lower
-OR heighten chara?
-
-double sound effect from image in options?
+sofas on side?
 
 test getting fresh copy from github and running it
 
-make pause menu nicer? (white boarder around menu)
 
 
 
 
-
-
-
-!!Keep options as is, passing the volume and sound. Not only does this allow us to change the volume of certain music/ sound (e.g. decreasing music for certain sound/ voice) but it is also generally better to not rely on singletons (could research for report?)
-
-
-
-
-
-
-
-get screenshots
-
-
-
-Testing the code post development
-Test cases (appendix)
-1A,1B - show data in text file, then data in settings activity, do twice
-2A, 2B - picture of directory before and after loading game, 2nd for without dir
-3 - show moving between activities, ending the game?
-4 - show both radio widgets, explain orientation
-5 - show saving data when pressing back, default and save
-(Test incorrect text file data? missing after loaded?)
-6 - getting calls while app is open, force closing the app
-7 - using android back buttons from menu, settings and in-game
-8 - Movement. Show how much? going outside bounds
-9 - Camera turning. Show locking, and straight up and down
-10 - Pausing, pause menu
-11 - Return to menu, show toast in menu as proof
-12 - picking up items, use on doors, notes, etc
-13 - items selected and unselected. selecting an object while an object is selected
-14 - interacting without, and with an item. interacting with an item but not on an object
-
- - gameover picture, leaving game
- - winning picture, leaving game (toast message)
-
-game overs
-winning
-
-
-
-between floors in elev and stairs
-number pad buttons
 
 
 
 Testing with other people, recording their thoughts and stuff, and what I can learn from it
+
+
 
 
 
@@ -85,10 +30,6 @@ debugging, using logs and error messages?
 focusing mostly on game engine, when creating actual game, was actual fairly quick due to created architecture, adding in objects takes a few line, new textures or buttons are also quick, basically all about that game engine
 
 
-
-Conclusion
-presentation not needed?
-use of supervisor?
 
 
 figs
@@ -104,9 +45,10 @@ New activity diagram with instruction activity
 
 
 appendix
-OLD interim stuffs?
 github stuff
 jpct transform fix
 maya scene creation show
 new project time used
-move test cases here?
+test cases
+test diagrams
+Final development screenshots

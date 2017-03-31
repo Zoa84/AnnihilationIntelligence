@@ -40,7 +40,7 @@ public class FloorSecond extends Floor{
     private int xWallLeft = 33;
     private int xWallRight = -33;
     private int yWallFront = -32;
-    private int yWallBack = 28;
+    private int yWallBack = 30;
     private Object3D[] aInteObjects = new Object3D[5];
 
     private boolean bElecOpen = false;
@@ -124,7 +124,7 @@ public class FloorSecond extends Floor{
             Collisions[7] = new CollisionMap(20, 0, 5, 3);
             Collisions[8] = new CollisionMap(20, -20, 5, 3);
 
-            Collisions[9] = new CollisionMap(-15, 36, 14, 7);
+            Collisions[9] = new CollisionMap(-15, 36, 14, 3);
 
             SetPosition(3);
 

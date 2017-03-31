@@ -53,11 +53,15 @@ public class Joystick {
 
     //Update function which is run in the update of the game
     //Gets the X and Y position of a finger, and checks if within the limit to use
-    public void Update(float xPos, float yPos) {
+    public void Update(float xPos, float yPos, int index) {
         float fLength = ((iXPos - xPos) * (iXPos - xPos)) + ((iYPos - yPos) * (iYPos - yPos));
         if (fLength < iLimit*iLimit) {
             rButton.left = (int) xPos - (iSize / 2);
             rButton.top = (int) yPos - (iSize / 2);
+        }
+        else if (iState - 1 == index) {
+            rButton.left = iXPos - (iSize/2);
+            rButton.top = iYPos - (iSize/2);
         }
     }
 

@@ -13,10 +13,12 @@ import com.threed.jpct.util.BitmapHelper;
  */
 
 public class NumPad {
-    private Texture[] tTexture = new Texture[2];
+    private Texture tTexture0;
+    private Texture tTexture1;
     private Rect rMenu;
     private Button[] bNumbers = new Button[12];
     private int iSpacing = 150;
+    private int iBorder = 30;
 
     public NumPad(Point pPoint, Context context) {
         //Set position of the menu using construction parameters
@@ -25,7 +27,9 @@ public class NumPad {
         //Load Menu background
         int resID;
         resID = context.getResources().getIdentifier("img_grey", "drawable", context.getPackageName());
-        tTexture[0] = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
+        tTexture0 = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
+        resID = context.getResources().getIdentifier("img_white", "drawable", context.getPackageName());
+        tTexture1 = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64));
 
         bNumbers[0] = new Button("0", pPoint.x/2, (pPoint.y/2) + (iSpacing*2), 64, context);
         bNumbers[1] = new Button("1", (pPoint.x/2)-iSpacing, (pPoint.y/2) - iSpacing, 64, context);
@@ -42,11 +46,16 @@ public class NumPad {
     }
 
     public void Draw(FrameBuffer fb) {
-        fb.blit(tTexture[0], 0, 0, rMenu.left, rMenu.top, rMenu.right, rMenu.bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        fb.blit(tTexture0, 0, 0, rMenu.left, rMenu.top, rMenu.right, rMenu.bottom, FrameBuffer.TRANSPARENT_BLITTING);
 
         for (int i = 0; i < bNumbers.length; i++) {
             bNumbers[i].Draw(fb);
         }
+
+        fb.blit(tTexture1, 0, 0, rMenu.left, rMenu.top, iBorder, rMenu.bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        fb.blit(tTexture1, 0, 0, rMenu.left, rMenu.top, rMenu.right, iBorder, FrameBuffer.TRANSPARENT_BLITTING);
+        fb.blit(tTexture1, 0, 0, rMenu.left + rMenu.right, rMenu.top + rMenu.bottom, -iBorder, -rMenu.bottom, FrameBuffer.TRANSPARENT_BLITTING);
+        fb.blit(tTexture1, 0, 0, rMenu.left + rMenu.right, rMenu.top + rMenu.bottom, -rMenu.right, -iBorder, FrameBuffer.TRANSPARENT_BLITTING);
     }
 
     public int Update(float xPos, float yPos) {

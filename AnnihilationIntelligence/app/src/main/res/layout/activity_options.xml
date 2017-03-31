@@ -31,7 +31,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
                     android:layout_gravity="center"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@color/colorBlack"/>
 
                 <SeekBar
                     android:layout_width="0dp"
@@ -64,7 +65,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
                     android:layout_gravity="center"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@color/colorBlack"/>
 
                 <SeekBar
                     android:layout_width="0dp"
@@ -97,7 +99,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.4"
                     android:layout_gravity="center"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@color/colorBlack"/>
 
                 <CheckBox
                     android:layout_width="0dp"
@@ -112,7 +115,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.4"
                     android:layout_gravity="center"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@color/colorBlack"/>
 
                 <CheckBox
                     android:layout_width="0dp"
@@ -140,7 +144,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"/>
                 </TableRow>
 
                 <TableRow
@@ -196,21 +201,27 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:onClick="restore"
-                    android:layout_weight="0.3"/>
+                    android:layout_weight="0.3"
+                    android:background="@drawable/img_menu_button"
+                    android:textColor="@color/colorWhite"/>
 
                 <Button
                     android:text="@string/sCancel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:onClick="cancel"
-                    android:layout_weight="0.4"/>
+                    android:layout_weight="0.3"
+                    android:background="@drawable/img_menu_button"
+                    android:textColor="@color/colorWhite"/>
 
                 <Button
                     android:text="@string/sSave"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:onClick="save"
-                    android:layout_weight="0.3"/>
+                    android:layout_weight="0.3"
+                    android:background="@drawable/img_menu_button"
+                    android:textColor="@color/colorWhite"/>
             </TableRow>
 
         </LinearLayout>

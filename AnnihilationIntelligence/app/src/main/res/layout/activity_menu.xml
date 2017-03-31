@@ -16,32 +16,6 @@
         android:scaleType="fitXY"
         android:adjustViewBounds="true"/>
 
-    <Button
-        android:text="@string/sOptions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/options"
-        app:layout_anchor="@+id/splash_image"
-        app:layout_anchorGravity="center_vertical|center_horizontal"
-        android:layout_gravity="bottom|center_horizontal"
-        android:onClick="options"
-        android:layout_below="@+id/start"
-        android:layout_alignEnd="@+id/start"
-        android:layout_marginEnd="10dp" />
-
-    <Button
-        android:text="@string/sExit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/exit"
-        app:layout_anchor="@+id/splash_image"
-        app:layout_anchorGravity="bottom|center_horizontal"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:onClick="exit"
-        android:layout_marginEnd="13dp"
-        android:layout_below="@+id/instructions"
-        android:layout_alignEnd="@+id/instructions" />
-
     <TextView
         android:text="@string/sAI"
         android:layout_width="wrap_content"
@@ -65,7 +39,10 @@
         android:onClick="start"
         android:layout_marginStart="50dp"
         android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/textView" />
+        android:layout_alignStart="@+id/textView"
+        android:background="@drawable/img_menu_button"
+        android:padding="10dp"
+        android:textColor="@color/colorWhite"/>
 
     <Button
         android:text="@string/sInstructions"
@@ -74,8 +51,45 @@
         android:id="@+id/instructions"
         android:onClick="instructions"
         android:layout_marginEnd="50dp"
+        android:background="@drawable/img_menu_button"
         android:layout_alignBaseline="@+id/start"
         android:layout_alignBottom="@+id/start"
-        android:layout_alignEnd="@+id/textView" />
+        android:layout_alignEnd="@+id/textView"
+        android:padding="10dp"
+        android:textColor="@color/colorWhite"/>
+
+    <Button
+        android:text="@string/sOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/options"
+        app:layout_anchor="@+id/splash_image"
+        app:layout_anchorGravity="center_vertical|center_horizontal"
+        android:layout_gravity="bottom|center_horizontal"
+        android:onClick="options"
+        android:background="@drawable/img_menu_button"
+        android:padding="10dp"
+        android:layout_below="@+id/start"
+        android:layout_alignStart="@+id/start"
+        android:layout_marginTop="8dp"
+        android:layout_alignEnd="@+id/start"
+        android:textColor="@color/colorWhite"/>
+
+    <Button
+        android:text="@string/sExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/exit"
+        app:layout_anchor="@+id/splash_image"
+        app:layout_anchorGravity="bottom|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:onClick="exit"
+        android:background="@drawable/img_menu_button"
+        android:padding="10dp"
+        android:layout_alignBaseline="@+id/options"
+        android:layout_alignBottom="@+id/options"
+        android:layout_alignStart="@+id/instructions"
+        android:layout_alignEnd="@+id/instructions"
+        android:textColor="@color/colorWhite"/>
 
 </RelativeLayout>
