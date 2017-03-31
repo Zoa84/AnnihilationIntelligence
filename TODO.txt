@@ -5,11 +5,9 @@ comment up the project
 
 move note on floor 4, other side? OR keep hidden, in questionaires it will be reported, then report how i didnt notice as i would skip it myself in testing since i knew
 
-sofas on side?
-
 test getting fresh copy from github and running it
 
-
+chara height
 
 
 
