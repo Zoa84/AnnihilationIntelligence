@@ -6,10 +6,12 @@ import android.os.CountDownTimer;
  * Created by Simon on 06/03/2017.
  */
 
+//The Text Buffer, handles the way messages are shown to the game screen.
+
 public class TextBuffer {
     private String[] sText = new String[4];                         //An array of the strings to draw, not necessarily in order
     private boolean[] bTextDestroy = {false, false, false, false};  //Whether a text should be destroyed. If new text is overridden, the timer still continues, so this is a fix
-    private int[] iOrder = {-1, -1, -1, -1};                        //The order we draw the text. -1 means there isn't text to draw
+    private int[] iOrder = {-1, -1, -1, -1};                        //The order we draw the text. -1 means there isn't any text to draw
     private boolean bDelAbso = false;                               //A boolean for if we can destroy the text, used as a fix for the DeleteAll function
 
     //Add text to the text buffer. If there is no space, it won't add text

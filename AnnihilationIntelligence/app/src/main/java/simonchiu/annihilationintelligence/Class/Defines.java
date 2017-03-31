@@ -15,7 +15,7 @@ public final class Defines {
     public static final int INVERTY = 3;
     public static final int ORIENTATION = 4;
 
-    //Defines for the activity flow to/from the PauseMenu Activity
+    //Defines for the activity flow to/from the Menu Activity
     public static final int OPTIONS = 0;
     public static final int GAME = 1;
 
@@ -24,7 +24,7 @@ public final class Defines {
     public static final int MUSIC_GAME = 1;
     public static final int MUSIC_OPTIONS = 2;
 
-    //Define for sound names
+    //Defines for sound names
     public static final int SOUND_SELECT = 0;
     public static final int SOUND_FAIL = 1;
     public static final int SOUND_LOCKED = 2;

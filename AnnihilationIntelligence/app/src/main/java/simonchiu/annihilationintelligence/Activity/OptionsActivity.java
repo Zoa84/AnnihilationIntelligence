@@ -17,6 +17,8 @@ import simonchiu.annihilationintelligence.R;
 
 import static simonchiu.annihilationintelligence.Class.Defines.*;
 
+//Options Activity, used to change the settings of the game
+
 public class OptionsActivity extends AppCompatActivity {
 
     boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
@@ -30,7 +32,7 @@ public class OptionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
-        //Get options and volume data from PauseMenu activity
+        //Get options and volume data from Menu activity
         this.bOptionData = getIntent().getBooleanArrayExtra("optionData");
         this.iVolume = getIntent().getIntArrayExtra("volumeData");
 
@@ -41,12 +43,13 @@ public class OptionsActivity extends AppCompatActivity {
         //Play music (passing the element to play)
         if (!Media.getInstance().playMusic(MUSIC_OPTIONS, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();
 
-        //Settings for the Music
+        //Set settings for the Music
         cCheckBox[MUSIC] = (CheckBox) findViewById(R.id.cMusic);
         cCheckBox[MUSIC].setChecked(bOptionData[MUSIC]);
-        //Settings for the Sound
+        //Set settings for the Sound
         cCheckBox[SOUND] = (CheckBox) findViewById(R.id.cSound);
         cCheckBox[SOUND].setChecked(bOptionData[SOUND]);
+
         //Listeners to check for changes to the check boxes for music and sound
         cCheckBox[MUSIC].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -66,12 +69,13 @@ public class OptionsActivity extends AppCompatActivity {
             }
         });
 
-        //Settings for Inverting camera controls
+        //Set settings for Inverting camera controls
         cCheckBox[INVERTX] = (CheckBox) findViewById(R.id.cInvX);
         cCheckBox[INVERTY] = (CheckBox) findViewById(R.id.cInvY);
         //Set the check buttons to current settings
         cCheckBox[INVERTX].setChecked(bOptionData[INVERTX]);
         cCheckBox[INVERTY].setChecked(bOptionData[INVERTY]);
+
         //Listeners to check for changes to the check boxes for inverting axis
         cCheckBox[INVERTX].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -99,6 +103,7 @@ public class OptionsActivity extends AppCompatActivity {
         {
             rgOrien.check(R.id.rRight);
         }
+
         //Listener to check for changes to the radio group
         rgOrien.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -119,7 +124,7 @@ public class OptionsActivity extends AppCompatActivity {
         sVolume[SOUND].setProgress(iVolume[SOUND]);
         sVolume[SOUND].setEnabled(bOptionData[MUSIC]);
 
-        //Listener for seek bars
+        //Listener for music seek bar
         sVolume[MUSIC].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -137,6 +142,7 @@ public class OptionsActivity extends AppCompatActivity {
             }
         });
 
+        //Listener for sound seek bar
         sVolume[SOUND].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -167,7 +173,7 @@ public class OptionsActivity extends AppCompatActivity {
     }
 
     public void cancel (View view){ // Button press cancel
-        //Return to menu activity, without saving any changes
+        //Return to menu activity, without saving any changes, by running the onBackPressed function above
         onBackPressed();
     }
 

@@ -23,7 +23,7 @@ public class Joystick {
     private int iState;                             //State for pointer to joystick
     private float fScale;                           //Scale for joystick to movement
     private Rect rBackground, rButton;              //Saves data to a format to use in the draw function
-    private Texture[] aTextures = new Texture[2];   //Array of the joystick textures, the background and the button itself
+    private Texture[] aTextures = new Texture[2];   //Array of the joystick textures: the background and the button itself
 
     //Gets the x and y pos from the constructor, as well as size, and will setup the data, as well as load the textures
     public Joystick(int xPos, int yPos, int size, Context context) {
@@ -51,7 +51,7 @@ public class Joystick {
         aTextures[1] = texture;
     }
 
-    //Update function which is run in the update of the game
+    //Update function which is run in the update of the game surface view
     //Gets the X and Y position of a finger, and checks if within the limit to use
     public void Update(float xPos, float yPos, int index) {
         float fLength = ((iXPos - xPos) * (iXPos - xPos)) + ((iYPos - yPos) * (iYPos - yPos));
@@ -75,7 +75,7 @@ public class Joystick {
         fb.blit(aTextures[1], 0, 0, rButton.left, rButton.top, rButton.right, rButton.bottom, FrameBuffer.TRANSPARENT_BLITTING);
     }
 
-    //Reset the joystick buttons position and state
+    //Reset the joysticks position and state
     public void Reset() {
         rButton.left = iXPos - (iSize/2);
         rButton.top = iYPos - (iSize/2);

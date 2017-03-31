@@ -11,6 +11,7 @@ import java.io.IOException;
  */
 
 //Media Class, a Singleton class which holds loaded music and sound files, and also plays them
+//Data is loaded in the Splash Activity
 
 public class Media {
     private AssetFileDescriptor[] descriptor = new AssetFileDescriptor[3];          //Array of music files
@@ -66,7 +67,7 @@ public class Media {
         mediaPlayer.setVolume(1 - fVolume, 1 - fVolume);
     }
 
-    //Creates a instance of this class, which is passed to any activity which calls this
+    //Creates an instance of this class, which is passed to any activity which calls this
     private static final Media holder = new Media();
     public static Media getInstance() {return holder;}
 }

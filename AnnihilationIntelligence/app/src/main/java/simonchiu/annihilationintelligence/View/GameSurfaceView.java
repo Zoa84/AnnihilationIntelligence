@@ -49,12 +49,11 @@ import static simonchiu.annihilationintelligence.Class.Defines.*;
 //The game surface view, ran as part of game activity to draw and render in 3d, and to implement the game
 
 public class GameSurfaceView implements GLSurfaceView.Renderer {
-
     //Variables for game surface view
     private long time = System.currentTimeMillis();
     private FrameBuffer fb = null;
     private RGBColor bg = new RGBColor(50, 50, 100);
-    private int fps = 0;
+    //private int fps = 0;
     private static GameActivity master = null;
     private Context context;
 
@@ -68,21 +67,25 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     //Array of Buttons
     private Button[] aButtons = new Button[2];
 
+    //Pause menu and pause menu buttons
     private PauseMenu pauseMenu;
     private Button[] aPauseButtons = new Button[3];
 
+    //Elevator menu and elevator menu buttons
     private ElevMenu ElevMenu;
     private Button[] aElevButtons = new Button[5];
 
+    //Number pad and pad buttons
     private NumPad NumPad;
     private int[] iNumbers = {10, 10, 10};
 
-    //Screen Size;
+    //Screen Size
     private Point pPoint;
 
-    //Distance to interact
+    //Distance to interact with an object
     private float iDistance = 20f;
 
+    //The current floor, and the floors themselves
     private int iFloor = 3;
     private FloorThird FloorThird;
     private FloorFourth FloorFourth;
@@ -90,27 +93,25 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     private FloorFirst FloorFirst;
     private FloorGround FloorGround;
 
-    //if game is paused
+    //If game is paused
     private boolean bPaused = false;
 
+    //The fonts for text
     private AGLFont[] AGLFont = new AGLFont[2];
 
     private boolean bDestroy = false, bElev = false, bNumPad = false;
 
-    private Inventory Inventory;                    //The inventory, manages collection, and selecting items
+    private Inventory Inventory;                        //The inventory, manages collection, and selecting items
 
-    private TextBuffer TextBuffer = new TextBuffer();
+    private TextBuffer TextBuffer = new TextBuffer();   //The text buffer to display messages
 
+    //Textures for HUD (Heads up display) and win/ game over screen
     private Texture tInteract = null, tDot = null, tLoading = null, tGameOver = null, tBlack = null, tWin = null;
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
 
-    public void setOptions(boolean[] optionData) {
-        bOptionData = optionData;
-    }
-
     //Constructor
-    public GameSurfaceView(Context context, Point point) {
+    public GameSurfaceView(Context context, Point point, boolean[] optionData) {
         //Set up two fonts, one large, one small
         Paint Paint = new Paint();
         Paint.setAntiAlias(true);
@@ -119,17 +120,21 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
         AGLFont[0] = new AGLFont(Paint);
         Paint.setTextSize(50);
         AGLFont[1] = new AGLFont(Paint);
-
         Paint.reset();
 
-        //Get the context, which allows us to load assets
-        this.context = context;
+        //Get option data from activity
+        bOptionData = optionData;
         //The Width and Height of the screen
         pPoint = point;
 
+        //Get the context, which allows us to load assets
+        this.context = context;
+
         if (master == null) {
-            //Load the floors
+            //Load the floor
             FloorThird = new FloorThird(context);
+
+            //Initialise multiple objects and texture
 
             //Initialise Joystick array
             //Set as 300 pixels away from both corners, with a radius of 128
@@ -141,16 +146,21 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             aButtons[0] = new Button(0, pPoint.x - 250, pPoint.y - 556, 128, context);
             aButtons[1] = new Button(1, 148, 148, 128, context);
 
+            //Initialise Pause menu
             pauseMenu = new PauseMenu(pPoint.x/2, pPoint.y/2, pPoint.x/2 - 50, pPoint.y/2 - 50, context);
 
+            //Initialise the elevator menu
             ElevMenu = new ElevMenu(pPoint, context);
 
+            //Initialise the Number pad
             NumPad = new NumPad(pPoint, context);
 
+            //Initialise the pause menu buttons
             aPauseButtons[0] = new Button("Pause Menu", pPoint.x/2, pPoint.y/10*2, 320, 100, context);
             aPauseButtons[1] = new Button("Resume", pPoint.x/2, pPoint.y/2, 250, 100, context);
             aPauseButtons[2] = new Button("Return to Menu", pPoint.x/2, pPoint.y/10*8, 380, 100, context);
 
+            //Initialise the elevtor buttons
             aElevButtons[0] = new Button(2, pPoint.x/5*2, 50 + ((pPoint.y-100)/6), 64, context);
             aElevButtons[1] = new Button(2, pPoint.x/5*2, 50 + 2*((pPoint.y-100)/6), 64, context);
             aElevButtons[2] = new Button(2, pPoint.x/5*2, 50 + 3*((pPoint.y-100)/6), 64, context);
@@ -531,6 +541,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                         //First time, the AI prepares a trap
                                         if (!Inventory.GetSelected(3)) {
                                             TextBuffer.AddText("Was that noise from the elevator?", 4000);
+                                            TextBuffer.AddText("Did someone call for it?", 4000);
+                                            TextBuffer.AddText("There's no one here...", 4000);
                                             ((GameActivity) context).PlaySound(SOUND_ELEV_DING);
                                             Inventory.SetSelected(3);
                                         }
@@ -993,7 +1005,6 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
     }
 
     public void onSurfaceChanged(GL10 gl, int w, int h) {
@@ -1370,12 +1381,13 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             aPauseButtons[2].Reset();
         }
 
+        /*//Get game frames per second
         if (System.currentTimeMillis() - time >= 1000) {
             //Logger.log(fps + "fps");
             fps = 0;
             time = System.currentTimeMillis();
         }
-        fps++;
+        fps++;*/
 
         //If game is being destroyed (returning to menu or closing app) reset data
         //Java does nnot use destructors like C++, meaning some data must be reset manually

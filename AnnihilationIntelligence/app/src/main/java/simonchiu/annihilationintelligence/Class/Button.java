@@ -27,7 +27,7 @@ public class Button {
     private int iYPos;                  //Y position of the button (the origin is the center)
     private int iXSize;                 //The size in X of the button (from the origin)
     private int iYSize;                 //The size in Y of the button (from the origin)
-    private int iBorder = 20;
+    private int iBorder = 20;           //An integer of the size of the white border
     private boolean bPressed = false;   //If the button has been pressed
     private Rect rButton;               //The rectangle shape of the button, used to draw the button
     private Texture tTexture;           //The texture of the button
@@ -47,7 +47,7 @@ public class Button {
         //Set position of button using construction parameters
         rButton = new Rect(iXPos - iXSize, iYPos - iYSize, iXSize*2, iYSize*2);
 
-        //Load Button
+        //Load Button texture
         int resID;
         resID = context.getResources().getIdentifier("img_button_pause", "drawable", context.getPackageName());
         tTexture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), 64, 64), true);
@@ -65,7 +65,7 @@ public class Button {
         //Set position of button using construction parameters
         rButton = new Rect(iXPos - iXSize, iYPos - iYSize, iXSize*2, iYSize*2);
 
-        //Load Button
+        //Load Button texture
         int resID;
         resID = context.getResources().getIdentifier("img_button_" + Integer.toString(type), "drawable", context.getPackageName());
         tTexture = new Texture(BitmapHelper.rescale(BitmapHelper.convert(context.getResources().getDrawable(resID)), iXSize*2, iYSize*2), true);

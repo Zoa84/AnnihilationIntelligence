@@ -5,15 +5,10 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-
-import com.threed.jpct.Logger;
-
-import java.lang.reflect.Field;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -24,26 +19,17 @@ import simonchiu.annihilationintelligence.View.GameSurfaceView;
 
 import static simonchiu.annihilationintelligence.Class.Defines.*;
 
+//Game Activity, the game part of the app, utilising the GameSurfaceView to show the game
+//This activity can pass data to the GSV, as well as holds functions to run from the GSV
 
 public class GameActivity extends Activity {
-
-    // Used to handle pause and resume...
-    //TODO necessary?
-    private static GameActivity master = null;
-
     private GLSurfaceView mGLView = null;
-    private GameSurfaceView renderer = null;
-
-    private Toast toast;
-    boolean back = false;
+    private GameSurfaceView renderer = null;        //Game surface view, which contains most of the 3D game
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
 
     protected void onCreate(Bundle savedInstanceState) {
-
-        Logger.log("onCreate");
-
         //Set the game activity to use fullscreen, removing the action bars, etc
         int mUIFlag = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -54,28 +40,22 @@ public class GameActivity extends Activity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         getWindow().getDecorView().setSystemUiVisibility(mUIFlag);
 
-        //Get options and volume data from splash activity
+        //Get options and volume data from Menu Activity
         this.bOptionData = getIntent().getBooleanArrayExtra("optionData");
         this.iVolume = getIntent().getIntArrayExtra("volumeData");
 
+        //Set the orientation
         if (bOptionData[ORIENTATION]) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
 
         //Play music (passing the element to play)
         PlayMusic(MUSIC_GAME);
 
-        //TODO necessary?
-        if (master != null) {
-            copy(master);
-        }
-
+        //Sets up the OpenGl view
         super.onCreate(savedInstanceState);
         mGLView = new GLSurfaceView(getApplication());
-
         mGLView.setEGLConfigChooser(new GLSurfaceView.EGLConfigChooser() {
             public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
-                // Ensure that we get a 16bit framebuffer. Otherwise, we'll fall
-                // back to Pixelflinger on some device (read: Samsung I7500)
                 int[] attributes = new int[] { EGL10.EGL_DEPTH_SIZE, 16, EGL10.EGL_NONE };
                 EGLConfig[] configs = new EGLConfig[1];
                 int[] result = new int[1];
@@ -84,12 +64,13 @@ public class GameActivity extends Activity {
             }
         });
 
+        //Get the size of the screen
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         Point screenSize = new Point(metrics.widthPixels, metrics.heightPixels);
 
-        renderer = new GameSurfaceView(this, screenSize);
-        renderer.setOptions(bOptionData);
+        //Create the Game Surface View, passing the required data
+        renderer = new GameSurfaceView(this, screenSize, bOptionData);
 
         mGLView.setRenderer(renderer);
         setContentView(mGLView);
@@ -118,39 +99,29 @@ public class GameActivity extends Activity {
         super.onStop();
     }
 
-    private void copy(Object src) {
-        try {
-            Logger.log("Copying data from master Activity!");
-            Field[] fs = src.getClass().getDeclaredFields();
-            for (Field f : fs) {
-                f.setAccessible(true);
-                f.set(this, f.get(src));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    //Passes any touch event to the Game Surface View to process
     public boolean onTouchEvent(MotionEvent me) {
         renderer.touchEvent(me);
 
         try {
             Thread.sleep(15);
         } catch (Exception e) {
-            // No need for this...
         }
 
         return super.onTouchEvent(me);
     }
 
+    //Function to play music. Can be accessed from the GSV
     public void PlayMusic(int music) {
         if (!Media.getInstance().playMusic(music, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();
     }
 
+    //Function to play sound. Can be accessed from the GSV
     public void PlaySound(int sound) {
         Media.getInstance().playSound(sound, iVolume[SOUND], bOptionData[SOUND]);
     }
 
+    //Function to stop music. Can be accessed from the GSV
     public void StopMusic() {
         Media.getInstance().stopMusic();
     }

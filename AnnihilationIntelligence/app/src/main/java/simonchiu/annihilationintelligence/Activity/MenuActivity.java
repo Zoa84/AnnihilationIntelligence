@@ -18,14 +18,14 @@ import simonchiu.annihilationintelligence.R;
 
 import static simonchiu.annihilationintelligence.Class.Defines.*;
 
-//The Menu Activity. This is the central hub of the app, and is accessed after the Splash Screen
+//The Menu Activity. This is the central hub of the app, and is accessed after the Splash Activity
 //From here the player can choose to start the game, change options or exit. If exiting using the
 //Android buttons, a toast message will appear to ask the player to press again to exit.
 
 public class MenuActivity extends AppCompatActivity {
 
     private boolean back = false;                   //If the back button has been pressed
-    private Toast toast;          //Variable to hold a toast message
+    private Toast toast;                            //Variable to hold a toast message
 
     private boolean[] bOptionData = new boolean[5]; //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     private int[] iVolume = new int[2];             //Array of the volume for music (0) and sound (1)
@@ -41,6 +41,7 @@ public class MenuActivity extends AppCompatActivity {
         this.bOptionData = getIntent().getBooleanArrayExtra("optionData");
         this.iVolume = getIntent().getIntArrayExtra("volumeData");
 
+        //Set orientation
         setOrientation();
 
         //Play music (passing the element to play)
@@ -48,6 +49,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void start (View view){ // Button press start game
+        //Starts the Game Activity, passing an intent, and waits for a result
         Intent intent = new Intent(MenuActivity.this,GameActivity.class);
         intent.putExtra("optionData", bOptionData);
         intent.putExtra("volumeData", iVolume);
@@ -57,6 +59,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void instructions (View view){ // Button press how to play
+        //Starts the Instruction Activity
         Intent intent = new Intent(MenuActivity.this,InstructionsActivity.class);
         intent.putExtra("optionData", bOptionData);
         intent.putExtra("volumeData", iVolume);
@@ -65,6 +68,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void options (View view){ // Button press options
+        //Starts the Options Activity, passing an intent, and waits for a result
         Intent intent = new Intent(MenuActivity.this,OptionsActivity.class);
         intent.putExtra("optionData", bOptionData);
         intent.putExtra("volumeData", iVolume);
@@ -74,6 +78,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void exit (View view){ // Button press exit game
+        //Ends the game
         Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
         Media.getInstance().stopMusic();
         finish();
@@ -83,6 +88,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         Media.getInstance().playSound(SOUND_SELECT, iVolume[SOUND], bOptionData[SOUND]);
+        //Creates a toast message to confirm the player wants to close the app
         if (!back) {
             if (toast != null) {toast.cancel();}
             toast = Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT);
@@ -110,6 +116,7 @@ public class MenuActivity extends AppCompatActivity {
     {
         super.onActivityResult(requestCode, resultCode, data);
         //If returning from the Options Activity
+        //Gets the new data to set
         if (resultCode == OPTIONS) {
             bOptionData = data.getBooleanArrayExtra("optionData");
             iVolume = data.getIntArrayExtra("volumeData");
@@ -119,10 +126,9 @@ public class MenuActivity extends AppCompatActivity {
         //If returning from the Game Activity
         else if (resultCode == GAME) {
             bCompleted = data.getBooleanExtra("completed", false);
-            //TODO change when game is completed/ ended
             if (bCompleted) {toast = Toast.makeText(this, "Game Completed", Toast.LENGTH_SHORT);}
             else {toast = Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT);}
-            toast.show();
+            //toast.show();
         }
 
         if (!Media.getInstance().playMusic(MUSIC_MENU, iVolume[MUSIC], bOptionData[MUSIC])) Toast.makeText(this, "Couldn't play music", Toast.LENGTH_SHORT).show();

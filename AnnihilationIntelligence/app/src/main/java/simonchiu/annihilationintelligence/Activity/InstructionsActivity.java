@@ -29,7 +29,6 @@ public class InstructionsActivity extends AppCompatActivity {
         //Set orientation
         if (bOptionData[ORIENTATION]) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-
     }
 
     @Override
@@ -39,7 +38,7 @@ public class InstructionsActivity extends AppCompatActivity {
         finish();
     }
 
-    public void menu (View view) {
+    public void menu (View view) { //Press Return to Menu
         onBackPressed();
     }
 

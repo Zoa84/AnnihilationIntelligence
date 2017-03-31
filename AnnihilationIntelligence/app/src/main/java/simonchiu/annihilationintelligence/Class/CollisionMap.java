@@ -15,6 +15,7 @@ public class CollisionMap {
     private float iXSize;   //The size in X of the boundary
     private float iYSize;   //The size in X of the boundary
 
+    //Constructor, passing the position and size of the collision box
     public CollisionMap(float xPos, float yPos, int xSize, int ySize) {
         iXPos = xPos;
         iYPos = yPos;
@@ -23,7 +24,7 @@ public class CollisionMap {
     }
 
     //Check if there is a collision in the x axis
-    public boolean CheckX(float xPos) {
+    private boolean CheckX(float xPos) {
         if (xPos > iXPos - iXSize) {
             if (xPos < iXPos + iXSize) {
                 return true;
@@ -33,7 +34,7 @@ public class CollisionMap {
     }
 
     //Check if there is a collision in the y (z) axis
-    public boolean CheckY(float yPos) {
+    private boolean CheckY(float yPos) {
         if (yPos > iYPos - iYSize) {
             if (yPos < iYPos + iYSize) {
                 return true;
@@ -42,7 +43,7 @@ public class CollisionMap {
         return false;
     }
 
-    //Check if there is a collision
+    //Check if there is a collision in either axis
     public boolean Check(float xPos, float yPos) {
         if (CheckX(xPos)) {
             if (CheckY(yPos)) {

@@ -21,12 +21,13 @@ import simonchiu.annihilationintelligence.R;
 import static simonchiu.annihilationintelligence.Class.Defines.*;
 
 //The Splash Screen Activity, and the starting point of the app. From here it creates a loading screen
-//for the player, then moves on to the PauseMenu Activity. This screen allows us to load data before the app is properly running
+//for the player, then moves on to the Menu Activity. This screen allows us to load data before the app is properly running
 
 public class SplashActivity extends AppCompatActivity {
 
     boolean[] bOptionData = new boolean[5];                             //Array of booleans for the checkboxes and radio groups under Defines (using class Defines)
     int[] iVolume = new int[2];                                         //Array of the volume for music (0) and sound (1)
+
     String[] sMusicName = {     //File names for music files
             "menu",
             "game",
@@ -44,15 +45,15 @@ public class SplashActivity extends AppCompatActivity {
             "win",
             "death"};
 
-    AssetFileDescriptor descriptor;
-
-    Toast toast;                                      //Variable to hold a toast message
+    AssetFileDescriptor descriptor;     //Used to load audio files
+    Toast toast;                        //Variable to hold a toast message
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        //Stay on Splash Screen for three seconds
         Thread timerThread = new Thread(){
             public void run(){
                 try{
@@ -60,7 +61,7 @@ public class SplashActivity extends AppCompatActivity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    //After loading all necessary data, send it to the PauseMenu Activity
+                    //After loading all necessary data, send it to the Menu Activity with an intent
                     Intent intent = new Intent(SplashActivity.this, MenuActivity.class);
                     intent.putExtra("optionData", bOptionData);
                     intent.putExtra("volumeData", iVolume);
@@ -72,6 +73,7 @@ public class SplashActivity extends AppCompatActivity {
         timerThread.start();
 
         //Loading data from text file.
+        //Open the selected directory
         File root = new File(Environment.getExternalStorageDirectory(), "Annihilation Intelligence");
         //If the directory does not exist, make one
         if (!root.exists()) {

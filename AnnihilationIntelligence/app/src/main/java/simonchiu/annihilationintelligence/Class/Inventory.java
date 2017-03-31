@@ -5,7 +5,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 
 import com.threed.jpct.FrameBuffer;
-import com.threed.jpct.Logger;
 import com.threed.jpct.Texture;
 import com.threed.jpct.util.BitmapHelper;
 
@@ -28,6 +27,7 @@ public class Inventory {
     private Rect[] rInventory = new Rect[3];                    //Array of rectangles for drawing the icons
     private Texture[] tTexture = new Texture[6];                //Array of textures for the icons. Includes a second set for when an item is selected
 
+    //Load the positions and textures of the inventory
     public Inventory(Point pPoint, Context context) {
         iXPos[0] = pPoint.x-iSize;
         iYPos[0] = iSize;
@@ -36,6 +36,7 @@ public class Inventory {
         iXPos[2] = iXPos[1]-(iSize*2);
         iYPos[2] = iSize;
 
+        //Create a rectangle shape for each item
         rInventory[0] = new Rect(iXPos[0] - iSize, iYPos[0] - iSize, iSize * 2, iYPos[0] + iSize);
         rInventory[1] = new Rect(iXPos[1] - iSize, iYPos[1] - iSize, iSize * 2, iYPos[1] + iSize);
         rInventory[2] = new Rect(iXPos[2] - iSize, iYPos[2] - iSize, iSize * 2, iYPos[2] + iSize);
@@ -74,11 +75,11 @@ public class Inventory {
     public boolean Update(float xPos, float yPos) {
         for (int i = 0; i < bInventory.length; i++) {
             if (bInventory[i] && iXPos[i] - iSize < xPos && iYPos[i] - iSize < yPos && iXPos[i] + iSize > xPos && iYPos[i] + iSize > yPos) {
-                //If item is selected, then unselect it
+                //If item is selected, then deselect it
                 if (bInventoryUse[i]) {
                     bInventoryUse[i] = false;
                 }
-                //If not selected, select it, but unselect anything else
+                //If not selected, select it, but deselect anything else
                 else {
                     bInventoryUse[i] = true;
                     for (int j = 0; j < bInventory.length; j++) {
@@ -91,10 +92,12 @@ public class Inventory {
         return false;
     }
 
+    //Set if an item has been selected
     public void SetSelected(int i) {
         bInventoryUse[i] = true;
     }
 
+    //Returns if an item has been selected
     public boolean GetSelected(int i) {
         return bInventoryUse[i];
     }

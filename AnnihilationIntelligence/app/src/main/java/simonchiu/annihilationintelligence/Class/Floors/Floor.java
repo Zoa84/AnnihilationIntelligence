@@ -5,22 +5,25 @@ import android.content.Context;
 import com.threed.jpct.Camera;
 import com.threed.jpct.Loader;
 import com.threed.jpct.Object3D;
-import com.threed.jpct.SimpleVector;
 import com.threed.jpct.TextureManager;
 import com.threed.jpct.World;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static simonchiu.annihilationintelligence.Class.Defines.DEG_TO_RAD;
+import static simonchiu.annihilationintelligence.Class.TransformFix.ObjectLoadFix;
 
 /**
  * Created by Simon on 07/03/2017.
  */
 
-public class Floor {
+//A base class that each floor class inherits from
+//Contains functions that each floor will use, however, does not hold any variables
 
-    public void SetPosition(int i, World world) {
+class Floor {
+
+    //Set the position of the character, such as coming out of an elevator or door
+    void SetPosition(int i, World world) {
         Camera cam = world.getCamera();
         //Starting position
         if (i == 0) {
@@ -40,31 +43,31 @@ public class Floor {
         }
     }
 
-    public void Destroy(World world) {
+    //Destroys the current world. Used as garbage collection when ending the game
+    void Destroy(World world) {
         world.dispose();
         TextureManager.getInstance().flush();
     }
 
-    public void ObjectLoader(Context context, int i, String name, Object3D[] aObjects, Object3D[] object, World world) {
+    //Loads objects in the correct
+    void ObjectLoader(Context context, int i, String name, Object3D[] object, World world) {
         InputStream is;
+        Object3D[] localObject = null;
 
         try {
             is = context.getResources().getAssets().open("objects/" + name + ".obj");
-            aObjects = Loader.loadOBJ(is, null, 1);
+            localObject = Loader.loadOBJ(is, null, 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        object[i] = aObjects[0];
+        object[i] = localObject[0];
         object[i].setTexture(name);
         object[i].build();
         world.addObject(object[i]);
 
-        //Due to jPCT world axis, rotate around X-axis to draw right-side up
-        object[i].setRotationPivot(SimpleVector.ORIGIN);
-        object[i].rotateX(180 * DEG_TO_RAD);
-        object[i].rotateMesh();
-        object[i].clearRotation();
+        //Fixes the rotation of loaded objects
+        object[i] = ObjectLoadFix(object[i]);
     }
 
 }
