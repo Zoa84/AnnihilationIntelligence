@@ -11,7 +11,7 @@ import com.threed.jpct.World;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static simonchiu.annihilationintelligence.Class.TransformFix.ObjectLoadFix;
+import static simonchiu.annihilationintelligence.Class.TransformFix.*;
 
 /**
  * Created by Simon on 07/03/2017.
@@ -27,19 +27,19 @@ class Floor {
         Camera cam = world.getCamera();
         //Starting position
         if (i == 0) {
-            cam.setPosition(-15f, 0, -30f);
+            cam.setPosition(fixTrans(-15f, 1.5f, 30f));
         }
         //Elevator
         else if (i == 1) {
-            cam.setPosition(-15f, 0, 26f);
+            cam.setPosition(fixTrans(-15f, 1.5f, -26f));
         }
         //Door 2 (Left)
         else if (i == 2) {
-            cam.setPosition(8f, 0, 26f);
+            cam.setPosition(fixTrans(8f, 1.5f, -26f));
         }
         //Door 1 (Right)
         else if (i == 3) {
-            cam.setPosition(24f, 0, 26f);
+            cam.setPosition(fixTrans(24f, 1.5f, -26f));
         }
     }
 

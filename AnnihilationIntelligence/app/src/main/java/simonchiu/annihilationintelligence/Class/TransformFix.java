@@ -39,23 +39,39 @@ public class TransformFix {
     //Fixes rotations from Maya to jPCT axis, taking a SimpleVector
     public static SimpleVector fixRot(SimpleVector vector)
     {
-        SimpleVector translate = new SimpleVector();
-        translate.x = -vector.x;
-        translate.y = -vector.y;
-        translate.z = vector.z;
+        SimpleVector rotation = new SimpleVector();
+        rotation.x = -vector.x;
+        rotation.y = -vector.y;
+        rotation.z = vector.z;
 
-        return translate;
+        return rotation;
     }
 
     //Fixes rotations from Maya to jPCT axis, taking three floats
     public static SimpleVector fixRot(float x, float y, float z)
     {
-        SimpleVector translate = new SimpleVector();
-        translate.x = -x;
-        translate.y = -y;
-        translate.z = z;
+        SimpleVector rotation = new SimpleVector();
+        rotation.x = -x;
+        rotation.y = -y;
+        rotation.z = z;
 
-        return translate;
+        return rotation;
+    }
+
+    //Fixes single rotations in Y
+    public static float fixRotY(float y)
+    {
+        float yRotation;
+        yRotation = -y;
+        return yRotation;
+    }
+
+    //Fixes single rotations in Z
+    public static float fixRotZ(float z)
+    {
+        float zRotation;
+        zRotation = -z;
+        return zRotation;
     }
 
     //Fixes the rotation objects are loaded in

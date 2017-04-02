@@ -16,7 +16,7 @@ import simonchiu.annihilationintelligence.Activity.GameActivity;
 import simonchiu.annihilationintelligence.Class.CollisionMap;
 
 import static simonchiu.annihilationintelligence.Class.Defines.DEG_TO_RAD;
-import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
+import static simonchiu.annihilationintelligence.Class.TransformFix.*;
 
 /**
  * Created by Simon on 01/03/2017.
@@ -26,8 +26,8 @@ import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
 
 public class FloorThird extends Floor{
     //List of object and texture names to load
-    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2", "key1"};
-    private Object3D[] object = new Object3D[33];               //Array of all objects
+    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2", "key1", "sign3"};
+    private Object3D[] object = new Object3D[34];               //Array of all objects
 
     private World world = null;                                 //The world, used to draw the 3D game
     private static GameActivity master = null;
@@ -93,6 +93,7 @@ public class FloorThird extends Floor{
             ObjectLoader(context, 30, "door1");
             ObjectLoader(context, 31, "door2");
             ObjectLoader(context, 32, "key1");
+            ObjectLoader(context, 33, "sign3");
 
             //Add collisions to the collision map
             Collisions[0] = new CollisionMap(-20, 20, 5, 3);
@@ -122,7 +123,7 @@ public class FloorThird extends Floor{
             object[11].translate(fixTrans(-20f, -5.5f, -15.5f));
             object[12].translate(fixTrans(-20f, -5.5f, 4.5f));
             object[13].translate(fixTrans(-20f, -5.5f, 24.5f));
-            object[13].rotateY(30 * DEG_TO_RAD);
+            object[13].rotateY(fixRotY(-30) * DEG_TO_RAD);
             object[14].translate(fixTrans(0f, -5.5f, -15.5f));
             object[15].translate(fixTrans(0f, -5.5f, 4.5f));
             object[16].translate(fixTrans(0f, -5.5f, 24.5f));
@@ -139,7 +140,7 @@ public class FloorThird extends Floor{
             object[27].translate(fixTrans(20f, -1.5f, 0f));
             object[28].translate(fixTrans(20f, -1.5f, 20f));
             object[32].translate(fixTrans(-24f, -3.4f, 20f));
-            object[32].rotateY(-20 * DEG_TO_RAD);
+            object[32].rotateY(fixRotY(20) * DEG_TO_RAD);
 
             //Add interactable objects to an array
             aInteObjects[0] = object[29];   //elevator

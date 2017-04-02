@@ -16,6 +16,7 @@ import simonchiu.annihilationintelligence.Activity.GameActivity;
 import simonchiu.annihilationintelligence.Class.CollisionMap;
 
 import static simonchiu.annihilationintelligence.Class.Defines.DEG_TO_RAD;
+import static simonchiu.annihilationintelligence.Class.TransformFix.fixRotY;
 import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
 
 /**
@@ -26,8 +27,8 @@ import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
 
 public class FloorGround extends Floor{
     //List of object and texture names to load
-    private String[] textures = {"room", "floor", "chair", "comp", "elev", "door1", "reception", "frontdoor", "rug"};
-    private Object3D[] object = new Object3D[11];               //Array of all objects
+    private String[] textures = {"room", "floor", "chair", "comp", "elev", "door1", "reception", "frontdoor", "rug", "sign0"};
+    private Object3D[] object = new Object3D[12];               //Array of all objects
 
     private World world = null;                                 //The world, used to draw the 3D game
     private static GameActivity master = null;
@@ -71,6 +72,7 @@ public class FloorGround extends Floor{
             ObjectLoader(context, 8, "comp");
             ObjectLoader(context, 9, "comp");
             ObjectLoader(context, 10, "rug");
+            ObjectLoader(context, 11, "sign0");
 
             //Add collisions to the collision map
             Collisions[0] = new CollisionMap(-15, 36, 14, 3);   //Elevator
@@ -81,13 +83,13 @@ public class FloorGround extends Floor{
 
             //Translate and rotate all objects
             object[6].translate(fixTrans(-24f, -5.5f, 30f));
-            object[6].rotateY(90f * DEG_TO_RAD);
+            object[6].rotateY(fixRotY(-90f) * DEG_TO_RAD);
             object[7].translate(fixTrans(-24f, -5.5f, 17.5f));
-            object[7].rotateY(105f * DEG_TO_RAD);
+            object[7].rotateY(fixRotY(-105f) * DEG_TO_RAD);
             object[8].translate(fixTrans(-16f, -1.2f, 18.5f));
-            object[8].rotateY(90f * DEG_TO_RAD);
+            object[8].rotateY(fixRotY(-90f) * DEG_TO_RAD);
             object[9].translate(fixTrans(-16f, -1.2f, 30f));
-            object[9].rotateY(90f * DEG_TO_RAD);
+            object[9].rotateY(fixRotY(-90f) * DEG_TO_RAD);
 
             //Add interactable objects to an array
             aInteObjects[0] = object[2];    //elevator

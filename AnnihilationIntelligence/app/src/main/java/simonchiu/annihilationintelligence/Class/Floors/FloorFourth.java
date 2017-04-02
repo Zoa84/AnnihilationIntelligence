@@ -25,7 +25,7 @@ import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
 
 public class FloorFourth extends Floor {
     //List of object and texture names to load
-    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door2", "note", "elev_open"};
+    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door2", "note", "elev_open", "sign4"};
     private Object3D[] object = new Object3D[33];
 
     private World world = null;                                 //The world, used to draw the 3D game
@@ -97,6 +97,7 @@ public class FloorFourth extends Floor {
             ObjectLoader(context, 29, "elev_open");
             ObjectLoader(context, 30, "door2");
             ObjectLoader(context, 31, "note");
+            ObjectLoader(context, 32, "sign4");
 
             //Add collisions to the collision map
             Collisions[0] = new CollisionMap(-20, 20, 5, 3);

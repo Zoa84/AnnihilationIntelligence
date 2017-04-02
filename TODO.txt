@@ -1,13 +1,7 @@
 TODO Next Time
 
 
-comment up the project
-
 move note on floor 4, other side? OR keep hidden, in questionaires it will be reported, then report how i didnt notice as i would skip it myself in testing since i knew
-
-test getting fresh copy from github and running it
-
-chara height
 
 
 
@@ -43,9 +37,11 @@ New activity diagram with instruction activity
 
 
 appendix
-github stuff
+github commits
+
 jpct transform fix
 maya scene creation show
+
 new project time used
 test cases
 test diagrams

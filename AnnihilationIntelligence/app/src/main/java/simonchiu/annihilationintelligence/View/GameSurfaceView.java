@@ -190,10 +190,10 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
             }
 
             //Starting text dialogue
-            TextBuffer.AddText("Hmm? I must've fell asleep...", 6000);
-            TextBuffer.AddText("Where is everyone? And what time is it?", 6000);
-            TextBuffer.AddText("I'm on the 3rd floor... I think...", 6000);
-            TextBuffer.AddText("Do I work here? I've gotta get out of here", 6000);
+            TextBuffer.AddText("Hmm? I must've fell asleep...");
+            TextBuffer.AddText("Where is everyone? And what time is it?");
+            TextBuffer.AddText("I'm on the 3rd floor... I think...");
+            TextBuffer.AddText("Do I work here? I've gotta get out of here");
         }
     }
 
@@ -340,18 +340,18 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 }
 
                                 public void onFinish() {
-                                    TextBuffer.DeleteAll();
+                                    TextBuffer.DeleteAllText();
                                     iFloor = 4;
-                                    TextBuffer.AddText("4th Floor", 3000);
+                                    //TextBuffer.AddText("4th Floor");
                                 }
                             }.start();
                         }
                         //Already on this floor
                         else {
                             ((GameActivity) context).PlaySound(SOUND_FAIL);
-                            TextBuffer.DeleteAll();
+                            TextBuffer.DeleteAllText();
                             String text = "I'm already on this floor";
-                            TextBuffer.AddText(text, 3000);
+                            TextBuffer.AddText(text);
                         }
                     }
                     //Goto floor 3
@@ -367,9 +367,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 }
 
                                 public void onFinish() {
-                                    TextBuffer.DeleteAll();
+                                    TextBuffer.DeleteAllText();
                                     iFloor = 3;
-                                    TextBuffer.AddText("3rd Floor", 3000);
+                                    //TextBuffer.AddText("3rd Floor", 3000);
                                 }
                             }.start();
                         }
@@ -377,8 +377,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         else {
                             ((GameActivity) context).PlaySound(SOUND_FAIL);
                             String text = "I'm already on this floor";
-                            TextBuffer.DeleteAll();
-                            TextBuffer.AddText(text, 3000);
+                            TextBuffer.DeleteAllText();
+                            TextBuffer.AddText(text);
                         }
                     }
                     //Goto floor 2
@@ -397,9 +397,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 }
 
                                 public void onFinish() {
-                                    TextBuffer.DeleteAll();
+                                    TextBuffer.DeleteAllText();
                                     iFloor = 2;
-                                    TextBuffer.AddText("2nd Floor", 3000);
+                                    //TextBuffer.AddText("2nd Floor", 3000);
                                 }
                             }.start();
                         }
@@ -407,23 +407,23 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         else {
                             ((GameActivity) context).PlaySound(SOUND_FAIL);
                             String text = "I'm already on this floor";
-                            TextBuffer.DeleteAll();
-                            TextBuffer.AddText(text, 3000);
+                            TextBuffer.DeleteAllText();
+                            TextBuffer.AddText(text);
                         }
                     }
                     //Goto floor 1
                     else if (i == 3) {
                         ((GameActivity) context).PlaySound(SOUND_FAIL);
-                        TextBuffer.DeleteAll();
+                        TextBuffer.DeleteAllText();
                         String text = "It won't let me go to this floor";
-                        TextBuffer.AddText(text, 3000);
+                        TextBuffer.AddText(text);
                     }
                     //Goto ground floor
                     else if (i == 4) {
                         ((GameActivity) context).PlaySound(SOUND_FAIL);
-                        TextBuffer.DeleteAll();
+                        TextBuffer.DeleteAllText();
                         String text = "It won't let me go to this floor";
-                        TextBuffer.AddText(text, 3000);
+                        TextBuffer.AddText(text);
                     }
                     break;
                 }
@@ -451,9 +451,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                 {
                     Inventory.SetSelected(4);
                     ((GameActivity) context).PlaySound(SOUND_PICKUP);
-                    TextBuffer.DeleteAll(4000);
-                    TextBuffer.AddText("It seems to have worked.", 4000);
-                    TextBuffer.AddText("Maybe the keycard reader's working now", 4000);
+                    TextBuffer.DeleteAllText();
+                    TextBuffer.AddText("It seems to have worked.");
+                    TextBuffer.AddText("Maybe the keycard reader's working now");
                 }
                 else {
                     //Game over from wrong code
@@ -502,8 +502,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             //If we haven't unlocked the elevator
                             if (!Inventory.GetSelected(3)) {
                                 ((GameActivity) context).PlaySound(SOUND_FAIL);
+                                TextBuffer.DeleteAllText();
                                 String text = "The elevator isn't working";
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                             //Call the elevator
                             else {
@@ -513,7 +514,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     bElev = false;
                                 }
                                 else {
-                                    TextBuffer.AddText(text, 3000);
+                                    TextBuffer.DeleteAllText();
+                                    TextBuffer.AddText(text);
                                     bElev = true;
                                 }
                             }
@@ -535,14 +537,14 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     }
 
                                     public void onFinish() {
-                                        TextBuffer.DeleteAll();
+                                        TextBuffer.DeleteAllText();
                                         iFloor = 4;
-                                        TextBuffer.AddText("4th Floor", 3000);
+                                        //TextBuffer.AddText("4th Floor", 3000);
                                         //First time, the AI prepares a trap
                                         if (!Inventory.GetSelected(3)) {
-                                            TextBuffer.AddText("Was that noise from the elevator?", 4000);
-                                            TextBuffer.AddText("Did someone call for it?", 4000);
-                                            TextBuffer.AddText("There's no one here...", 4000);
+                                            TextBuffer.AddText("Was that noise from the elevator?");
+                                            TextBuffer.AddText("Did someone call for it?");
+                                            TextBuffer.AddText("There's no one here...");
                                             ((GameActivity) context).PlaySound(SOUND_ELEV_DING);
                                             Inventory.SetSelected(3);
                                         }
@@ -552,7 +554,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
                                 String text = FloorThird.Interact(i);
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.DeleteAllText();
+                                TextBuffer.AddText(text);
                             }
                         }
                         //Door 2 (Left)
@@ -560,7 +563,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             if (Inventory.GetSelected(0)) {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
                                 String text = "The Keycard won't work on this door";
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.DeleteAllText();
+                                TextBuffer.AddText(text);
                             }
                             else if (Inventory.GetSelected(1)) {
                                 //Goto 2nd floor
@@ -574,25 +578,27 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     }
 
                                     public void onFinish() {
-                                        TextBuffer.DeleteAll();
-                                        TextBuffer.AddText("2nd Floor", 3000);
+                                        TextBuffer.DeleteAllText();
+                                        //TextBuffer.AddText("2nd Floor", 3000);
                                         iFloor = 2;
                                     }
                                 }.start();
                             }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.DeleteAllText();
                                 String text = FloorThird.Interact(i);
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                         }
                         //Keycard 1
                         else if (i == 3) {
                             if (!Inventory.GetInventory(0)) {
                                 ((GameActivity) context).PlaySound(SOUND_PICKUP);
+                                TextBuffer.DeleteAllText();
                                 String text = FloorThird.Interact(i);
                                 Inventory.SetInventory(0);
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                         }
                     }
@@ -621,12 +627,13 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_ELEV_DING);
+                                TextBuffer.DeleteAllText();
                                 String text = FloorFourth.Interact(i);
                                 if (bElev) {
                                     bElev = false;
                                 }
                                 else {
-                                    TextBuffer.AddText(text, 3000);
+                                    TextBuffer.AddText(text);
                                     bElev = true;
                                 }
                             }
@@ -645,8 +652,8 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     }
 
                                     public void onFinish() {
-                                        TextBuffer.DeleteAll();
-                                        TextBuffer.AddText("3rd Floor", 3000);
+                                        TextBuffer.DeleteAllText();
+                                        //TextBuffer.AddText("3rd Floor", 3000);
                                         iFloor = 3;
                                         FloorFourth.SetElevSafe();
                                     }
@@ -654,19 +661,20 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.DeleteAllText();
                                 String text = FloorFourth.Interact(i);
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                         }
                         //note 1
                         else if (i == 2) {
                             ((GameActivity) context).PlaySound(SOUND_SELECT);
                             String text = FloorFourth.Interact(i);
-                            TextBuffer.DeleteAll(6000);
-                            TextBuffer.AddText(text, 6000);
-                            TextBuffer.AddText("elevator. It is controlled by the AI which controls", 6000);
-                            TextBuffer.AddText("when the elevator moves or stops in an", 6000);
-                            TextBuffer.AddText("emergency. Do not use unless called for.", 6000);
+                            TextBuffer.DeleteAllText();
+                            TextBuffer.AddText(text);
+                            TextBuffer.AddText("elevator. It is controlled by the AI which controls");
+                            TextBuffer.AddText("when the elevator moves or stops in an");
+                            TextBuffer.AddText("emergency. Do not use unless called for.");
                         }
                     }
                 }
@@ -678,12 +686,13 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         //"Elevator
                         if (i == 0) {
                             ((GameActivity) context).PlaySound(SOUND_ELEV_DING);
+                            TextBuffer.DeleteAllText();
                             String text = FloorSecond.Interact(i);
                             if (bElev) {
                                 bElev = false;
                             }
                             else {
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                                 bElev = true;
                             }
                         }
@@ -691,8 +700,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         else if (i == 1) {
                             if (Inventory.GetSelected(0)) {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.DeleteAllText();
                                 String text = "The Keycard won't work on this door";
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                             else if (Inventory.GetSelected(1)) {
                                 //Goto 3rd floor
@@ -706,24 +716,26 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     }
 
                                     public void onFinish() {
-                                        TextBuffer.DeleteAll();
-                                        TextBuffer.AddText("3rd Floor", 3000);
+                                        TextBuffer.DeleteAllText();
+                                        //TextBuffer.AddText("3rd Floor", 3000);
                                         iFloor = 3;
                                     }
                                 }.start();
                             }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.DeleteAllText();
                                 String text = FloorSecond.Interact(i);
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                         }
                         //Door2 (Left)
                         else if (i == 2) {
                             if (Inventory.GetSelected(0)) {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.DeleteAllText();
                                 String text = "The Keycard won't work on this door";
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                             else if (Inventory.GetSelected(1)) {
                                 //Goto 1st floor
@@ -740,25 +752,27 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     }
 
                                     public void onFinish() {
-                                        TextBuffer.DeleteAll();
-                                        TextBuffer.AddText("1st Floor", 3000);
+                                        TextBuffer.DeleteAllText();
+                                        //TextBuffer.AddText("1st Floor", 3000);
                                         iFloor = 1;
                                     }
                                 }.start();
                             }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.DeleteAllText();
                                 String text = FloorSecond.Interact(i);
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                         }
                         //Keycard 2
                         else if (i == 3) {
                             if (!Inventory.GetInventory(1)) {
                                 ((GameActivity) context).PlaySound(SOUND_PICKUP);
+                                TextBuffer.DeleteAllText();
                                 String text = FloorSecond.Interact(i);
                                 Inventory.SetInventory(1);
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                         }
                         //Electrical box
@@ -766,23 +780,27 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             if (!Inventory.GetSelected(2)) {
                                 if (FloorSecond.GetElec()) {
                                     ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                    TextBuffer.AddText("It reads: 173. Is that a code?", 3000);
+                                    TextBuffer.DeleteAllText();
+                                    TextBuffer.AddText("It reads: 173. Is that a code?");
                                 }
                                 else {
                                     ((GameActivity) context).PlaySound(SOUND_LOCKED);
-                                    TextBuffer.AddText("An electrical box. It's locked by screws", 3000);
+                                    TextBuffer.DeleteAllText();
+                                    TextBuffer.AddText("An electrical box. It's locked by screws");
                                 }
                             }
                             else {
                                 if (!FloorSecond.GetElec()) {
                                     ((GameActivity) context).PlaySound(SOUND_CODE);
                                     FloorSecond.OpenElec();
+                                    TextBuffer.DeleteAllText();
                                     String text = FloorSecond.Interact(i);
-                                    TextBuffer.AddText(text, 3000);
+                                    TextBuffer.AddText(text);
                                 }
                                 else {
                                     ((GameActivity) context).PlaySound(SOUND_SELECT);
-                                    TextBuffer.AddText("It reads: 173. Is that a code?", 3000);
+                                    TextBuffer.DeleteAllText();
+                                    TextBuffer.AddText("It reads: 173. Is that a code?");
                                 }
                             }
                         }
@@ -796,15 +814,17 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         //"Elevator
                         if (i == 0) {
                             ((GameActivity) context).PlaySound(SOUND_FAIL);
+                            TextBuffer.DeleteAllText();
                             String text = "The elevator won't work properly";
-                            TextBuffer.AddText(text, 3000);
+                            TextBuffer.AddText(text);
                         }
                         //Door1 (Right)
                         else if (i == 1) {
                             if (Inventory.GetSelected(0)) {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.DeleteAllText();
                                 String text = "The Keycard won't work on this door";
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                             else if (Inventory.GetSelected(1)) {
                                 //Goto 2nd floor
@@ -818,16 +838,17 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     }
 
                                     public void onFinish() {
-                                        TextBuffer.DeleteAll();
-                                        TextBuffer.AddText("2nd Floor", 3000);
+                                        TextBuffer.DeleteAllText();
+                                        //TextBuffer.AddText("2nd Floor", 3000);
                                         iFloor = 2;
                                     }
                                 }.start();
                             }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.DeleteAllText();
                                 String text = FloorFirst.Interact(i);
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                         }
                         //Door2 (Left)
@@ -835,8 +856,9 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                             if (Inventory.GetSelected(4)) {
                                 if (Inventory.GetSelected(0)) {
                                     ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                    TextBuffer.DeleteAllText();
                                     String text = "The Keycard won't work on this door";
-                                    TextBuffer.AddText(text, 3000);
+                                    TextBuffer.AddText(text);
                                 }
                                 else if (Inventory.GetSelected(1)) {
                                     //Goto G floor
@@ -853,23 +875,24 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                         }
 
                                         public void onFinish() {
-                                            TextBuffer.DeleteAll();
-                                            TextBuffer.AddText("Ground Floor", 3000);
+                                            TextBuffer.DeleteAllText();
+                                            //TextBuffer.AddText("Ground Floor", 3000);
                                             iFloor = 0;
                                         }
                                     }.start();
                                 }
                                 else {
                                     ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                    TextBuffer.DeleteAllText();
                                     String text = FloorFirst.Interact(i);
-                                    TextBuffer.AddText(text, 3000);
+                                    TextBuffer.AddText(text);
                                 }
                             }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_FAIL);
-                                TextBuffer.DeleteAll(4000);
-                                TextBuffer.AddText("The Keycard reader isn't working", 4000);
-                                TextBuffer.AddText("Can I reset it somehow?", 4000);
+                                TextBuffer.DeleteAllText();
+                                TextBuffer.AddText("The Keycard reader isn't working");
+                                TextBuffer.AddText("Can I reset it somehow?");
                             }
                         }
                         //Screwdriver
@@ -878,16 +901,18 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 ((GameActivity) context).PlaySound(SOUND_PICKUP);
                                 String text = FloorFirst.Interact(i);
                                 Inventory.SetInventory(2);
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.DeleteAllText();
+                                TextBuffer.AddText(text);
                             }
                         }
                         //Electrical box
                         else if (i == 4) {
                             if (!Inventory.GetSelected(2)) {
                                 if (FloorFirst.GetElec()) {
+                                    TextBuffer.DeleteAllText();
                                     if (Inventory.GetSelected(4)) {
                                         ((GameActivity) context).PlaySound(SOUND_FAIL);
-                                        TextBuffer.AddText("I've already put in the right code", 3000);
+                                        TextBuffer.AddText("I've already put in the right code");
                                     }
                                     else {
                                         ((GameActivity) context).PlaySound(SOUND_SELECT);
@@ -896,20 +921,23 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                 }
                                 else {
                                     ((GameActivity) context).PlaySound(SOUND_LOCKED);
-                                    TextBuffer.AddText("An electrical box. It's locked by screws", 3000);
+                                    TextBuffer.DeleteAllText();
+                                    TextBuffer.AddText("An electrical box. It's locked by screws");
                                 }
                             }
                             else {
                                 if (!FloorFirst.GetElec()) {
                                     ((GameActivity) context).PlaySound(SOUND_CODE);
                                     FloorFirst.OpenElec();
+                                    TextBuffer.DeleteAllText();
                                     String text = FloorFirst.Interact(i);
-                                    TextBuffer.AddText(text, 3000);
+                                    TextBuffer.AddText(text);
                                 }
                                 else {
+                                    TextBuffer.DeleteAllText();
                                     if (Inventory.GetSelected(4)) {
                                         ((GameActivity) context).PlaySound(SOUND_FAIL);
-                                        TextBuffer.AddText("I've already put in the right code", 3000);
+                                        TextBuffer.AddText("I've already put in the right code");
                                     }
                                     else {
                                         ((GameActivity) context).PlaySound(SOUND_SELECT);
@@ -922,11 +950,11 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         else if (i == 5) {
                             ((GameActivity) context).PlaySound(SOUND_SELECT);
                             String text = FloorFirst.Interact(i);
-                            TextBuffer.DeleteAll(6000);
-                            TextBuffer.AddText(text, 6000);
-                            TextBuffer.AddText("reset the power, the machines been acting", 6000);
-                            TextBuffer.AddText("up a bit. The reset code from the 2nd", 6000);
-                            TextBuffer.AddText("floor's wrong. Just flip the code it gives", 6000);
+                            TextBuffer.DeleteAllText();
+                            TextBuffer.AddText(text);
+                            TextBuffer.AddText("reset the power, the machines been acting");
+                            TextBuffer.AddText("up a bit. The reset code from the 2nd");
+                            TextBuffer.AddText("floor's wrong. Just flip the code it gives");
                         }
                     }
                 }
@@ -939,15 +967,17 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                         //"Elevator
                         if (i == 0) {
                             ((GameActivity) context).PlaySound(SOUND_FAIL);
+                            TextBuffer.DeleteAllText();
                             String text = "The elevator won't work properly";
-                            TextBuffer.AddText(text, 3000);
+                            TextBuffer.AddText(text);
                         }
                         //Door1 (Right)
                         else if (i == 1) {
                             if (Inventory.GetSelected(0)) {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.DeleteAllText();
                                 String text = "The Keycard won't work on this door";
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                             else if (Inventory.GetSelected(1)) {
                                 //Goto 1st floor
@@ -961,16 +991,17 @@ public class GameSurfaceView implements GLSurfaceView.Renderer {
                                     }
 
                                     public void onFinish() {
-                                        TextBuffer.DeleteAll();
-                                        TextBuffer.AddText("1st Floor", 3000);
+                                        TextBuffer.DeleteAllText();
+                                        //TextBuffer.AddText("1st Floor", 3000);
                                         iFloor = 1;
                                     }
                                 }.start();
                             }
                             else {
                                 ((GameActivity) context).PlaySound(SOUND_LOCKED);
+                                TextBuffer.DeleteAllText();
                                 String text = FloorGround.Interact(i);
-                                TextBuffer.AddText(text, 3000);
+                                TextBuffer.AddText(text);
                             }
                         }
                         //EXIT

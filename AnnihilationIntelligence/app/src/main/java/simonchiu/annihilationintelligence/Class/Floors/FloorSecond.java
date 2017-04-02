@@ -25,8 +25,8 @@ import static simonchiu.annihilationintelligence.Class.TransformFix.fixTrans;
 
 public class FloorSecond extends Floor{
     //List of object and texture names to load
-    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2", "key2", "elecbox", "elecbox_open2"};
-    private Object3D[] object = new Object3D[35];               //Array of all objects
+    private String[] textures = {"room", "floor", "table", "chair", "comp", "elev", "door1", "door2", "key2", "elecbox", "elecbox_open2", "sign2"};
+    private Object3D[] object = new Object3D[36];               //Array of all objects
 
     private World world = null;                                 //The world, used to draw the 3D game
     private static GameActivity master = null;
@@ -96,6 +96,7 @@ public class FloorSecond extends Floor{
             ObjectLoader(context, 32, "key2");
             ObjectLoader(context, 33, "elecbox");
             ObjectLoader(context, 34, "elecbox_open2");
+            ObjectLoader(context, 35, "sign2");
 
             //Add collisions to the collision map
             Collisions[0] = new CollisionMap(-20, 20, 5, 3);
